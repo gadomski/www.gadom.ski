@@ -11,7 +11,7 @@ module.exports = function(grunt) {
                 base: "build",
                 branch: "master"
             },
-            src: ["*"]
+            src: ["**"]
         }
 
     });
