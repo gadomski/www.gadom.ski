@@ -1,6 +1,5 @@
 {
   "locals": {
-    "url": "http://localhost:8080",
     "name": "gadomski.github.io",
     "owner": "Pete Gadomski",
     "description": "github vanity page"
