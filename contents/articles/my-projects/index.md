@@ -8,7 +8,7 @@ template: article.jade
 I've contributed to some projects, and created others.
 This is not an exhaustive list.
 
-* [**PDAL/PDAL**](https://github.com/PDAL/PDAL): point data attraction library.
+* [**PDAL/PDAL**](https://github.com/PDAL/PDAL): point data abstraction library.
   [GDAL](http://www.gdal.org) for pointclouds.
   <small class="tomorrow-comment">C++</small>
 * **GRiD**: database system and web application for transforming, storing, analyzing, and retrieving point cloud data.
