@@ -1,8 +1,7 @@
 {
   "locals": {
     "name": "gadomski.github.io",
-    "owner": "Pete Gadomski",
-    "description": "github vanity page"
+    "owner": "Pete Gadomski"
   },
   "plugins": [
     "./plugins/paginator.coffee",
