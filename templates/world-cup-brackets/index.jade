@@ -1,16 +1,24 @@
 extends ../layout.jade
 
+block append vars
+  - bodyclass = "article-detail"
+
+block prepend title
+  | #{ page.title + " - " }
 
 block append head
   link(rel="stylesheet", href="style.css")
 
+block header
+  h1= page.title
+  p!= page.html
 
 block content
-  h2= page.title
-
-  != page.html
-
   #wc2010
 
   script(type="text/javascript", src=contents.js["d3.min.js"].url)
   script(type="text/javascript", src="brackets.js")
+
+block prepend footer
+  div.nav
+    a(href=contents.index.url) « Full blog
