@@ -34,7 +34,3 @@ rect.focused {
 text {
     pointer-events: none;
 }
-
-h1, p {
-    text-align: center;
-}
