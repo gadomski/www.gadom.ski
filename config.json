@@ -5,7 +5,8 @@
     "description": "github vanity page"
   },
   "plugins": [
-    "./plugins/paginator.coffee"
+    "./plugins/paginator.coffee",
+    "wintersmith-data-json"
   ],
   "require": {
     "moment": "moment",

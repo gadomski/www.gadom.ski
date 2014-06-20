@@ -1,0 +1,40 @@
+.chart {
+    display: block;
+    margin: auto;
+    margin-top: 60px;
+    font-size: 11px;
+}
+
+rect {
+    stroke: #eee;
+    fill: #aaa;
+    fill-opacity: .5;
+}
+
+rect.parent {
+    cursor: pointer;
+}
+
+rect.winner {
+    fill: green;
+}
+
+rect.loser {
+    fill: gray;
+}
+
+rect.champion {
+    fill: gold;
+}
+
+rect.focused {
+    fill: blue;
+}
+
+text {
+    pointer-events: none;
+}
+
+h1, p {
+    text-align: center;
+}

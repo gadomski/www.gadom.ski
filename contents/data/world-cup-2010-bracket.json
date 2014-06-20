@@ -1,0 +1,91 @@
+{
+    "name": "Spain",
+    "children": [
+    {
+        "name": "Netherlands",
+        "children": [
+        {
+            "name": "Uruguay",
+            "children": [
+            {
+                "name": "Uruguay",
+                "children": [
+                {"name": "Uruguay"},
+                {"name": "South Korea"}
+                ]
+            },
+            {
+                "name": "Ghana",
+                "children": [
+                {"name": "United States"},
+                {"name": "Ghana"}
+                ]
+            }
+            ]
+        },
+        {
+            "name": "Netherlands",
+            "children": [
+            {
+                "name": "Netherlands",
+                "children": [
+                {"name": "Netherlands"},
+                {"name": "Slovakia"}
+                ]
+            },
+            {
+                "name": "Brazil",
+                "children": [
+                {"name": "Brazil"},
+                {"name": "Chile"}
+                ]
+            }
+            ]
+        }
+        ]
+    },
+    {
+        "name": "Spain",
+        "children": [
+        {
+            "name": "Germany",
+            "children": [
+            {
+                "name": "Germany",
+                "children": [
+                {"name": "Germany"},
+                {"name": "England"}
+                ]
+            },
+            {
+                "name": "Argentina",
+                "children": [
+                {"name": "Argentina"},
+                {"name": "Mexico"}
+                ]
+            }
+            ]
+        },
+        {
+            "name": "Spain",
+            "children": [
+            {
+                "name": "Paraguay",
+                "children": [
+                {"name": "Paraguay"},
+                {"name": "Japan"}
+                ]
+            },
+            {
+                "name": "Spain",
+                "children": [
+                {"name": "Spain"},
+                {"name": "Portugal"}
+                ]
+            }
+            ]
+        }
+        ]
+    }
+    ]
+}

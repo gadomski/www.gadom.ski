@@ -1,10 +1,12 @@
 {
   "dependencies": {
-    "moment": "2.3.x",
-    "underscore": "1.4.x",
-    "typogr": "0.5.x",
+    "grunt-gh-pages": "*",
     "grunt-wintersmith": "*",
-    "grunt-gh-pages": "*"
+    "moment": "2.3.x",
+    "typogr": "0.5.x",
+    "underscore": "1.4.x",
+    "wintersmith": "^2.0.10",
+    "wintersmith-data-json": "0.0.2"
   },
   "repository": "none"
 }
