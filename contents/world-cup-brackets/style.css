@@ -11,10 +11,6 @@ rect {
     fill-opacity: .5;
 }
 
-rect.parent {
-    cursor: pointer;
-}
-
 rect.winner {
     fill: green;
 }
