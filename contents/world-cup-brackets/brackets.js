@@ -1,4 +1,4 @@
-var w = 1120,
+var w = 760,
     h = 600,
     x = d3.scale.linear(),
     y = d3.scale.linear().range([0, h]);

@@ -1,0 +1,16 @@
+extends ../layout.jade
+
+
+block append head
+  link(rel="stylesheet", href="style.css")
+
+
+block content
+  h2= page.title
+
+  != page.html
+
+  #wc2010
+
+  script(type="text/javascript", src=contents.js["d3.min.js"].url)
+  script(type="text/javascript", src="brackets.js")
