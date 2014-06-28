@@ -41,6 +41,7 @@ function assignScores(results, bracket) {
         else
         {
             results.losers.push(bracket.name);
+            bracket.winner = results.name;
             bracket.status = "incorrect";
         }
     }
@@ -103,7 +104,12 @@ function buildBrackets(trees) {
         .attr("transform", transform)
         .attr("dy", "0.35em")
         .attr("font-size", "12px")
-        .text(function(d) { return d.name; });
+        .html(function(d) {
+            if (d.status === "incorrect")
+                return "<tspan text-decoration=\"line-through\">" + d.name + "</tspan> " + d.winner;
+            else
+                return d.name;
+        });
 
     function transform(d) {
         return "translate(8," + d.dx * height / 2 + ")";
@@ -121,14 +127,14 @@ var results = {
             "name": "",
             "children": [
             {
-                "name": "",
+                "name": "Brazil",
                 "children": [
                 {"name": "Brazil"},
                 {"name": "Chile"}
                 ]
             },
             {
-                "name": "",
+                "name": "Columbia",
                 "children": [
                 {"name": "Columbia"},
                 {"name": "Uruguay"}
