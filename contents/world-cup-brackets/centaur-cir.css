@@ -1,0 +1,9 @@
+.incorrect rect {
+    fill: red;
+}
+.correct rect {
+    fill: green;
+}
+.leaf rect {
+    fill: steelblue;
+}
