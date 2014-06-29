@@ -468,7 +468,7 @@ var brackets = [
                 ]
             },
             {
-                "name": "Greece",
+                "name": "Costa Rica",
                 "children": [
                 {"name": "Costa Rica"},
                 {"name": "Greece"}
