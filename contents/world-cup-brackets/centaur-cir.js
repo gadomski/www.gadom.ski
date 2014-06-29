@@ -100,15 +100,22 @@ function buildBrackets(trees) {
         .attr("width", 0.2 * width)
         .attr("height", function(d) { return d.dx * height; })
         
-    g.append("text")
+    var text = g.append("text")
         .attr("transform", transform)
         .attr("dy", "0.35em")
         .attr("font-size", "12px")
-        .html(function(d) {
+        .each(function(d) {
+            var name = d3.select(this).append("tspan")
+                .text(function(d) { return d.name; })
+                .attr("x", 0);
             if (d.status === "incorrect")
-                return "<tspan text-decoration=\"line-through\">" + d.name + "</tspan> " + d.winner;
-            else
-                return d.name;
+            {
+                name.attr("text-decoration", "line-through");
+                d3.select(this).append("tspan")
+                    .text(d.winner)
+                    .attr("x", 0)
+                    .attr("dy", "1.2em");
+            }
         });
 
     function transform(d) {
