@@ -111,10 +111,12 @@ function buildBrackets(trees) {
             if (d.status === "incorrect")
             {
                 name.attr("text-decoration", "line-through");
-                d3.select(this).append("tspan")
-                    .text(d.winner)
-                    .attr("x", 0)
-                    .attr("dy", "1.2em");
+                if (d.winner) {
+                    d3.select(this).append("tspan")
+                        .text(d.winner)
+                        .attr("x", 0)
+                        .attr("dy", "1.2em");
+                }
             }
         });
 
