@@ -176,7 +176,7 @@ var results = {
                 ]
             },
             {
-                "name": "",
+                "name": "Germany",
                 "children": [
                 {"name": "Germany"},
                 {"name": "Algeria"}
