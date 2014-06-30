@@ -74,7 +74,7 @@ function buildBrackets(trees) {
         .style("margin-top", "2em");
 
     bracket.append("p").text(function(d) {
-        return String(d.score) + " point(s), maximum possible is " + String(d.possibleScore);
+        return String(d.score) + " " + pluralize("point", d.score) + ", maximum possible is " + String(d.possibleScore);
     });
 
     var svg = bracket.append("svg")
