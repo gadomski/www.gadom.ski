@@ -186,7 +186,7 @@ var results = {
                 ]
             },
             {
-                "name": "",
+                "name": "Costa Rica",
                 "children": [
                 {"name": "Costa Rica"},
                 {"name": "Greece"}
@@ -319,7 +319,7 @@ var brackets = [
     "name": "Germany",
     "children": [
     {
-        "name": "Brazil",
+        "name": "Germany",
         "children": [
         {
             "name": "Brazil",
@@ -362,10 +362,10 @@ var brackets = [
         ]
     },
     {
-        "name": "Greece",
+        "name": "Argentina",
         "children": [
         {
-            "name": "Netherlands",
+            "name": "Greece",
             "children": [
             {
                 "name": "Netherlands",
@@ -412,7 +412,7 @@ var brackets = [
     "name": "Germany",
     "children": [
     {
-        "name": "Brazil",
+        "name": "Germany",
         "children": [
         {
             "name": "Brazil",
@@ -455,10 +455,10 @@ var brackets = [
         ]
     },
     {
-        "name": "Costa Rica",
+        "name": "Argentina",
         "children": [
         {
-            "name": "Netherlands",
+            "name": "Costa Rica",
             "children": [
             {
                 "name": "Netherlands",
