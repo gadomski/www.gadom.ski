@@ -169,7 +169,7 @@ var results = {
             "name": "",
             "children": [
             {
-                "name": "",
+                "name": "France",
                 "children": [
                 {"name": "France"},
                 {"name": "Nigeria"}
