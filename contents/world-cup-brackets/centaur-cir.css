@@ -7,3 +7,6 @@
 .leaf rect {
     fill: steelblue;
 }
+.standing a, .standing a:hover, .standing a:active {
+    text-decoration: none;
+}

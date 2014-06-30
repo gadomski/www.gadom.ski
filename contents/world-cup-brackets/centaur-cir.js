@@ -61,6 +61,18 @@ function scoreFromDepth(depth) {
 function buildBrackets(trees) {
     var brackets = d3.select("#brackets");
 
+    brackets.append("h2").text("Standings");
+    brackets.append("ol").selectAll(".standing")
+            .data(trees)
+        .enter().append("li")
+        .attr("class", "standing")
+        .append("a")
+        .attr("href", function(d) { return "#" + d.owner; })
+        .html(function(d) {
+            return d.owner + " &mdash; " + d.score + " " + pluralize("points", d.score) + ", " + d.possibleScore + " possible";
+        });
+
+
     var x = d3.scale.linear(),
         y = d3.scale.linear().range([0, height]);
 
@@ -70,7 +82,9 @@ function buildBrackets(trees) {
         .append("div")
         .attr("class", "bracket");
 
-    bracket.append("h2").text(function(d, i) { return "#" + String(i+1) + ": " + d.owner; })
+    bracket.append("h2")
+        .attr("id", function(d) { return d.owner; })
+        .text(function(d, i) { return "#" + String(i+1) + ": " + d.owner; })
         .style("margin-top", "2em");
 
     bracket.append("p").text(function(d) {
@@ -506,6 +520,7 @@ brackets.forEach(function(b) {
     assignScores(results, b);
 });
 brackets.sort(function(a, b) {
-    return b.score - a.score;
+    var scoreDiff = b.score - a.score;
+    return scoreDiff != 0 ? scoreDiff : b.possibleScore - a.possibleScore;
 });
 buildBrackets(brackets);
