@@ -512,6 +512,99 @@ var brackets = [
         ]
     }
     ]
+},
+{
+    "owner": "Kelly",
+    "third": "Argentina",
+    "name": "Costa Rica",
+    "children": [
+    {
+        "name": "France",
+        "children": [
+        {
+            "name": "Columbia",
+            "children": [
+            {
+                "name": "Brazil",
+                "children": [
+                {"name": "Brazil"},
+                {"name": "Chile"}
+                ]
+            },
+            {
+                "name": "Columbia",
+                "children": [
+                {"name": "Columbia"},
+                {"name": "Uruguay"}
+                ]
+            }
+            ]
+        },
+        {
+            "name": "France",
+            "children": [
+            {
+                "name": "France",
+                "children": [
+                {"name": "France"},
+                {"name": "Nigeria"}
+                ]
+            },
+            {
+                "name": "Germany",
+                "children": [
+                {"name": "Germany"},
+                {"name": "Algeria"}
+                ]
+            }
+            ]
+        }
+        ]
+    },
+    {
+        "name": "Costa Rica",
+        "children": [
+        {
+            "name": "Costa Rica",
+            "children": [
+            {
+                "name": "Netherlands",
+                "children": [
+                {"name": "Netherlands"},
+                {"name": "Mexico"}
+                ]
+            },
+            {
+                "name": "Costa Rica",
+                "children": [
+                {"name": "Costa Rica"},
+                {"name": "Greece"}
+                ]
+            }
+            ]
+        },
+        {
+            "name": "Argentina",
+            "children": [
+            {
+                "name": "Argentina",
+                "children": [
+                {"name": "Argentina"},
+                {"name": "Switzerland"}
+                ]
+            },
+            {
+                "name": "USA",
+                "children": [
+                {"name": "Belgium"},
+                {"name": "USA"}
+                ]
+            }
+            ]
+        }
+        ]
+    }
+    ]
 }
 ];
 
