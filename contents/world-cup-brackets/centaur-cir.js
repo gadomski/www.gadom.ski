@@ -219,7 +219,7 @@ var results = {
                 ]
             },
             {
-                "name": "",
+                "name": "Belgium",
                 "children": [
                 {"name": "Belgium"},
                 {"name": "USA"}
