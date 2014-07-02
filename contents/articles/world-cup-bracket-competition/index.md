@@ -5,7 +5,7 @@ date: 2014-07-01
 template: article.jade
 ---
 
-Building on the world done for the [2010 World Cup Bracket](../../world-cup-brackets/2010.html), I've used the same basic data visualization to build a bracket competition for everyone in our house.
+Building on the work done for the [2010 World Cup Bracket](../../world-cup-brackets/2010.html), I've used the same basic data visualization to build a bracket competition for everyone in our house.
 Each of the four roommates submitted a bracket at the end of group play, and points are awarded for correct guesses.
 The page is updated with the latest results each day.
 
