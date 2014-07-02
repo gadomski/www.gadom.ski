@@ -30,6 +30,12 @@ html(lang='en')
         block footer
           section.about
             !=contents['about.md'].html
+          section.icons
+            p
+              a(href="https://github.com/gadomski/gadomski.github.io/")
+                img(src=contents.img["github.png"].url)
+              a(href=contents["feed.json"].url)
+                img(src=contents.img["rss.png"].url)
           section.copy
             p &copy; #{ new Date().getFullYear() } #{ locals.owner } &mdash; powered by&nbsp;
               a(href='https://github.com/jnordberg/wintersmith') Wintersmith

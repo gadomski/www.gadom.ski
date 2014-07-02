@@ -170,6 +170,16 @@ footer .copy, footer .copy a {
   color: #8e8e8e;
 }
 
+footer .icons {
+  text-align: center;
+}
+footer .icons img {
+  height: 32px;
+  width: 32px;
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
 /* article */
 
 .article {
