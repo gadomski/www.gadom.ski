@@ -7,6 +7,10 @@ var width = Number(kegLife.style("width").slice(0, kegLife.style("width").length
 
 var parseDate = d3.time.format("%Y-%m-%d");
 
+var today = new Date();
+today.setHours(0, 0, 0, 0);
+
+
 function purchaseDate(d) { return d.date; }
 function msToDays(d) { return Math.floor(d * 1.15741e-8); }
 
@@ -30,14 +34,16 @@ function buildKegLife(data) {
 
     var svg = kegLife.append("svg")
         .attr("width", width + margin.right + margin.left)
-        .attr("height", height + margin.top + margin.bottom);
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var bar = svg.selectAll("g.bar").data(data.kegPurchases);
     bar.enter().append("g")
         .attr("class", "bar");
     bar
         .attr("transform", function(d, i) {
-            return "translate(" + margin.left + "," + (i * barHeight + margin.top + barSpacing) + ")";
+            return "translate(0," + (i * barHeight + barSpacing) + ")";
         })
     bar.append("rect")
         .attr("width", function(d) { return xscale(d.dateRange); })
@@ -65,7 +71,6 @@ function buildKegLife(data) {
 
     svg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
         .call(xaxis);
 }
 
@@ -73,13 +78,56 @@ function buildKegLife(data) {
 function buildCostComparison(data) {
     var height = width / 2;
 
+    var purchases = data["purchases"];
+    
+    purchases.forEach(function(d, i, a) {
+        if (i === 0)
+            d.cumulativeCost = d.cost;
+        else
+            d.cumulativeCost = d.cost + a[i-1].cumulativeCost;
+    });
+    var fairMarketValue = purchases.reduce(function(previous, current) {
+        if (!current.keg)
+            return previous
+
+        var cumulativeCost = previous.length > 0 ? previous[previous.length - 1].forwardCumulativeCost : 0;
+        var cost = (Math.floor(data.kegs[current.keg].gallons * 128 / 12 )/ 6) * data.beers[current.beer].sixPackCost;
+
+        previous.push({
+            "date": current.date,
+            "cost": cost,
+            "cumulativeCost": cumulativeCost,
+            "forwardCumulativeCost": cumulativeCost + cost
+        });
+        return previous;
+    }, []);
+    fairMarketValue.push({
+        "date": today,
+        "cumulativeCost": fairMarketValue[fairMarketValue.length - 1].forwardCumulativeCost}
+        );
+
+    var dateExtent = d3.extent(purchases, function(d) { return d.date; });
+    var maxCost = d3.max([fairMarketValue, purchases], function(d) {
+        return d3.max(d, function(e) { return e.cumulativeCost; });
+    });
+
+    var xscale = d3.scale.linear()
+        .domain(dateExtent)
+        .range([0, width])
+        .nice();
+
+    var yscale = d3.scale.linear()
+        .domain([0, maxCost])
+        .range([height, 0])
+        .nice();
+   
+    var svg = costComparison.append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom);
 }
 
 
 d3.json("../data/the-beer-tree.json", function(error, data) {
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-
     data.kegPurchases = data["purchases"].filter(function(d) {
         d.date = parseDate.parse(d.date);
         return d.keg;
