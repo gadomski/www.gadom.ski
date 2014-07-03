@@ -1,22 +1,22 @@
 {
     "purchases": [
     {
-        "date": "2014-07-03",
+        "date": "2014-07-02",
         "name": "Costco pre-built Kegerator",
         "cost": 350
     },
     {
-        "date": "2014-07-03",
+        "date": "2014-07-02",
         "name": "Beer hardware and CO2",
         "cost": 46
     },
     {
-        "date": "2014-07-03",
+        "date": "2014-07-02",
         "name": "Tubing insulation and drill bits",
         "cost": 13
     },
     {
-        "date": "2014-07-03",
+        "date": "2014-07-01",
         "beer": "stranger",
         "cost": 70,
         "keg": "1/4"
@@ -31,6 +31,7 @@
         "stranger": {
             "name": "Stranger Pale Ale",
             "brewery": "Left Hand",
+            "color": "#FFBF00",
             "style": "American Pale Ale",
             "body": "Medium-Light",
             "abv": 5,

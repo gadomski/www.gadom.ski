@@ -1,4 +1,22 @@
 extends article.jade
 
+block append head
+  link(rel="stylesheet", href=contents.css["the-beer-tree.css"].url)
+
 block header
   h1= page.title
+
+block append content
+  h2 Keg Life
+  #keg-life
+
+  h2 Calendar
+  #calendar
+    p Coming soon
+
+  h2 Cost Comparison
+  #cost-comparison
+    p Coming soon
+
+  script(src=contents.js["d3.min.js"].url)
+  script(src=contents.js["the-beer-tree.js"].url)
