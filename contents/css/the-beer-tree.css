@@ -8,3 +8,10 @@
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+text.keg-date {
+  font: 12px sans-serif;
+  stroke: #aaa;
+  stroke-width: 0.8px;
+  fill: none;
+}

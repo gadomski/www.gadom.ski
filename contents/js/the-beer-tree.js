@@ -7,11 +7,12 @@ var width = Number(kegLife.style("width").slice(0, kegLife.style("width").length
 var parseDate = d3.time.format("%Y-%m-%d");
 
 function purchaseDate(d) { return d.date; }
+function msToDays(d) { return Math.floor(d * 1.15741e-8); }
 
 
 function buildKegLife(data) {
     var height = width / 2
-        padding = {top: 40, right: 60, bottom: 0, left: 60};
+        padding = {top: 40, right: 10, bottom: 0, left: 100};
 
     var kegPurchases = data["purchases"].filter(function(d) {
         return d.keg;
@@ -21,7 +22,16 @@ function buildKegLife(data) {
     today.setHours(0, 0, 0, 0);
 
     kegPurchases.forEach(function(d, i, a) {
-        d.endDate = a[i + 1] ? a[i + 1].date : today;
+        if (a[i + 1])
+        {
+            d.endDate = a[i + 1].date;
+            d.kicked = true;
+        }
+        else
+        {
+            d.endDate = today;
+            d.kicked = false;
+        }
         d.dateRange = d.endDate - d.date;
         if (!maxDateRange || d.dateRange > maxDateRange)
             maxDateRange = d.dateRange;
@@ -34,9 +44,10 @@ function buildKegLife(data) {
     var xaxis = d3.svg.axis()
         .orient("top")
         .scale(xscale)
-        .tickFormat(function(d) { return Math.floor(d * 1.15741e-8) + " days"; });
+        .tickFormat(function(d) { return msToDays(d) + " days"; });
 
     var barHeight = (height - padding.top - padding.bottom) / kegPurchases.length;
+    var barSpacing = 10;
 
     var svg = kegLife.append("svg")
         .attr("width", width)
@@ -47,12 +58,31 @@ function buildKegLife(data) {
         .attr("class", "bar");
     bar
         .attr("transform", function(d, i) {
-            return "translate(" + padding.left + "," + (i * barHeight + padding.top) + ")";
+            return "translate(" + padding.left + "," + (i * barHeight + padding.top + barSpacing) + ")";
         })
     bar.append("rect")
         .attr("width", function(d) { return xscale(d.dateRange); })
-        .attr("height", barHeight)
-        .style("fill", function(d) { return data["beers"][d.beer].color; });
+        .attr("height", barHeight - 2 * barSpacing)
+        .style("fill", function(d) {
+            var color = data["beers"][d.beer].color;
+            return d.kicked ? color : d3.hsl(color).brighter(1.2);
+        });
+    bar.append("text")
+        .attr("y", barHeight / 2)
+        .attr("x", 20)
+        .attr("dy", 0.5)
+        .text(function(d) {
+            var name = data["beers"][d.beer].name;
+            var descriptor = d.kicked ? "kicked in " + msToDays(d.dateRange) + " days" : "unkicked";
+            return name + ", " + descriptor;
+        });
+    bar.append("text")
+        .attr("class", "keg-date")
+        .attr("y", barSpacing + 6)
+        .attr("dy", 0.5)
+        .attr("x", -20)
+        .attr("text-anchor", "end")
+        .text(function(d) { return d3.time.format("%B %e")(d.date); })
 
     svg.append("g")
         .attr("class", "x axis")
