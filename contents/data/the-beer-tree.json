@@ -1,0 +1,50 @@
+{
+    "purchases": [
+    {
+        "date": "2014-07-03",
+        "name": "Costco pre-built Kegerator",
+        "cost": 350
+    },
+    {
+        "date": "2014-07-03",
+        "name": "Beer hardware and CO2",
+        "cost": 46
+    },
+    {
+        "date": "2014-07-03",
+        "name": "Tubing insulation and drill bits",
+        "cost": 13
+    },
+    {
+        "date": "2014-07-03",
+        "beer": "stranger",
+        "cost": 70,
+        "keg": "1/4"
+    },
+    {
+        "date": "2014-07-31",
+        "name": "Refridgeration",
+        "cost": 3
+    }
+    ],
+    "beers": {
+        "stranger": {
+            "name": "Stranger Pale Ale",
+            "brewery": "Left Hand",
+            "style": "American Pale Ale",
+            "body": "Medium-Light",
+            "abv": 5,
+            "ibu": 36,
+            "plato": 11.7,
+            "malts": ["Pale 2-row", "Rye", "Munich", "Crystal"],
+            "hops": ["Centennial", "Willamette", "Cascade"],
+            "beeradvocate": "/beer/profile/418/66154/",
+            "sixPackCost": 7.99
+        }
+    },
+    "kegs": {
+        "1/4": {
+            "gallons": 7.75
+        }
+    }
+}
