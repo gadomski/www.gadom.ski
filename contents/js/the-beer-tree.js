@@ -1,9 +1,9 @@
 var kegLife = d3.select("#keg-life"),
     calendar = d3.select("#calendar"),
-    costComparison = d3.select("#costComparison");
+    costComparison = d3.select("#cost-comparison");
 
 var width = Number(kegLife.style("width").slice(0, kegLife.style("width").length - 2)),
-    margin = {top: 40, right: 10, bottom: 0, left: 100};
+    margin = {top: 40, right: 10, bottom: 40, left: 100};
 
 var parseDate = d3.time.format("%Y-%m-%d");
 
@@ -78,7 +78,9 @@ function buildKegLife(data) {
 function buildCostComparison(data) {
     var height = width / 2;
 
-    var purchases = data["purchases"];
+    var purchases = data["purchases"],
+        colors = ["steelblue", "red"],
+        names = ["Spending", "Fair market value"];
     
     purchases.forEach(function(d, i, a) {
         if (i === 0)
@@ -106,24 +108,76 @@ function buildCostComparison(data) {
         "cumulativeCost": fairMarketValue[fairMarketValue.length - 1].forwardCumulativeCost}
         );
 
-    var dateExtent = d3.extent(purchases, function(d) { return d.date; });
     var maxCost = d3.max([fairMarketValue, purchases], function(d) {
         return d3.max(d, function(e) { return e.cumulativeCost; });
     });
 
-    var xscale = d3.scale.linear()
-        .domain(dateExtent)
+    var xscale = d3.time.scale()
+        .domain(d3.extent(purchases, function(d) { return d.date; }))
         .range([0, width])
         .nice();
+
+    var xaxis = d3.svg.axis()
+        .orient("bottom")
+        .scale(xscale);
 
     var yscale = d3.scale.linear()
         .domain([0, maxCost])
         .range([height, 0])
         .nice();
+
+    var yaxis = d3.svg.axis()
+        .orient("left")
+        .tickFormat(function(d) { return "$" + d; })
+        .scale(yscale);
+
+    var line = d3.svg.line()
+        .x(function(d) { return xscale(d.date); })
+        .y(function(d) { return yscale(d.cumulativeCost); });
    
     var svg = costComparison.append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom);
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var path = svg.selectAll(".line").data([purchases, fairMarketValue]);
+    path.enter().append("g")
+        .attr("class", "line")
+        .append("path")
+        .style("stroke", function(d, i) { return colors[i]; })
+        .attr("d", line);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xaxis);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yaxis);
+
+    var legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(" + (width - 120) + "," + (height - 120) + ")");
+
+    var legendEntry = legend.selectAll(".legend-entry").data([purchases, fairMarketValue]);
+    legendEntry.enter().append("g")
+        .attr("class", "legend-entry")
+        .attr("transform", function(d, i) {
+            return "translate(0," + i * 16 + ")";
+        });
+    legendEntry.append("rect")
+        .attr("width", 10)
+        .attr("height", 10)
+        .style("fill", function(d, i) { return colors[i]; })
+    legendEntry.append("text")
+        .attr("x", 16) 
+        .attr("y", 8) 
+        .attr("dy", 0.5)
+        .text(function(d, i) { return names[i]; });
+
+
 }
 
 

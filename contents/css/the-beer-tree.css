@@ -15,3 +15,13 @@ text.keg-date {
   stroke-width: 0.8px;
   fill: none;
 }
+
+.line path {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1px;
+}
+
+.legend {
+  font: 12px sans-serif;
+}
