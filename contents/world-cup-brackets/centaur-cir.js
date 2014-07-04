@@ -166,7 +166,7 @@ var results = {
             ]
         },
         {
-            "name": "",
+            "name": "Germany",
             "children": [
             {
                 "name": "France",
