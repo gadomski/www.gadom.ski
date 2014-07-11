@@ -202,4 +202,6 @@ d3.json("../data/the-beer-tree.json", function(error, data) {
 
     buildKegLife(data);
     buildCostComparison(data);
+    calendar
+        .style("display", "none");
 });
