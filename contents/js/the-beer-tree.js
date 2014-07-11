@@ -31,9 +31,6 @@ function buildKegLife(data) {
     var barHeight = (height - margin.top) / data.kegPurchases.length;
     var barSpacing = 10;
 
-    kegLife.append("p")
-        .text("The x-axis is beers per day for kicked kegs.");
-
     var svg = kegLife.append("svg")
         .attr("width", width + margin.right + margin.left)
         .attr("height", height + margin.top)
@@ -48,11 +45,23 @@ function buildKegLife(data) {
             return "translate(0," + (i * barHeight + barSpacing) + ")";
         })
     bar.append("rect")
-        .attr("width", function(d) { return xscale(d.beersPerDay); })
+        .attr("width", function(d) {
+            if (d.beersPerDay)
+                return xscale(d.beersPerDay);
+            else
+                return xscale.range()[1];
+        })
         .attr("height", barHeight - 2 * barSpacing)
-        .style("fill", function(d) {
+        .each(function(d) {
+            var e = d3.select(this); 
             var color = data["beers"][d.beer].color;
-            return d.kicked ? color : d3.hsl(color).brighter(1.2);
+            if (!d.kicked) {
+                e.style("fill", "none");
+                e.style("stroke", color);
+                e.style("stroke-width", "3px");
+            } else {
+                e.style("fill", color);
+            }
         });
     bar.append("text")
         .attr("y", barHeight / 2)
@@ -60,7 +69,7 @@ function buildKegLife(data) {
         .attr("dy", 0.5)
         .text(function(d) {
             var name = data["beers"][d.beer].name;
-            var descriptor = d.kicked ? d.keg + " keg in " + msToDays(d.dateRange) + " days" : "unkicked";
+            var descriptor = d.kicked ? d.keg + " keg in " + msToDays(d.dateRange) + " days" : d.keg + " keg, unkicked";
             return name + ", " + descriptor;
         });
     bar.append("text")
@@ -74,6 +83,11 @@ function buildKegLife(data) {
     svg.append("g")
         .attr("class", "x axis")
         .call(xaxis);
+    svg.append("text")
+        .text("beers per day")
+        .attr("x", -25)
+        .attr("y", -25)
+        .style("font-size", "12px");
 }
 
 
@@ -149,6 +163,39 @@ function buildCostComparison(data) {
         .append("path")
         .style("stroke", function(d, i) { return colors[i]; })
         .attr("d", line);
+
+    var dataPoints = svg.selectAll(".data-points").data(purchases)
+        .enter().append("g");
+    
+    dataPoints.append("circle")
+        .attr("class", "data-points")
+        .attr("cx", function(d) { return xscale(d.date); })
+        .attr("cy", function(d) { return yscale(d.cumulativeCost); })
+        .attr("r", 3)
+        .style("fill", "steelblue")
+    dataPoints.append("text")
+        .attr("x", function(d) { return xscale(d.date) + 5; })
+        .attr("y", function(d, i) {
+            var y = yscale(d.cumulativeCost) + 14;
+            var previous = purchases[i-1];
+            if (previous && d.cost < 20)
+                y -= 4;
+            return y;
+        })
+        .attr("dy", 0.35)
+        .text(function(d) {
+            if (d.name)
+                return d.name;
+            else
+                return data.beers[d.beer].name + ", " + d.keg + " keg";
+        })
+        .style("font-size", "10px")
+        .style("text-anchor", function(d) {
+              if ((xscale.domain()[1] - d.date) / (xscale.domain()[1] - xscale.domain()[0]) < 0.1)
+                  return "end";
+              else
+                  return "start";
+        });
 
     svg.append("g")
         .attr("class", "x axis")
