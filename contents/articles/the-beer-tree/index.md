@@ -13,9 +13,8 @@ But what if the tree actually makes us money in the end?
 
 <span class="more"></span>
 
-I'll update this article peridoically with context on the project.
-
 ### Update: 2014-07-11
 
 We've kicked one 1/4 barrel keg of [Stranger Pale Ale](http://lefthandbrewing.com/beers/stranger-pale-ale/), and are about to start in on a 1/6 barrel keg of [White Rascal](http://averybrewing.com/our-ales/white-rascal/).
 We've been having what we believe were leaking issues with our CO<sub>2</sub> regulator, so we got that replaced yesterday.
+Hopefully with our new regulator and a new keg we can fight back some of the foaming issues we've been having.
