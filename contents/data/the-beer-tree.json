@@ -37,6 +37,11 @@
         "beer": "whiteRascal",
         "cost": 60,
         "keg": "1/6"
+    },
+    {
+        "date": "2014-07-11",
+        "name": "10ft 3/16\" tubing, CO2 refill",
+        "cost": 14.51
     }
     ],
     "beers": {

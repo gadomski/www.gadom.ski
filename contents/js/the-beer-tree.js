@@ -171,16 +171,10 @@ function buildCostComparison(data) {
         .attr("class", "data-points")
         .attr("cx", function(d) { return xscale(d.date); })
         .attr("cy", function(d) { return yscale(d.cumulativeCost); })
-        .attr("r", 3)
-        .style("fill", function(d) {
-            if (d.beer) {
-                return data.beers[d.beer].color;
-            } else {
-                return "steelblue";
-            }
-        });
+        .attr("r", function(d) { return d.beer ? 5 : 3; })
+        .style("stroke", function(d) { return d.beer ? data.beers[d.beer].color : "steelblue"; });
     dataPoints.append("text")
-        .attr("x", function(d) { return xscale(d.date) + 5; })
+        .attr("x", function(d) { return xscale(d.date) + 8; })
         .attr("y", function(d, i) {
             var y = yscale(d.cumulativeCost) + 14;
             var previous = purchases[i-1];

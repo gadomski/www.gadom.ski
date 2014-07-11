@@ -25,3 +25,7 @@ text.keg-date {
 .legend {
   font: 12px sans-serif;
 }
+
+.data-points {
+    fill: #fff;
+}
