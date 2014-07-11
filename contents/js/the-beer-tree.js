@@ -3,7 +3,7 @@ var kegLife = d3.select("#keg-life"),
     costComparison = d3.select("#cost-comparison");
 
 var width = Number(kegLife.style("width").slice(0, kegLife.style("width").length - 2)),
-    margin = {top: 40, right: 10, bottom: 100, left: 100};
+    margin = {top: 40, right: 10, bottom: 80, left: 100};
 
 var parseDate = d3.time.format("%Y-%m-%d");
 
@@ -184,12 +184,18 @@ function buildCostComparison(data) {
 d3.json("../data/the-beer-tree.json", function(error, data) {
     data.kegPurchases = data["purchases"].filter(function(d) {
         d.date = parseDate.parse(d.date);
+        if (d.endDate)
+            d.endDate = parseDate.parse(d.endDate);
         return d.keg;
     });
     data["purchases"].sort(function(a, b) { return a.date - b.date; });
     data.kegPurchases.forEach(function(d, i, a) {
-        if (!d.endDate)
+        if (!d.endDate) {
             d.endDate = today;
+            d.kicked = false;
+        } else {
+            d.kicked = true;
+        }
         d.dateRange = d.endDate - d.date;
     });
 
