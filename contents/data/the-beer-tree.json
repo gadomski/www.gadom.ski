@@ -24,7 +24,7 @@
     },
     {
         "date": "2014-07-31",
-        "name": "Refridgeration",
+        "name": "Refrigeration",
         "cost": 3
     },
     {
@@ -57,7 +57,7 @@
         "whiteRascal": {
             "name": "White Rascal",
             "brewery": "Avery Brewing Company",
-            "color": "rgb(87,35,21)",
+            "color": "rgb(190,82,58)",
             "style": "Witbier",
             "abv": 5.6,
             "ibu": 22,

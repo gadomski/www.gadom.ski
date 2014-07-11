@@ -96,7 +96,7 @@ function buildCostComparison(data) {
 
     var purchases = data["purchases"],
         colors = ["steelblue", "red"],
-        names = ["Spending", "Fair market value"];
+        names = ["Expenses", "Fair market value"];
     
     purchases.forEach(function(d, i, a) {
         if (i === 0)
@@ -172,7 +172,13 @@ function buildCostComparison(data) {
         .attr("cx", function(d) { return xscale(d.date); })
         .attr("cy", function(d) { return yscale(d.cumulativeCost); })
         .attr("r", 3)
-        .style("fill", "steelblue")
+        .style("fill", function(d) {
+            if (d.beer) {
+                return data.beers[d.beer].color;
+            } else {
+                return "steelblue";
+            }
+        });
     dataPoints.append("text")
         .attr("x", function(d) { return xscale(d.date) + 5; })
         .attr("y", function(d, i) {
