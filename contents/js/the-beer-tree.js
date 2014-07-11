@@ -18,23 +18,25 @@ function msToDays(d) { return Math.floor(d * 1.15741e-8); }
 function buildKegLife(data) {
     var height = width / 2;
 
-    var maxDateRange = d3.max(data.kegPurchases, function(d) { return d.dateRange; });
+    var maxBeersPerDay = d3.max(data.kegPurchases, function(d) { return d.beersPerDay; });
 
     var xscale = d3.scale.linear()
-        .domain([0, maxDateRange])
+        .domain([0, maxBeersPerDay])
         .range([0, width]);
 
     var xaxis = d3.svg.axis()
         .orient("top")
-        .scale(xscale)
-        .tickFormat(function(d) { return msToDays(d) + " days"; });
+        .scale(xscale);
 
-    var barHeight = (height - margin.top - margin.bottom) / data.kegPurchases.length;
+    var barHeight = (height - margin.top) / data.kegPurchases.length;
     var barSpacing = 10;
+
+    kegLife.append("p")
+        .text("The x-axis is beers per day for kicked kegs.");
 
     var svg = kegLife.append("svg")
         .attr("width", width + margin.right + margin.left)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("height", height + margin.top)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -46,7 +48,7 @@ function buildKegLife(data) {
             return "translate(0," + (i * barHeight + barSpacing) + ")";
         })
     bar.append("rect")
-        .attr("width", function(d) { return xscale(d.dateRange); })
+        .attr("width", function(d) { return xscale(d.beersPerDay); })
         .attr("height", barHeight - 2 * barSpacing)
         .style("fill", function(d) {
             var color = data["beers"][d.beer].color;
@@ -58,7 +60,7 @@ function buildKegLife(data) {
         .attr("dy", 0.5)
         .text(function(d) {
             var name = data["beers"][d.beer].name;
-            var descriptor = d.kicked ? "kicked in " + msToDays(d.dateRange) + " days" : "unkicked";
+            var descriptor = d.kicked ? d.keg + " keg in " + msToDays(d.dateRange) + " days" : "unkicked";
             return name + ", " + descriptor;
         });
     bar.append("text")
@@ -93,7 +95,7 @@ function buildCostComparison(data) {
             return previous
 
         var cumulativeCost = previous.length > 0 ? previous[previous.length - 1].forwardCumulativeCost : 0;
-        var cost = (Math.floor(data.kegs[current.keg].gallons * 128 / 12 )/ 6) * data.beers[current.beer].sixPackCost;
+        var cost = (current.numberOfBeers / 6) * data.beers[current.beer].sixPackCost;
 
         previous.push({
             "date": current.date,
@@ -190,13 +192,17 @@ d3.json("../data/the-beer-tree.json", function(error, data) {
     });
     data["purchases"].sort(function(a, b) { return a.date - b.date; });
     data.kegPurchases.forEach(function(d, i, a) {
+        d.numberOfBeers = Math.floor(data.kegs[d.keg].gallons * 128 / 12 );
         if (!d.endDate) {
             d.endDate = today;
+            d.dateRange = null;
+            d.beersPerDay = null;
             d.kicked = false;
         } else {
+            d.dateRange = d.endDate - d.date;
+            d.beersPerDay = d.numberOfBeers / msToDays(d.dateRange);
             d.kicked = true;
         }
-        d.dateRange = d.endDate - d.date;
     });
 
     buildKegLife(data);
