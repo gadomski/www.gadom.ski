@@ -17,6 +17,7 @@
     },
     {
         "date": "2014-07-02",
+        "endDate": "2014-07-09",
         "beer": "stranger",
         "cost": 70,
         "keg": "1/4"
@@ -25,6 +26,17 @@
         "date": "2014-07-31",
         "name": "Refridgeration",
         "cost": 3
+    },
+    {
+        "date": "2014-07-08",
+        "name": "More tubing, thermometer, etc",
+        "cost": 50.67
+    },
+    {
+        "date": "2014-07-11",
+        "beer": "whiteRascal",
+        "cost": 60,
+        "keg": "1/6"
     }
     ],
     "beers": {
@@ -41,11 +53,24 @@
             "hops": ["Centennial", "Willamette", "Cascade"],
             "beeradvocate": "/beer/profile/418/66154/",
             "sixPackCost": 7.99
+        },
+        "whiteRascal": {
+            "name": "White Rascal",
+            "brewery": "Avery Brewing Company",
+            "color": "rgb(87,35,21)",
+            "style": "Witbier",
+            "abv": 5.6,
+            "ibu": 22,
+            "beeradvocate": "/beer/profile/30/9689/",
+            "sixPackCost": 8.99
         }
     },
     "kegs": {
         "1/4": {
             "gallons": 7.75
+        },
+        "1/6": {
+            "gallons": 5.16
         }
     }
 }
