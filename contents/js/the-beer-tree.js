@@ -186,17 +186,10 @@ d3.json("../data/the-beer-tree.json", function(error, data) {
         d.date = parseDate.parse(d.date);
         return d.keg;
     });
+    data["purchases"].sort(function(a, b) { return a.date - b.date; });
     data.kegPurchases.forEach(function(d, i, a) {
-        if (a[i + 1])
-        {
-            d.endDate = a[i + 1].date;
-            d.kicked = true;
-        }
-        else
-        {
+        if (!d.endDate)
             d.endDate = today;
-            d.kicked = false;
-        }
         d.dateRange = d.endDate - d.date;
     });
 
