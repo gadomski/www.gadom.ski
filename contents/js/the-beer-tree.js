@@ -3,7 +3,7 @@ var kegLife = d3.select("#keg-life"),
     costComparison = d3.select("#cost-comparison");
 
 var width = Number(kegLife.style("width").slice(0, kegLife.style("width").length - 2)),
-    margin = {top: 40, right: 10, bottom: 40, left: 100};
+    margin = {top: 40, right: 10, bottom: 100, left: 100};
 
 var parseDate = d3.time.format("%Y-%m-%d");
 
@@ -159,7 +159,7 @@ function buildCostComparison(data) {
 
     var legend = svg.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - 120) + "," + (height - 120) + ")");
+        .attr("transform", "translate(" + (width / 2 - 50) + "," + (height + 40) + ")");
 
     var legendEntry = legend.selectAll(".legend-entry").data([purchases, fairMarketValue]);
     legendEntry.enter().append("g")
