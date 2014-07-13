@@ -141,7 +141,7 @@ function buildBrackets(trees) {
 
 
 var results = {
-    "name": "",
+    "name": "Germany",
     "children": [
     {
         "name": "Germany",
