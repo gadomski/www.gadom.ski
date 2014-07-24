@@ -34,6 +34,7 @@
     },
     {
         "date": "2014-07-11",
+        "endDate": "2014-07-23",
         "beer": "whiteRascal",
         "cost": 60,
         "keg": "1/6"
