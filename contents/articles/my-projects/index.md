@@ -14,7 +14,7 @@ This is not an exhaustive list.
 * **GRiD**: database system and web application for transforming, storing, analyzing, and retrieving point cloud data.
   <small class="tomorrow-comment">python (django), jquery, pl/sql</small>
 * [**gadomski/glac.io**](https://github.com/gadomski/glac.io): real time data visualization of glacier and climate data.
-  It is [publicly accessible](https://gadomski.github.io/glac.io).
+  It is [publicly accessible](http://glacierresearch.org).
   <small class="tomorrow-comment">javascript (d3)</small>
 * [**gadomski/cwms-jsonapi**](https://github.com/gadomski/cwms-jsonapi): simplistic JSON API for the [Corps Water Management System](http://www.hec.usace.army.mil/cwms/cwms.aspx).
   <small class="tomorrow-comment">pl/sql</small>
