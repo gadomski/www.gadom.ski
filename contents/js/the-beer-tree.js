@@ -191,7 +191,7 @@ function buildCostComparison(data) {
         })
         .style("font-size", "10px")
         .style("text-anchor", function(d) {
-              if ((xscale.domain()[1] - d.date) / (xscale.domain()[1] - xscale.domain()[0]) < 0.1)
+              if ((xscale.domain()[1] - d.date) / (xscale.domain()[1] - xscale.domain()[0]) < 0.2)
                   return "end";
               else
                   return "start";

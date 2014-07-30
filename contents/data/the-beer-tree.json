@@ -43,6 +43,12 @@
         "date": "2014-07-11",
         "name": "10ft 3/16\" tubing, CO2 refill",
         "cost": 14.51
+    },
+    {
+        "date": "2014-07-28",
+        "beer": "dalesPale",
+        "cost": 70,
+        "keg": "1/6"
     }
     ],
     "beers": {
@@ -68,6 +74,16 @@
             "abv": 5.6,
             "ibu": 22,
             "beeradvocate": "/beer/profile/30/9689/",
+            "sixPackCost": 8.99
+        },
+        "dalesPale": {
+            "name": "Dale's Pale Ale",
+            "brewery": "Oskar Blues",
+            "color": "rgb(23,41,110)",
+            "style": "American Pale Ale",
+            "abv": 6.5,
+            "ibu": 65,
+            "beeradvocate": "/beer/profile/2681/6518/",
             "sixPackCost": 8.99
         }
     },
