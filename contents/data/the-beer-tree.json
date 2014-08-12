@@ -46,9 +46,16 @@
     },
     {
         "date": "2014-07-28",
+        "endDate": "2014-08-03",
         "beer": "dalesPale",
         "cost": 70,
         "keg": "1/6"
+    },
+    {
+        "date": "2014-08-11",
+        "beer": "90shilling",
+        "cost": 77,
+        "keg", "1/4"
     }
     ],
     "beers": {
@@ -84,6 +91,15 @@
             "abv": 6.5,
             "ibu": 65,
             "beeradvocate": "/beer/profile/2681/6518/",
+            "sixPackCost": 8.99
+        },
+        "90shilling": {
+            "name": "90 Shilling Ale",
+            "brewery": "ODell Brewing Company",
+            "color": "rgb(149, 29, 0)",
+            "style": "Scottish Ale",
+            "abv": 5.3,
+            "ibu": 27,
             "sixPackCost": 8.99
         }
     },
