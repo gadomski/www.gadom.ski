@@ -53,9 +53,21 @@
     },
     {
         "date": "2014-08-11",
+        "endDate": "2014-08-27",
         "beer": "90shilling",
         "cost": 77,
-        "keg", "1/4"
+        "keg": "1/4"
+    },
+    {
+        "date": "2014-09-05",
+        "name": "CO2 refill",
+        "cost": 9.99
+    },
+    {
+        "date": "2014-09-06",
+        "beer": "mamasYellowPils",
+        "cost": 68,
+        "keg": "1/6"
     }
     ],
     "beers": {
@@ -101,6 +113,14 @@
             "abv": 5.3,
             "ibu": 27,
             "sixPackCost": 8.99
+        },
+        "mamasYellowPils": {
+            "name": "Mama's Yella Pils",
+            "brewery": "Oskar Blues",
+            "color": "#E9C13F",
+            "style": "Czech Pilsner",
+            "abv": 5.3,
+            "sixPackCost": 7.99
         }
     },
     "kegs": {

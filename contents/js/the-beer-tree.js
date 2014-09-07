@@ -177,15 +177,12 @@ function buildCostComparison(data) {
         .attr("x", function(d) { return xscale(d.date) + 8; })
         .attr("y", function(d, i) {
             var y = yscale(d.cumulativeCost) + 14;
-            var previous = purchases[i-1];
-            if (previous && d.cost < 20)
-                y -= 4;
             return y;
         })
         .attr("dy", 0.35)
         .text(function(d) {
             if (d.name)
-                return d.name;
+                return "";
             else
                 return data.beers[d.beer].name + ", " + d.keg + " keg";
         })
