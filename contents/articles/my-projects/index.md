@@ -19,6 +19,9 @@ Last updated 2015-05-03.
 - [**fgt**](https://github.com/gadomski/fgt): C++ library for performing Fast Gauss Transforms, which are used for many types of spatial optimization problems.
   <small class="tomorrow-comment">C++</small>
 
+- [**las-rs**](https://github.com/gadomski/las-rs): Rust library for reading and writing LAS files.
+  <small class="tomorrow-comment">Rust</small>
+
 * **GRiD**: database system and web application for transforming, storing, analyzing, and retrieving point cloud data.
   <small class="tomorrow-comment">python (django), jquery, pl/sql</small>
 
