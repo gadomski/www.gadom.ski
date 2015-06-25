@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on gadomski.github.io</title>
-    <link>http://localhost:1313/post/</link>
+    <link>http://gadomski.github.io/post/</link>
     <description>Recent content in Posts on gadomski.github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 12 May 2015 16:14:19 -0600</lastBuildDate>
-    <atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://gadomski.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>las-rs</title>
-      <link>http://localhost:1313/post/las-rs-announcement/</link>
+      <link>http://gadomski.github.io/post/las-rs-announcement/</link>
       <pubDate>Tue, 12 May 2015 16:14:19 -0600</pubDate>
       
-      <guid>http://localhost:1313/post/las-rs-announcement/</guid>
+      <guid>http://gadomski.github.io/post/las-rs-announcement/</guid>
       <description>
 
 &lt;p&gt;&lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; is a new language.&lt;/p&gt;
@@ -66,10 +66,10 @@ Here&amp;rsquo;s hoping.&lt;/p&gt;
     
     <item>
       <title>Fast Gauss Transform C&#43;&#43; Library</title>
-      <link>http://localhost:1313/post/fgt-announcement/</link>
+      <link>http://gadomski.github.io/post/fgt-announcement/</link>
       <pubDate>Sun, 03 May 2015 16:15:50 -0600</pubDate>
       
-      <guid>http://localhost:1313/post/fgt-announcement/</guid>
+      <guid>http://gadomski.github.io/post/fgt-announcement/</guid>
       <description>&lt;p&gt;Have you ever wanted to solve a Fast Gauss Transform really quickly?&lt;/p&gt;
 
 &lt;p&gt;$$ G(\mathbf{y}_j) = \sum_{i=1}^{N} q_i \exp \frac { - || \mathbf{y}_j - \mathbf{x}_i ||^2 } { h^2 } $$&lt;/p&gt;
@@ -89,19 +89,19 @@ If you want to get crazy you can even use an &lt;a href=&#34;http://openmp.org/w
     
     <item>
       <title>Coherent Point Drift C&#43;&#43; Library</title>
-      <link>http://localhost:1313/post/cpd-announcement/</link>
+      <link>http://gadomski.github.io/post/cpd-announcement/</link>
       <pubDate>Sun, 01 Feb 2015 16:04:26 -0600</pubDate>
       
-      <guid>http://localhost:1313/post/cpd-announcement/</guid>
+      <guid>http://gadomski.github.io/post/cpd-announcement/</guid>
       <description>&lt;p&gt;I&amp;rsquo;ve released a C++ library for running &lt;a href=&#34;https://sites.google.com/site/myronenko/research/cpd&#34;&gt;Coherent Point Drift&lt;/a&gt; on a set of points: &lt;a href=&#34;https://github.com/gadomski/cpd&#34;&gt;https://github.com/gadomski/cpd&lt;/a&gt;.
-I&amp;rsquo;ve also put together some basic &lt;a href=&#34;http://localhost:1313/cpd-presentation/&#34;&gt;slides&lt;/a&gt; describing the (very general) operation of the algorithm.&lt;/p&gt;
+I&amp;rsquo;ve also put together some basic &lt;a href=&#34;http://gadomski.github.io/cpd-presentation/&#34;&gt;slides&lt;/a&gt; describing the (very general) operation of the algorithm.&lt;/p&gt;
 
 &lt;p&gt;This library was developed initially to do change detection on high-temporal-resolution repeat terrestrial lidar scans of the &lt;a href=&#34;http://en.wikipedia.org/wiki/Helheim_Glacier&#34;&gt;Helheim Glacier&lt;/a&gt;.
 Like all glaciers, the Helheim Glacier deforms non-rigidly, and quantifying that non-rigid deformation (i.e. the spatially-varying surface velocities) of the glacier is important for many glaciological applications, including model initialization.&lt;/p&gt;
 
 &lt;p&gt;CPD is currently in a state where it works, but it has a lot of problems:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/helheim-cpd-magnitude.png&#34; alt=&#34;Very rough initial run of non-rigid CPD on the Helheim Glacier&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://gadomski.github.io/images/helheim-cpd-magnitude.png&#34; alt=&#34;Very rough initial run of non-rigid CPD on the Helheim Glacier&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;The above picture is a visualization of the magnitude of the velocity vectors at each point (units of meters per six hours, which was the time between scans).
@@ -120,10 +120,10 @@ Watch &lt;a href=&#34;https://github.com/gadomski/cpd/releases&#34;&gt;https://g
     
     <item>
       <title>Real-time glacier monitoring</title>
-      <link>http://localhost:1313/post/glacio-announcement/</link>
+      <link>http://gadomski.github.io/post/glacio-announcement/</link>
       <pubDate>Wed, 10 Sep 2014 16:18:48 -0600</pubDate>
       
-      <guid>http://localhost:1313/post/glacio-announcement/</guid>
+      <guid>http://gadomski.github.io/post/glacio-announcement/</guid>
       <description>&lt;p&gt;One of my work projects went live today: &lt;a href=&#34;http://glacierresearch.org/&#34;&gt;http://glacierresearch.org/&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Internally known as glac.io (and also available at &lt;a href=&#34;http://glac.io/&#34;&gt;http://glac.io/&lt;/a&gt;), the website serves real-time climate and camera data from sensors located near glaciers all over the world.
@@ -137,7 +137,7 @@ I&amp;rsquo;ve made a viewer (again, with d3.js) to flip through the latest pict
 Some of these pictures can be stunning.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/helheim-terminus.jpg&#34; alt=&#34;Terminus of the Helheim Glacier&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://gadomski.github.io/images/helheim-terminus.jpg&#34; alt=&#34;Terminus of the Helheim Glacier&#34; /&gt;
 &lt;/p&gt;
 
 &lt;ul&gt;
