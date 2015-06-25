@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>gadomski.github.io</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on gadomski.github.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 25 Jun 2015 16:04:26 -0600</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Coherent Point Drift C&#43;&#43; Library</title>
+      <link>http://localhost:1313/post/cpd-announcement/</link>
+      <pubDate>Thu, 25 Jun 2015 16:04:26 -0600</pubDate>
+      
+      <guid>http://localhost:1313/post/cpd-announcement/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve released a C++ library for running &lt;a href=&#34;https://sites.google.com/site/myronenko/research/cpd&#34;&gt;Coherent Point Drift&lt;/a&gt; on a set of points: &lt;a href=&#34;https://github.com/gadomski/cpd&#34;&gt;https://github.com/gadomski/cpd&lt;/a&gt;.
+I&amp;rsquo;ve also put together some basic &lt;a href=&#34;http://localhost:1313/cpd-presentation/&#34;&gt;slides&lt;/a&gt; describing the (very general) operation of the algorithm.&lt;/p&gt;
+
+&lt;p&gt;This library was developed initially to do change detection on high-temporal-resolution repeat terrestrial lidar scans of the &lt;a href=&#34;http://en.wikipedia.org/wiki/Helheim_Glacier&#34;&gt;Helheim Glacier&lt;/a&gt;.
+Like all glaciers, the Helheim Glacier deforms non-rigidly, and quantifying that non-rigid deformation (i.e. the spatially-varying surface velocities) of the glacier is important for many glaciological applications, including model initialization.&lt;/p&gt;
+
+&lt;p&gt;CPD is currently in a state where it works, but it has a lot of problems:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;magnitude.png&#34; alt=&#34;Very rough initial run of non-rigid CPD on the Helheim Glacier&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The above picture is a visualization of the magnitude of the velocity vectors at each point (units of meters per six hours, which was the time between scans).
+Some of the current issues:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We have to break the scan up into little chunks, since the CPD math chokes on big matrices of data&lt;/li&gt;
+&lt;li&gt;Some of those chunks don&amp;rsquo;t register well — that&amp;rsquo;s those little flyaway portions in the bottom of the image&lt;/li&gt;
+&lt;li&gt;The whole thing is single-threaded and slow — this run took thirty hours&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;However, these are definitely initial results, and I am hopeful we will be able to improve performance both in time and in supported data volumes.
+Watch &lt;a href=&#34;https://github.com/gadomski/cpd/releases&#34;&gt;https://github.com/gadomski/cpd/releases&lt;/a&gt; for updates.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
