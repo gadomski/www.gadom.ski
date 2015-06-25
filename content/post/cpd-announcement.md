@@ -13,7 +13,7 @@ Like all glaciers, the Helheim Glacier deforms non-rigidly, and quantifying that
 
 CPD is currently in a state where it works, but it has a lot of problems:
 
-![Very rough initial run of non-rigid CPD on the Helheim Glacier](magnitude.png)
+![Very rough initial run of non-rigid CPD on the Helheim Glacier](/images/helheim-cpd-magnitude.png)
 
 The above picture is a visualization of the magnitude of the velocity vectors at each point (units of meters per six hours, which was the time between scans).
 Some of the current issues:
