@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on gadomski.github.io</title>
+    <link>http://localhost:1313/post/</link>
+    <description>Recent content in Posts on gadomski.github.io</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 12 May 2015 16:14:19 -0600</lastBuildDate>
+    <atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>las-rs</title>
+      <link>http://localhost:1313/post/las-rs-announcement/</link>
+      <pubDate>Tue, 12 May 2015 16:14:19 -0600</pubDate>
+      
+      <guid>http://localhost:1313/post/las-rs-announcement/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; is a new language.&lt;/p&gt;
+
+&lt;p&gt;That&amp;rsquo;s about where I want to leave it.
+People &lt;a href=&#34;http://winningraceconditions.blogspot.com/2012/09/rust-0-index-and-conclusion.html&#34;&gt;like it&lt;/a&gt;, people &lt;a href=&#34;http://www.viva64.com/en/b/0324/&#34;&gt;hate it&lt;/a&gt;&amp;hellip;kay.
+I thought I&amp;rsquo;d check it out, so I hacked together a quick &lt;a href=&#34;http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html&#34;&gt;las&lt;/a&gt; reader.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/gadomski/las-rs&#34;&gt;https://github.com/gadomski/las-rs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I plan to add the ability to write lasfiles as well, and maybe a command-line interface (either as part of &lt;strong&gt;las-rs&lt;/strong&gt; or as a separate package) that roughly emulates &lt;a href=&#34;http://www.liblas.org/&#34;&gt;liblas&lt;/a&gt; and &lt;a href=&#34;http://www.cs.unc.edu/~isenburg/lastools/&#34;&gt;lastools&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;My thoughts on working with rust so far:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Yes yes yes &lt;a href=&#34;https://crates.io/&#34;&gt;cargo&lt;/a&gt;.
+&lt;em&gt;las&lt;/em&gt; files are all little-endian, but rust doesn&amp;rsquo;t come natively with an endian-aware read stream.
+Boom, &lt;a href=&#34;https://crates.io/crates/byteorder&#34;&gt;byteorder&lt;/a&gt;, and done.
+Much better than manually vendoring some header-only C/C++ library or forcing boost upon yourself.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Language syntax is good.
+Learning curve is not gentle, but that hopefully will change as rust &lt;a href=&#34;http://blog.rust-lang.org/2014/12/12/1.0-Timeline.html&#34;&gt;hits 1.0&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;+1 to built in, same-file testing.
+The easier tests are to write, the more they will be written.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Once I learned the basics of the language, a rewrite of the &lt;em&gt;las&lt;/em&gt; reader took less than probably five hours.
+Much faster than an equivalent C/C++ standup, just from a pure typing mechanics perspective.
+There&amp;rsquo;s something to that.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;I think I like &lt;a href=&#34;https://doc.rust-lang.org/book/traits.html&#34;&gt;traits&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;No opinion on performance yet.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The biggest stick in the mud for rust, as it always has been, is the inertia/chicken-and-egg problem.
+If I build &lt;a href=&#34;https://github.com/gadomski/WDAL&#34;&gt;my next big project&lt;/a&gt; in rust, I&amp;rsquo;m automatically HOSING anyone that wants to work on it with me.
+Open source performance programming is more-or-less expected to be C/C++, full stop.
+For now, rust might be a nice niche that I spec out fun little projects in, but as of yet I&amp;rsquo;m not willing to commit my big developments to the new language.&lt;/p&gt;
+
+&lt;h2 id=&#34;next-steps:3cc72ef3e1a99aab8e0f63fd512364dd&#34;&gt;Next Steps&lt;/h2&gt;
+
+&lt;p&gt;As mentioned above, I want to make a writer and a command line interface.
+I also want to FFI wrap &lt;a href=&#34;http://trac.osgeo.org/geotiff/&#34;&gt;libgeotiff&lt;/a&gt; and &lt;a href=&#34;http://www.gdal.org/&#34;&gt;GDAL&lt;/a&gt; so I can work with spatial reference systems in rust.
+Might as well give the language a fighting chance, and the joy of cargo.io is that if I FFI wrap those things once, hopefully those wrappings can just become canonical and no one has to solve that problem again.
+Here&amp;rsquo;s hoping.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Fast Gauss Transform C&#43;&#43; Library</title>
+      <link>http://localhost:1313/post/fgt-announcement/</link>
+      <pubDate>Sun, 03 May 2015 16:15:50 -0600</pubDate>
+      
+      <guid>http://localhost:1313/post/fgt-announcement/</guid>
+      <description>&lt;p&gt;Have you ever wanted to solve a Fast Gauss Transform really quickly?&lt;/p&gt;
+
+&lt;p&gt;$$ G(\mathbf{y}_j) = \sum_{i=1}^{N} q_i \exp \frac { - || \mathbf{y}_j - \mathbf{x}_i ||^2 } { h^2 } $$&lt;/p&gt;
+
+&lt;p&gt;Because I know I have.&lt;/p&gt;
+
+&lt;p&gt;But for serious, solving that equation, which basically calculates the n-dimentional probability density function between two points, is important for a lot of stuff, including many types of spatial optimization problems.
+I needed to do it fast for my implementation of &lt;a href=&#34;https://github.com/gadomski/cpd&#34;&gt;Coherent Point Drift&lt;/a&gt;, so I made a C++ library &lt;a href=&#34;https://github.com/gadomski/fgt&#34;&gt;fgt&lt;/a&gt;, modeled after &lt;a href=&#34;http://www.umiacs.umd.edu/~morariu/figtree/&#34;&gt;FIGTree&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The library is implemented in what is hopefully a modern, reusable C++ fashion, with minimal external dependencies (look ma, no boost).
+The main dependency is &lt;a href=&#34;http://arma.sourceforge.net/&#34;&gt;armadillo&lt;/a&gt;, a really swell matrix library that I keep reusing because it makes me happy.
+If you want to get crazy you can even use an &lt;a href=&#34;http://openmp.org/wp/&#34;&gt;openmp&lt;/a&gt; library to parallelize stuff.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/gadomski/fgt&#34;&gt;https://github.com/gadomski/fgt&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Coherent Point Drift C&#43;&#43; Library</title>
+      <link>http://localhost:1313/post/cpd-announcement/</link>
+      <pubDate>Sun, 01 Feb 2015 16:04:26 -0600</pubDate>
+      
+      <guid>http://localhost:1313/post/cpd-announcement/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve released a C++ library for running &lt;a href=&#34;https://sites.google.com/site/myronenko/research/cpd&#34;&gt;Coherent Point Drift&lt;/a&gt; on a set of points: &lt;a href=&#34;https://github.com/gadomski/cpd&#34;&gt;https://github.com/gadomski/cpd&lt;/a&gt;.
+I&amp;rsquo;ve also put together some basic &lt;a href=&#34;http://localhost:1313/cpd-presentation/&#34;&gt;slides&lt;/a&gt; describing the (very general) operation of the algorithm.&lt;/p&gt;
+
+&lt;p&gt;This library was developed initially to do change detection on high-temporal-resolution repeat terrestrial lidar scans of the &lt;a href=&#34;http://en.wikipedia.org/wiki/Helheim_Glacier&#34;&gt;Helheim Glacier&lt;/a&gt;.
+Like all glaciers, the Helheim Glacier deforms non-rigidly, and quantifying that non-rigid deformation (i.e. the spatially-varying surface velocities) of the glacier is important for many glaciological applications, including model initialization.&lt;/p&gt;
+
+&lt;p&gt;CPD is currently in a state where it works, but it has a lot of problems:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/helheim-cpd-magnitude.png&#34; alt=&#34;Very rough initial run of non-rigid CPD on the Helheim Glacier&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;The above picture is a visualization of the magnitude of the velocity vectors at each point (units of meters per six hours, which was the time between scans).
+Some of the current issues:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;We have to break the scan up into little chunks, since the CPD math chokes on big matrices of data&lt;/li&gt;
+&lt;li&gt;Some of those chunks don&amp;rsquo;t register well — that&amp;rsquo;s those little flyaway portions in the bottom of the image&lt;/li&gt;
+&lt;li&gt;The whole thing is single-threaded and slow — this run took thirty hours&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;However, these are definitely initial results, and I am hopeful we will be able to improve performance both in time and in supported data volumes.
+Watch &lt;a href=&#34;https://github.com/gadomski/cpd/releases&#34;&gt;https://github.com/gadomski/cpd/releases&lt;/a&gt; for updates.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Real-time glacier monitoring</title>
+      <link>http://localhost:1313/post/glacio-announcement/</link>
+      <pubDate>Wed, 10 Sep 2014 16:18:48 -0600</pubDate>
+      
+      <guid>http://localhost:1313/post/glacio-announcement/</guid>
+      <description>&lt;p&gt;One of my work projects went live today: &lt;a href=&#34;http://glacierresearch.org/&#34;&gt;http://glacierresearch.org/&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Internally known as glac.io (and also available at &lt;a href=&#34;http://glac.io/&#34;&gt;http://glac.io/&lt;/a&gt;), the website serves real-time climate and camera data from sensors located near glaciers all over the world.
+Some of the highlights:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://glacierresearch.org/locations/hubbard/data.html&#34;&gt;Real time climate data charting&lt;/a&gt;: constructed with &lt;a href=&#34;http://d3js.org/&#34;&gt;d3.js&lt;/a&gt; and a custom-rolled &lt;a href=&#34;https://github.com/gadomski/cwms-jsonapi&#34;&gt;javascript api for the Corps Water Management System&lt;/a&gt;.
+These data provide up-to-the-minute information about the environmental conditions at each of three glacier sites (with more to come soon).&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://glacierresearch.org/locations/helheim/realtime-images-terminus.html&#34;&gt;Real time images&lt;/a&gt;: we currently have four cameras hooked into our site providing recent still imagery of our research sites.
+I&amp;rsquo;ve made a viewer (again, with d3.js) to flip through the latest pictures.
+Some of these pictures can be stunning.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/helheim-terminus.jpg&#34; alt=&#34;Terminus of the Helheim Glacier&#34; /&gt;
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://glacierresearch.org/locations/&#34;&gt;Room for growth&lt;/a&gt;: the webpage is developed with an eye towards incorporating data from more sites and more projects.
+The code is available on &lt;a href=&#34;https://github.com/gadomski/glac.io&#34;&gt;github&lt;/a&gt; and uses all open-source technologies.
+The site itself is all static html pages and javascript &amp;mdash; no complex server setup necessary.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://glacierresearch.org/collaborators.html&#34;&gt;Many agencies and individuals&lt;/a&gt; have worked together to bring these data to one place, and I owe them all a thanks.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Fast Gauss Transform C&#43;&#43; Library | gadomski.github.io
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+
+  
+  <link rel="stylesheet" href="/css/sanitize.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/highlight_monokai.css">
+  <link rel="stylesheet/less" href="/css/theme.less">
+  <link rel="stylesheet" href="/css/custom.css">
+
+
+  
+  <script src="/js/less.js" type="text/javascript"></script>
+
+
+</head>
+
+
+
+<body>
+<div class="container">
+
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="/">gadomski.github.io</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          <li><a href="https://twitter.com/petegadomski" target="_blank">Twitter</a></li>
+          
+          <li><a href="https://github.com/gadomski" target="_blank">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Fast Gauss Transform C&#43;&#43; Library</h1>
+      <div class="meta">
+        May 3, 2015 &nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>Have you ever wanted to solve a Fast Gauss Transform really quickly?</p>
+
+<p>$$ G(\mathbf{y}_j) = \sum_{i=1}^{N} q_i \exp \frac { - || \mathbf{y}_j - \mathbf{x}_i ||^2 } { h^2 } $$</p>
+
+<p>Because I know I have.</p>
+
+<p>But for serious, solving that equation, which basically calculates the n-dimentional probability density function between two points, is important for a lot of stuff, including many types of spatial optimization problems.
+I needed to do it fast for my implementation of <a href="https://github.com/gadomski/cpd">Coherent Point Drift</a>, so I made a C++ library <a href="https://github.com/gadomski/fgt">fgt</a>, modeled after <a href="http://www.umiacs.umd.edu/~morariu/figtree/">FIGTree</a>.</p>
+
+<p>The library is implemented in what is hopefully a modern, reusable C++ fashion, with minimal external dependencies (look ma, no boost).
+The main dependency is <a href="http://arma.sourceforge.net/">armadillo</a>, a really swell matrix library that I keep reusing because it makes me happy.
+If you want to get crazy you can even use an <a href="http://openmp.org/wp/">openmp</a> library to parallelize stuff.</p>
+
+<p><a href="https://github.com/gadomski/fgt">https://github.com/gadomski/fgt</a></p>
+
+    </article>
+    
+
+
+<script type="text/javascript">
+     
+    var disqus_shortname = '';
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </main>
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
