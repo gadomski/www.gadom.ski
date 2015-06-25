@@ -1,0 +1,6 @@
+{
+  "name": "gadomski.github.io",
+  "devDependencies": {
+    "grunt-gh-pages": "^0.10.0"
+  }
+}
