@@ -1,3 +1,8 @@
 baseurl = "http://gadomski.github.io/"
 languageCode = "en-us"
 title = "gadomski.github.io"
+
+[Params]
+github = "https://github.com/gadomski"
+twitter = "https://twitter.com/petegadomski"
+copyright = "Pete Gadomski 2015"
