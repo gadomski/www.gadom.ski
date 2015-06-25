@@ -1,6 +1,5 @@
 +++
 date = "2014-09-10T16:18:48-06:00"
-draft = true
 title = "Real-time glacier monitoring"
 
 +++

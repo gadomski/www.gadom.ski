@@ -1,6 +1,5 @@
 +++
 date = "2015-02-01T16:04:26-06:00"
-draft = true
 title = "Coherent Point Drift C++ Library"
 
 +++

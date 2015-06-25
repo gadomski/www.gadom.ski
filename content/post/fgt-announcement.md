@@ -1,6 +1,5 @@
 +++
 date = "2015-05-03T16:15:50-06:00"
-draft = true
 title = "Fast Gauss Transform C++ Library"
 
 +++
