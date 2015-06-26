@@ -1,0 +1,65 @@
+==================================================================
+https://keybase.io/gadomski
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://gadomski.github.io
+  * I am gadomski (https://keybase.io/gadomski) on keybase.
+  * I have a public key with fingerprint A963 4783 FF27 4BAA CAC3  7B74 F050 18EE D3F6 F069
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "a9634783ff274baacac37b74f05018eed3f6f069",
+            "host": "keybase.io",
+            "key_id": "f05018eed3f6f069",
+            "uid": "d8c1d996a09059af9b28156d5c515a00",
+            "username": "gadomski"
+        },
+        "service": {
+            "hostname": "gadomski.github.io",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1402677184,
+    "expire_in": 157680000,
+    "prev": "f01fb5195662f32a9922f11569198f6e669a2cee97c5f23146a49fcd2729ad50",
+    "seqno": 5,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v0.1.22
+Comment: https://keybase.io/crypto
+
+yMHwAnicbVFNSBxnGN5N6k9FQ6JiiRQkw5IfMMv8frPfrrSHSiVphKJIICjLNzPf
+7E7Umc3MrOl2WZcaUyguTbPxIArGRCSHzcFDcmjxYIIStMZgoogJJkplD2KISQ7b
+jbg6s00uod/l5Xve53ne9+GdKjvoKHEW3MyVlS/kvnX+Pflv2NE8dGIySgiaFCG8
+UaId54usqAGsh3RFNQkvgSBgWN7DyDLNswJCIhIZXuBZmeRIyoOxxMhAJgEkaomg
+ZtgKy0ZABnYrmoVZH78iWej/8MP5huQRKQlCgEhIchDJUKA9FAckTuQoDpGkTTSw
+rqJObLEDSNI6jXaFiNUSFtqliBYazY/+jOEOKGYwLPy3RkjXTE3UOqx+0DRDhtfW
+m5GQLbiMBf9HK7+gqJIV31J0Yd1QNJXwUhZTNBXbm2JJGvA85WFrCfxTSNGxX7EZ
+HA88pPXsObgrH5aSBY6CHAC0zNAIQpqWKSsVpKBHBhgAiGgRY8iLnEwzFAsQC2VR
+onkaIomzMxv4kqoRXs5aEwUsS0MJqMgM65iIPZxs/cLhLHEUFhywD+go+fLwp7O6
+fi/au/jGLBoo9xNVwkZ3ounn16NM/ex437oLFlxZ3ljDjlPpnXt3Muef+kfIlGs9
+8ThafK0llxr49aw7XtHbV2MubvOl/4TmBlcykerk5m6NML3bsRhoK7tB9Zx82fZd
+YWNyqQFw/ff36r5nne++6o5vpxIDEbLhw5RbeJE753uemT40PNoTY0eOHZf0b4p7
++33ZB7/9Ujk8kj399d35P//KJn/kg2vq+7i3qPnWH8sTM7dXxh5VNA1tZuNb4phv
+Jt70ZGpnkEyOVz+bbayrajk6zCQWXm0Nrs4B13ymMnY1+XYlmZ6oWqWP/AB66nd9
+1WfSF5auc4FU5XhrunQfyWgbRA==
+=GDhY
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/gadomski
+
+==================================================================
