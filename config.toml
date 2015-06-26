@@ -1,6 +1,7 @@
 baseurl = "http://gadomski.github.io/"
 languageCode = "en-us"
 title = "gadomski.github.io"
+theme = "angels-ladder"
 
 [Params]
 github = "https://github.com/gadomski"
