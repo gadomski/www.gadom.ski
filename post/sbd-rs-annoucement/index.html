@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    sbd-rs | gadomski.github.io
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+
+  
+  <link rel="stylesheet" href="/css/sanitize.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/highlight_monokai.css">
+  <link rel="stylesheet/less" href="/css/theme.less">
+  <link rel="stylesheet" href="/css/custom.css">
+
+
+  
+  <script src="/js/less.js" type="text/javascript"></script>
+
+
+</head>
+
+
+
+<body>
+<div class="container">
+
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="/">gadomski.github.io</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          <li><a href="https://twitter.com/petegadomski" target="_blank">Twitter</a></li>
+          
+          <li><a href="https://github.com/gadomski" target="_blank">GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>sbd-rs</h1>
+      <div class="meta">
+        Oct 27, 2015 &nbsp;
+        
+      </div>
+    </div>
+    <article>
+      <p>I&rsquo;ve created <a href="https://github.com/gadomski/sbd-rs"><strong>sbd-rs</strong></a>, a <a href="https://crates.io/crates/sbd">crate</a> written in <a href="https://crates.io/crates/sbd">Rust</a>; <a href="https://crates.io/crates/las">my first crate</a> was a Rust-native <a href="http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html">las</a> reader, announced on this site <a href="/post/las-rs-announcement">previously</a>.
+<strong>sbd-rs</strong> includes a library for reading, decoding, and writing <a href="https://en.wikipedia.org/wiki/Iridium_Communications#SBD_Modems">Iridium SBD messages</a>, which are used to transmit data from remote climate monitoring stations, among other uses.
+It also includes an executable which exposes some of the library&rsquo;s functionality to a system, including a forever-running TCP server that handles incoming Iridium DirectIP communications.
+For one example of climate data that is transmitted via Iridium SBD, see the <a href="http://atlas.lidar.io">ATLAS home page</a>.</p>
+
+<p>At risk of making too much of it, I loved my experience developing in Rust for this work.
+Like oh-so-many projects, I started <strong>sbd-rs</strong> a while ago (August 28th of this year), did some work, then dropped it until this past week (late October).
+This is more than enough time to forget the details of the nitpicky design decisions that you made when creating a library, and in some languages (here&rsquo;s looking at you, any dynamically typed language), enough time to render a mostly-incomplete project useless upon retrieval.
+We&rsquo;ve all been there &ndash; coming back to a half-baked idea with no idea what&rsquo;s going on, and deciding to rewrite the damn thing instead of trying to untangle the existing work.
+I thought that&rsquo;s what I was going to have to do with this one when I realized I needed to recode <a href="https://github.com/gadomski/sbd">my existing Iridium DirectIP server</a> with quick turnaround.</p>
+
+<p>Before burning my the existing Rust work to the ground, I decided to try and untangle what I&rsquo;d done, just in case.
+It turns out that Rust is the most come-back-later-able language I&rsquo;ve run into, and in a very quick window I was able to hack together what I needed.</p>
+
+<p>First, there&rsquo;s the ease of testing.
+Testing is built in to the language as a native construct, making the work required to set up some basic sanity testing very light.
+This, in turn, makes it much more likely that a half-finished project will have tests, which makes it much more trustable.
+I know that my past self <em>sucks</em> at coding and am likely to not trust code he has written &ndash; only with tests can I use any code that he&rsquo;s made at all.</p>
+
+<p>Second, there&rsquo;s the strict yet understandable lints.
+One example: I can tell <code>rustc</code> to yell at me when I forget to document a public function, forcing me to at least put a little thought into what I&rsquo;m doing.
+Again, since documentation is more or less a first-class entity in rust, this is cheap and easy, rather than all custom-y feeling when doing it in C++ (e.g.).</p>
+
+<p>Third, the standard library.
+It has what you need, e.g. a native <code>BufReader</code> that takes a stream of bytes and handles the buffering for you.
+Sure, sometimes I want custom buffering behavior, and if so I can write my own, but most of the time I just want to explicitly say that I don&rsquo;t just want to read this stream of bytes, I want to do it all smart-like.
+Sometimes it takes a bit to get your head around traits and namespaces, and because Rust is such a new language figuring out the idiomatic way of doing something can take a bit of work, but in general I feel like I get guided in a good direction by the language itself.</p>
+
+<p>Finally, there&rsquo;s the fact that Rust is <em>very</em> opinionated.
+The borrow checker makes you think about every single move and every single reference, which I suppose could be a slow-down for some developers.
+For me, I don&rsquo;t want to think about the right way to do something, I want the compiler (or better yet, a compiler-aware vim plugin) to tell me when I&rsquo;m wrong.</p>
+
+<p>It&rsquo;s not perfect.
+I would love something like <code>clang-check</code> for rust.
+There&rsquo;s the inertia problem of any new language, where it takes work to convince anyone to use it for anything.
+But this experience was enough to convince me to use it again on another project.</p>
+
+    </article>
+    
+
+
+<script type="text/javascript">
+     
+    var disqus_shortname = '';
+
+     
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+  </main>
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+

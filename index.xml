@@ -2,19 +2,64 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>gadomski.github.io</title>
-    <link>http://gadomski.github.io/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on gadomski.github.io</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 12 May 2015 16:14:19 -0600</lastBuildDate>
-    <atom:link href="http://gadomski.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Oct 2015 19:43:54 -0500</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>sbd-rs</title>
+      <link>http://localhost:1313/post/sbd-rs-annoucement/</link>
+      <pubDate>Tue, 27 Oct 2015 19:43:54 -0500</pubDate>
+      
+      <guid>http://localhost:1313/post/sbd-rs-annoucement/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;ve created &lt;a href=&#34;https://github.com/gadomski/sbd-rs&#34;&gt;&lt;strong&gt;sbd-rs&lt;/strong&gt;&lt;/a&gt;, a &lt;a href=&#34;https://crates.io/crates/sbd&#34;&gt;crate&lt;/a&gt; written in &lt;a href=&#34;https://crates.io/crates/sbd&#34;&gt;Rust&lt;/a&gt;; &lt;a href=&#34;https://crates.io/crates/las&#34;&gt;my first crate&lt;/a&gt; was a Rust-native &lt;a href=&#34;http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html&#34;&gt;las&lt;/a&gt; reader, announced on this site &lt;a href=&#34;http://localhost:1313/post/las-rs-announcement&#34;&gt;previously&lt;/a&gt;.
+&lt;strong&gt;sbd-rs&lt;/strong&gt; includes a library for reading, decoding, and writing &lt;a href=&#34;https://en.wikipedia.org/wiki/Iridium_Communications#SBD_Modems&#34;&gt;Iridium SBD messages&lt;/a&gt;, which are used to transmit data from remote climate monitoring stations, among other uses.
+It also includes an executable which exposes some of the library&amp;rsquo;s functionality to a system, including a forever-running TCP server that handles incoming Iridium DirectIP communications.
+For one example of climate data that is transmitted via Iridium SBD, see the &lt;a href=&#34;http://atlas.lidar.io&#34;&gt;ATLAS home page&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;At risk of making too much of it, I loved my experience developing in Rust for this work.
+Like oh-so-many projects, I started &lt;strong&gt;sbd-rs&lt;/strong&gt; a while ago (August 28th of this year), did some work, then dropped it until this past week (late October).
+This is more than enough time to forget the details of the nitpicky design decisions that you made when creating a library, and in some languages (here&amp;rsquo;s looking at you, any dynamically typed language), enough time to render a mostly-incomplete project useless upon retrieval.
+We&amp;rsquo;ve all been there &amp;ndash; coming back to a half-baked idea with no idea what&amp;rsquo;s going on, and deciding to rewrite the damn thing instead of trying to untangle the existing work.
+I thought that&amp;rsquo;s what I was going to have to do with this one when I realized I needed to recode &lt;a href=&#34;https://github.com/gadomski/sbd&#34;&gt;my existing Iridium DirectIP server&lt;/a&gt; with quick turnaround.&lt;/p&gt;
+
+&lt;p&gt;Before burning my the existing Rust work to the ground, I decided to try and untangle what I&amp;rsquo;d done, just in case.
+It turns out that Rust is the most come-back-later-able language I&amp;rsquo;ve run into, and in a very quick window I was able to hack together what I needed.&lt;/p&gt;
+
+&lt;p&gt;First, there&amp;rsquo;s the ease of testing.
+Testing is built in to the language as a native construct, making the work required to set up some basic sanity testing very light.
+This, in turn, makes it much more likely that a half-finished project will have tests, which makes it much more trustable.
+I know that my past self &lt;em&gt;sucks&lt;/em&gt; at coding and am likely to not trust code he has written &amp;ndash; only with tests can I use any code that he&amp;rsquo;s made at all.&lt;/p&gt;
+
+&lt;p&gt;Second, there&amp;rsquo;s the strict yet understandable lints.
+One example: I can tell &lt;code&gt;rustc&lt;/code&gt; to yell at me when I forget to document a public function, forcing me to at least put a little thought into what I&amp;rsquo;m doing.
+Again, since documentation is more or less a first-class entity in rust, this is cheap and easy, rather than all custom-y feeling when doing it in C++ (e.g.).&lt;/p&gt;
+
+&lt;p&gt;Third, the standard library.
+It has what you need, e.g. a native &lt;code&gt;BufReader&lt;/code&gt; that takes a stream of bytes and handles the buffering for you.
+Sure, sometimes I want custom buffering behavior, and if so I can write my own, but most of the time I just want to explicitly say that I don&amp;rsquo;t just want to read this stream of bytes, I want to do it all smart-like.
+Sometimes it takes a bit to get your head around traits and namespaces, and because Rust is such a new language figuring out the idiomatic way of doing something can take a bit of work, but in general I feel like I get guided in a good direction by the language itself.&lt;/p&gt;
+
+&lt;p&gt;Finally, there&amp;rsquo;s the fact that Rust is &lt;em&gt;very&lt;/em&gt; opinionated.
+The borrow checker makes you think about every single move and every single reference, which I suppose could be a slow-down for some developers.
+For me, I don&amp;rsquo;t want to think about the right way to do something, I want the compiler (or better yet, a compiler-aware vim plugin) to tell me when I&amp;rsquo;m wrong.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s not perfect.
+I would love something like &lt;code&gt;clang-check&lt;/code&gt; for rust.
+There&amp;rsquo;s the inertia problem of any new language, where it takes work to convince anyone to use it for anything.
+But this experience was enough to convince me to use it again on another project.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>las-rs</title>
-      <link>http://gadomski.github.io/post/las-rs-announcement/</link>
+      <link>http://localhost:1313/post/las-rs-announcement/</link>
       <pubDate>Tue, 12 May 2015 16:14:19 -0600</pubDate>
       
-      <guid>http://gadomski.github.io/post/las-rs-announcement/</guid>
+      <guid>http://localhost:1313/post/las-rs-announcement/</guid>
       <description>
 
 &lt;p&gt;&lt;a href=&#34;http://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt; is a new language.&lt;/p&gt;
@@ -66,10 +111,10 @@ Here&amp;rsquo;s hoping.&lt;/p&gt;
     
     <item>
       <title>Fast Gauss Transform C&#43;&#43; Library</title>
-      <link>http://gadomski.github.io/post/fgt-announcement/</link>
+      <link>http://localhost:1313/post/fgt-announcement/</link>
       <pubDate>Sun, 03 May 2015 16:15:50 -0600</pubDate>
       
-      <guid>http://gadomski.github.io/post/fgt-announcement/</guid>
+      <guid>http://localhost:1313/post/fgt-announcement/</guid>
       <description>&lt;p&gt;Have you ever wanted to solve a Fast Gauss Transform really quickly?&lt;/p&gt;
 
 &lt;p&gt;$$ G(\mathbf{y}_j) = \sum_{i=1}^{N} q_i \exp \frac { - || \mathbf{y}_j - \mathbf{x}_i ||^2 } { h^2 } $$&lt;/p&gt;
@@ -89,19 +134,19 @@ If you want to get crazy you can even use an &lt;a href=&#34;http://openmp.org/w
     
     <item>
       <title>Coherent Point Drift C&#43;&#43; Library</title>
-      <link>http://gadomski.github.io/post/cpd-announcement/</link>
+      <link>http://localhost:1313/post/cpd-announcement/</link>
       <pubDate>Sun, 01 Feb 2015 16:04:26 -0600</pubDate>
       
-      <guid>http://gadomski.github.io/post/cpd-announcement/</guid>
+      <guid>http://localhost:1313/post/cpd-announcement/</guid>
       <description>&lt;p&gt;I&amp;rsquo;ve released a C++ library for running &lt;a href=&#34;https://sites.google.com/site/myronenko/research/cpd&#34;&gt;Coherent Point Drift&lt;/a&gt; on a set of points: &lt;a href=&#34;https://github.com/gadomski/cpd&#34;&gt;https://github.com/gadomski/cpd&lt;/a&gt;.
-I&amp;rsquo;ve also put together some basic &lt;a href=&#34;http://gadomski.github.io/cpd-presentation/&#34;&gt;slides&lt;/a&gt; describing the (very general) operation of the algorithm.&lt;/p&gt;
+I&amp;rsquo;ve also put together some basic &lt;a href=&#34;http://localhost:1313/cpd-presentation/&#34;&gt;slides&lt;/a&gt; describing the (very general) operation of the algorithm.&lt;/p&gt;
 
 &lt;p&gt;This library was developed initially to do change detection on high-temporal-resolution repeat terrestrial lidar scans of the &lt;a href=&#34;http://en.wikipedia.org/wiki/Helheim_Glacier&#34;&gt;Helheim Glacier&lt;/a&gt;.
 Like all glaciers, the Helheim Glacier deforms non-rigidly, and quantifying that non-rigid deformation (i.e. the spatially-varying surface velocities) of the glacier is important for many glaciological applications, including model initialization.&lt;/p&gt;
 
 &lt;p&gt;CPD is currently in a state where it works, but it has a lot of problems:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://gadomski.github.io/images/helheim-cpd-magnitude.png&#34; alt=&#34;Very rough initial run of non-rigid CPD on the Helheim Glacier&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/helheim-cpd-magnitude.png&#34; alt=&#34;Very rough initial run of non-rigid CPD on the Helheim Glacier&#34; /&gt;
 &lt;/p&gt;
 
 &lt;p&gt;The above picture is a visualization of the magnitude of the velocity vectors at each point (units of meters per six hours, which was the time between scans).
@@ -120,10 +165,10 @@ Watch &lt;a href=&#34;https://github.com/gadomski/cpd/releases&#34;&gt;https://g
     
     <item>
       <title>Real-time glacier monitoring</title>
-      <link>http://gadomski.github.io/post/glacio-announcement/</link>
+      <link>http://localhost:1313/post/glacio-announcement/</link>
       <pubDate>Wed, 10 Sep 2014 16:18:48 -0600</pubDate>
       
-      <guid>http://gadomski.github.io/post/glacio-announcement/</guid>
+      <guid>http://localhost:1313/post/glacio-announcement/</guid>
       <description>&lt;p&gt;One of my work projects went live today: &lt;a href=&#34;http://glacierresearch.org/&#34;&gt;http://glacierresearch.org/&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Internally known as glac.io (and also available at &lt;a href=&#34;http://glac.io/&#34;&gt;http://glac.io/&lt;/a&gt;), the website serves real-time climate and camera data from sensors located near glaciers all over the world.
@@ -137,7 +182,7 @@ I&amp;rsquo;ve made a viewer (again, with d3.js) to flip through the latest pict
 Some of these pictures can be stunning.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://gadomski.github.io/images/helheim-terminus.jpg&#34; alt=&#34;Terminus of the Helheim Glacier&#34; /&gt;
+&lt;p&gt;&lt;img src=&#34;http://localhost:1313/images/helheim-terminus.jpg&#34; alt=&#34;Terminus of the Helheim Glacier&#34; /&gt;
 &lt;/p&gt;
 
 &lt;ul&gt;
