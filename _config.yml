@@ -1,0 +1,17 @@
+title: Pete Gadomski
+email: pete@gadom.ski
+description: >
+  Personal web page for Pete Gadomski.
+baseurl: ""
+url: "http://www.gadom.ski"
+twitter_username: pgadomski
+github_username:  gadomski
+
+# Build settings
+markdown: kramdown
+theme: minima
+gems:
+  - jekyll-feed
+exclude:
+  - Gemfile
+  - Gemfile.lock
