@@ -15,7 +15,7 @@ You'll need the following softwares for this exercise:
 - [OGR](http://gdal.org/1.11/ogr/)
 - [Python](https://www.python.org/)
 
-# The problem
+## The problem
 
 Given data from five TLS scan positions, crop the data to an area of interest (AOI) and provide those cropped data to the downstream user as a single file.
 
@@ -32,7 +32,7 @@ The area of interest is a rectangular box in the east side of the meadow, south 
 
 *Note: there were actually six scan positions collected that day, but ScanPos006 did not contain any useful data inside the area of interest, so we've not included it in this exercise other than to plot it on the above map.*
 
-# The process
+## The process
 
 We pick things up after we've exported a file for each scan position from RiSCAN Pro.
 We could have used PDAL to do the exporting, but that's a more advanced subject for a later day.
@@ -54,7 +54,7 @@ laz/original
 Makefile
 ```
 
-## Cropping
+### Cropping
 
 We're going to crop the data with [PDAL's crop filter](http://www.pdal.io/stages/filters.crop.html) by providing it a [WKT](https://en.wikipedia.org/wiki/Well-known_text) polygon of our AOI.
 Because our AOI is a shapefile, we need to convert it to WKT with [ogr2ogr](http://www.gdal.org/ogr2ogr.html).
@@ -99,7 +99,7 @@ $ make -j 5 boundaries
 Boom.
 We've got five cropped laz files in `las/cropped`, taking advantage of multiple cores.
 
-## Merging
+### Merging
 
 Merging these cropped files into one big deliverable is even simpler with `pdal merge`.
 I still like to use a make rule, for repeatability:
@@ -109,7 +109,7 @@ laz/2013-05-01-StudyArea1.laz: $(CROPPED)
     pdal merge $^ $@
 ```
 
-# Conclusion
+## Conclusion
 
 While it's not hard to do this sort of work in a GUI, things get harder when you want to do the same process over and over, tweaking the inputs, or you want to do the work on a large number of files.
 Automation such as this is also handy when integrating with other processing steps, such as map generation.
