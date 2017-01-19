@@ -5,11 +5,19 @@ date:   2017-01-19 15:00:00 -0700
 categories: pdal
 ---
 
-This is the first in a series of posts describing how to use [PDAL](http://www.pdal.io/) to develop automated, repeatable processes that can do the work normally done in [RiSCAN Pro](http://www.riegl.com/products/software-packages/riscan-pro/) or other such software.
+This is the first in a series of posts describing how to use [PDAL](http://www.pdal.io/) to develop automated, repeatable processes, the kind that can be tedious to do manually in [RiSCAN Pro](http://www.riegl.com/products/software-packages/riscan-pro/) or other such software.
+These posts are aimed at a medium-to-high-level user, one who is comfortable with the command line, writing makefiles, and basic scripting.
+The PDAL [tutorials](http://www.pdal.io/tutorial/index.html) and [workshop](http://www.pdal.io/workshop/index.html) might be a better start for a beginner user.
+
+You'll need the following softwares for this exercise:
+
+- [PDAL](http://www.pdal.io/)
+- [OGR](http://gdal.org/1.11/ogr/)
+- [Python](https://www.python.org/)
 
 # The problem
 
-Given data from five TLS scan positions, crop the data to an area of interest and provide those cropped data to the downstream user as a single file.
+Given data from five TLS scan positions, crop the data to an area of interest (AOI) and provide those cropped data to the downstream user as a single file.
 
 About as simple as it gets.
 
@@ -22,13 +30,13 @@ The area of interest is a rectangular box in the east side of the meadow, south 
 
 ![Area of interest](/img/2013-05-01-tuolumne-aoi.png)
 
-*Note: there were actually six scan positions collected that day, but ScanPos006 did not contain any useful data inside the area of interest, so we've not included it in this exercise.*
+*Note: there were actually six scan positions collected that day, but ScanPos006 did not contain any useful data inside the area of interest, so we've not included it in this exercise other than to plot it on the above map.*
 
 # The process
 
-We pick things up after we've exported one complete file for each scan position, named `ScanPos00{n}.laz`, from RiSCAN Pro.
-We can actually use PDAL to do the exporting as well, but that's a subject for a later day.
-I've organized the files like this, including our AOI shapefile:
+We pick things up after we've exported a file for each scan position from RiSCAN Pro.
+We could have used PDAL to do the exporting, but that's a more advanced subject for a later day.
+I've organized the laz files and our AOI shapefile like this:
 
 ```
 $ tree .
@@ -43,13 +51,14 @@ laz/original
 ├── ScanPos003.laz
 ├── ScanPos004.laz
 └── ScanPos005.laz
+Makefile
 ```
 
 ## Cropping
 
-We'll crop the data using [PDAL's crop filter](http://www.pdal.io/stages/filters.crop.html) and providing it a [WKT](https://en.wikipedia.org/wiki/Well-known_text) polygon.
-We were provided the area of interest as a shapefile, so we need to convert it to WKT with [ogr2ogr](http://www.gdal.org/ogr2ogr.html).
-Since shapefiles can be complicated, there's no straightforward way to convert a shapefile to WKT; in this case, however, we know the shapefile has one shape, so we can use a simple Python script (saved as `~/bin/ogr2wkt` for future use):
+We're going to crop the data with [PDAL's crop filter](http://www.pdal.io/stages/filters.crop.html) by providing it a [WKT](https://en.wikipedia.org/wiki/Well-known_text) polygon of our AOI.
+Because our AOI is a shapefile, we need to convert it to WKT with [ogr2ogr](http://www.gdal.org/ogr2ogr.html).
+Since shapefiles can be complicated, there's no straightforward way to convert a shapefile to WKT; in this case, however, we know that our shapefile is simple enough to use this simple Python script, located in `~/bin/ogr2wkt`:
 
 {% highlight python linenos %}
 #!/usr/bin/env python
@@ -65,7 +74,7 @@ for feature in data.GetLayer():
     print feature.GetGeometryRef().ExportToWkt()
 {% endhighlight %}
 
-We glue everything together as a couple makefile rules:
+We glue everything together with a couple of make rules (in `Makefile`):
 
 ```
 CROPPED:=$(patsubst laz/original/%.laz,las/cropped/%.laz,$(wildcard laz/original/*.laz))
@@ -93,7 +102,7 @@ We've got five cropped laz files in `las/cropped`, taking advantage of multiple 
 ## Merging
 
 Merging these cropped files into one big deliverable is even simpler with `pdal merge`.
-I still like to use a makefile rule, for repeatability:
+I still like to use a make rule, for repeatability:
 
 ```
 laz/2013-05-01-StudyArea1.laz: $(CROPPED)
