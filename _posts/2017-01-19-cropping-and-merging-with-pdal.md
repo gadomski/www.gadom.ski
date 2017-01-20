@@ -146,4 +146,3 @@ $ tree .
 
 While it's not hard to do this sort of work in a GUI, things get harder when you want to do the same process over and over, tweaking the inputs, or you want to do the work on a large number of files.
 Automation such as this is also handy when integrating with other processing steps, such as map generation.
-In future posts, I'll explore how you might visualize these data using automated (non-GUI) tools.
