@@ -17,7 +17,7 @@ You'll need the following softwares for this exercise:
 
 ## The problem
 
-Given data from five TLS scan positions, crop the data to an area of interest (AOI) and provide those cropped data to the downstream user as a single file.
+Given data from five terrestrial laser scanning (TLS) scan positions, crop the data to an area of interest (AOI) and provide those cropped data to the downstream user as a single file.
 
 About as simple as it gets.
 
