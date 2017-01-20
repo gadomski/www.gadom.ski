@@ -2,7 +2,8 @@
 layout: post
 title:  "Cropping and merging with PDAL"
 date:   2017-01-19 15:00:00 -0700
-categories: pdal
+category: pdal
+tags: pdal ogr python
 ---
 
 This is the first in a series of posts describing how to use [PDAL](http://www.pdal.io/) to develop automated, repeatable processes, the kind that can be tedious to do manually in [RiSCAN Pro](http://www.riegl.com/products/software-packages/riscan-pro/) or other such software.
