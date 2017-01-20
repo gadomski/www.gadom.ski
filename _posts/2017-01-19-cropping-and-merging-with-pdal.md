@@ -40,25 +40,30 @@ I've organized the laz files and our AOI shapefile like this:
 
 ```
 $ tree .
-aoi
-├── study_area1.dbf
-├── study_area1.prj
-├── study_area1.shp
-├── study_area1.shx
-laz/original
-├── ScanPos001.laz
-├── ScanPos002.laz
-├── ScanPos003.laz
-├── ScanPos004.laz
-└── ScanPos005.laz
-Makefile
+.
+├── Makefile
+├── aoi
+│   ├── study_area1.dbf
+│   ├── study_area1.gmt
+│   ├── study_area1.prj
+│   ├── study_area1.shp
+│   └── study_area1.shx
+└── laz
+    └── original
+        ├── ScanPos001.laz
+        ├── ScanPos002.laz
+        ├── ScanPos003.laz
+        ├── ScanPos004.laz
+        └── ScanPos005.laz
 ```
+
+We'll use that `Makefile` to drive our processing.
 
 ### Cropping
 
 We're going to crop the data with [PDAL's crop filter](http://www.pdal.io/stages/filters.crop.html) by providing it a [WKT](https://en.wikipedia.org/wiki/Well-known_text) polygon of our AOI.
 Because our AOI is a shapefile, we need to convert it to WKT with [ogr2ogr](http://www.gdal.org/ogr2ogr.html).
-Since shapefiles can be complicated, there's no straightforward way to convert a shapefile to WKT; in this case, however, we know that our shapefile is simple enough to use this simple Python script, located in `~/bin/ogr2wkt`:
+Since shapefiles can be complicated, there's no straightforward way to convert a shapefile to WKT; in this case, however, we know that our shapefile is simple enough to use this simple Python script, located in `~/bin/ogr2wkt` (which is on my `$PATH`):
 
 {% highlight python linenos %}
 #!/usr/bin/env python
@@ -90,7 +95,7 @@ laz/cropped/%.laz: laz/original/%.laz aoi/study_area1.shp
 RiSCAN Pro doesn't export laz data with spatial reference information (at least, it doesn't without diving deep into their GeoSysManager, which I've never found worth it).
 So we manually specify the source spatial reference system with `--readers.las.spatialreference`.
 
-We put this in a makefile so we have automatic parallelization:
+We can use make's parallelization to process all the files at once:
 
 ```
 $ make -j 5 boundaries
@@ -110,6 +115,34 @@ laz/2013-05-01-StudyArea1.laz: $(CROPPED)
 ```
 
 ## Conclusion
+
+Our tree should now look like this:
+
+```
+$ tree .
+.
+├── Makefile
+├── aoi
+│   ├── study_area1.dbf
+│   ├── study_area1.gmt
+│   ├── study_area1.prj
+│   ├── study_area1.shp
+│   └── study_area1.shx
+└── laz
+    ├── 2013-05-01-StudyArea1.laz
+    ├── cropped
+    │   ├── ScanPos001.laz
+    │   ├── ScanPos002.laz
+    │   ├── ScanPos003.laz
+    │   ├── ScanPos004.laz
+    │   └── ScanPos005.laz
+    └── original
+        ├── ScanPos001.laz
+        ├── ScanPos002.laz
+        ├── ScanPos003.laz
+        ├── ScanPos004.laz
+        └── ScanPos005.laz
+```
 
 While it's not hard to do this sort of work in a GUI, things get harder when you want to do the same process over and over, tweaking the inputs, or you want to do the work on a large number of files.
 Automation such as this is also handy when integrating with other processing steps, such as map generation.
