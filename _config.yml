@@ -6,6 +6,7 @@ baseurl: ""
 url: "http://www.gadom.ski"
 twitter_username: petegadomski
 github_username:  gadomski
+google_analytics: UA-90644232-1
 
 # Build settings
 markdown: kramdown
