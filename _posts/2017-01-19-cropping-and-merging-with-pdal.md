@@ -98,7 +98,7 @@ So we manually specify the source spatial reference system with `--readers.las.s
 We can use make's parallelization to process all the files at once:
 
 ```
-$ make -j 5 boundaries
+$ make -j 5 cropped
 ```
 
 Boom.
