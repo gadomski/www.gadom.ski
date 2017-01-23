@@ -2,7 +2,6 @@
 layout: post
 title:  "Cropping and merging with PDAL"
 date:   2017-01-19 15:00:00 -0700
-category: pdal
 tags: pdal ogr python
 ---
 

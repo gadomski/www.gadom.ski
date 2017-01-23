@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "Slope maps with GMT"
-category: gmt
 tags: gmt slope-map ogr gdal skiing hidden-valley
 ---
 
