@@ -17,11 +17,13 @@ You'll need the following softwares to follow along:
 - GMT
 - [GDAL/OGR](http://www.gdal.org/)
 
+The Makefile used in this example, along with a download script for the data, are in a gist at the [bottom of this post](#conclusion).
+
 ## The goal
 
 [Hidden Valley](https://en.wikipedia.org/wiki/Hidden_Valley_(Ski_Estes_Park)) is a abandoned ski area in Rocky Mountain National Park that closed in 1991.
 It now is a popular winter destination for backcountry skiing and sledding.
-We want to create a map with the dangerous slope angles color-coded, with enough additional context to make it a useful map. 
+We want to create a map with the dangerous slope angles color-coded, with enough additional context to make it a useful map.
 
 ![Hidden Valley](/img/hidden-valley-slope-angle.png)
 
@@ -123,6 +125,131 @@ A few things to note:
 We make our map by running `make build/hidden-valley.png`:
 
 ![Rainbow elevation map of Hidden Valley](/img/hidden-valley-rainbow.png)
+
+## Creating more derivative products
+
+We've already created one derivative product, our cropped DEM `build/dem.tif`.
+Let's create the rest of the products we need to make our map.
+I'll step through the rules one-by-one and talk through what they're doing.
+
+### Calculate the slope
+
+```
+build/slope.nc: build/dem.tif
+	grdgradient -fg $< -S$@ -D
+	grdmath $@ ATAN PI DIV 180 MUL = $@
+```
+
+`grdgradient` does derivative math on gridded data.
+In this case, we use the combination of the `-D` and `-S` options to write the magnitude of the gradient vector to a file, `build/slope.nc`.
+We also need to specify `-fg` because our data is a geographic (lat/lon) grid and we need to convert those latitudes and longitudes to meters before calculating the gradient.
+Once we've calculated the raw gradient magnitude, we convert that to an angle, in degrees, using `grdmath`.
+
+### Create a hillshade
+
+```
+build/gradient.nc: build/dem.tif
+	grdgradient -fg $< -G$@ -A-45 -Nt0.6
+```
+
+In this case, we use `grdgradient` to create a hillshade.
+We use `-N` to control the intensity of the hillshade &mdash; since we'll be drawing contours and additional overlays, we dial down the intensity to `0.6` so the map is a bit less noisy.
+
+### Crop and convert the vector data
+
+```
+OGR2GMT:="ogr2ogr -f GMT -spat $(XMIN) $(YMIN) $(XMAX) $(YMAX) -clipsrc spat_extent"
+
+build/flowline.gmt: water/Shape/NHDFlowline.shp
+	$(OGR2GMT) $@ $< 
+
+build/waterbody.gmt: water/Shape/NHDWaterbody.shp
+	$(OGR2GMT) $@ $< 
+
+build/roads.shp: $(wildcard roads/Shape/Trans_RoadSegment*.shp)
+	ogr2ogr -f 'ESRI Shapefile' -spat $(XMIN) $(YMIN) $(XMAX) $(YMAX) -clipsrc spat_extent $@ $(word 1,$^)
+	ogr2ogr -f 'ESRI Shapefile' -spat $(XMIN) $(YMIN) $(XMAX) $(YMAX) -clipsrc spat_extent -addfields $@ $(word 2,$^)
+	ogr2ogr -f 'ESRI Shapefile' -spat $(XMIN) $(YMIN) $(XMAX) $(YMAX) -clipsrc spat_extent -addfields $@ $(word 3,$^)
+
+build/roads.gmt: build/roads.shp
+	ogr2ogr -f GMT $@ $<
+```
+
+Creating flowline (streams) and waterbody (lakes, etc) vectors is a simple matter of cropping the source data with `ogr2ogr` and writing it out in the GMT format.
+Creating the roads file is a bit more tricky, since the road data comes in three seperate shapefiles.
+I wasn't able to figure out how to `-addfields` to a GMT vector file, so I create an intermediate `build/roads.shp`, then convert that file to gmt.
+
+### Create a color palette
+
+```
+build/slope.cpt: Makefile
+	makecpt -Cwhite,'#ffff33','#ff7f00','#e41a1c','#984ea3','#377eb8','#777777' -T0,25,30,35,40,45,50,90 -N > $@
+```
+
+This rule creates a color palette that we'll use for our slopes.
+
+## Putting it all together
+
+Now that we've created all of the intermediate products, let's rewrite our PostScript rule to create our final map.
+I'll step through the rule components one-by-one, with an explanation immediately after.
+
+```
+build/hidden-valley.ps: build/dem.tif build/slope.nc build/gradient.nc build/flowline.gmt build/waterbody.gmt build/roads.gmt build/slope.cpt Makefile
+```
+
+Add all of our derivative products to ensure they get built.
+
+```
+	grdimage build/slope.nc -Cbuild/slope.cpt -Ibuild/gradient.nc -Ba -B+t"Hidden Valley" -JM8i -Rbuild/slope.nc -K > $@
+```
+
+Draw the slope grid, colored with our custom palette.
+The `-JM8i` specifies the projection for these data, in this case a Mercator projection that is 8 inches wide.
+The `-R` instructs `grdimage` to use the bounds of the `build/slope.nc` grid as the bounds of the plot.
+The `-I` option adds the hillshade, the `-Ba` adds a border, the `-B+t` titles the plot.
+The `-K` option "keeps the output file open" so we can add more layers.
+
+```
+	grdcontour build/dem.tif -C20 -A100 -J -R -K -O >> $@
+```
+
+Add contours spaced 20 meters apart, labelled every 100 meters.
+The `-J` and `-R` options inherit the values used in the previous command, so we don't need to specify them again.
+The `-O` option instructs `grdcontour` to output "overlay" PostScript that is meant to be appended onto PostScript data "kept open" with `-K`.
+
+```
+	psxy build/flowline.gmt -W0.6p,'#377eb8' -J -R -K -O >> $@
+	psxy build/waterbody.gmt -G'#377eb8' -J -R -K -O >> $@
+	psxy build/roads.gmt -W1p,'#f781bf' -J -R -K -O >> $@
+```
+
+Add the vector data.
+The `-W` option specifies the pen used to draw lines, and the `-G` option specifies the fill.
+
+```
+	psbasemap -Lx5.2i/-0.7i+c$(YMIN)+w1k -J -R -K -O >> $@
+```
+
+Add the length scale, set to 1km.
+
+```
+	psscale -D0i/-0.7i+w3i/0.2i+h -Cbuild/slope.cpt -G0/60 -By+l"Slope angle" -I -O >> $@
+```
+
+Add the color legend.
+
+Now you can run `make build/hidden-valley.png` and get your map!
+
+![Hidden Valley](/img/hidden-valley-slope-angle.png)
+
+## Conclusion
+
+By automating this map-generation, you can easily create maps for new areas.
+I've souped up this example into [this project](https://github.com/gadomski/slope-maps), which I can use to quickly create maps of new areas I'm exploring.
+
+Here's the complete Makefile used for this example, along with a download script to grab the data you need:
+
+{% gist gadomski/f90e464114e5bbfecdda9e6b262f5adf %}
 
 ## References
 

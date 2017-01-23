@@ -20,6 +20,7 @@ gem "github-pages", group: :jekyll_plugins
 
 # If you have any plugins, put them here!
 group :jekyll_plugins do
+   gem "jekyll-gist"
    gem "jekyll-feed", "~> 0.6"
    gem "jekyll-scholar"
 end
