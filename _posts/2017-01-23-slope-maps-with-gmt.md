@@ -2,7 +2,7 @@
 layout: post
 title: "Slope maps with GMT"
 category: gmt
-tags: gmt slope-maps ogr skiing
+tags: gmt slope-map ogr gdal skiing hidden-valley
 ---
 
 About two-thirds of dry slab avalanches occur on slopes between 30° and 45° {% cite McClung2006 %}.
@@ -11,25 +11,25 @@ A map of slope angles is therefore a useful tool for safe decision making when b
 The excellent [CalTopo](https://caltopo.com/) provides a suite of map building tools, including a slope angle shading map.
 But me being me, I want to make my own maps.
 
-This wakthrough describes how to make a slope angle shading map using free and open data and [GMT](http://gmt.soest.hawaii.edu/).
+This wakthrough describes how to make a slope angle shading map using free and open data and [Generic Mapping Tools (GMT)](http://gmt.soest.hawaii.edu/).
 You'll need the following softwares to follow along:
 
 - GMT
 - [GDAL/OGR](http://www.gdal.org/)
 
-The Makefile used in this example, along with a download script for the data, are in a gist at the [bottom of this post](#conclusion).
+The Makefile used in this example, along with a download script to fetch the map data, are in a gist at the [bottom of this post](#conclusion).
 
 ## The goal
 
 [Hidden Valley](https://en.wikipedia.org/wiki/Hidden_Valley_(Ski_Estes_Park)) is a abandoned ski area in Rocky Mountain National Park that closed in 1991.
 It now is a popular winter destination for backcountry skiing and sledding.
-We want to create a map with the dangerous slope angles color-coded, with enough additional context to make it a useful map.
+We want to color-code dangerous slope angles while providing enough additional context to make a useful map.
 
 ![Hidden Valley](/img/hidden-valley-slope-angle.png)
 
 ## Getting the data
 
-We'll use data from the [USGS 3D Elevation Program](https://nationalmap.gov/elevation.html) to produce our slope, hillshade, and contour images.
+We'll use data from the [USGS 3D Elevation Program](https://nationalmap.gov/elevation.html) to produce our slope, hillshade, and contour grids.
 Our stream and lake overlays will come from the [National Hydrography Dataset](https://nhd.usgs.gov/), and the roads from the [National Transporation Dataset](https://catalog.data.gov/dataset/usgs-national-transportation-dataset-ntd-downloadable-data-collectionde7d2).
 All these products are browsable and downloadable through [The National Map](https://viewer.nationalmap.gov/basic/), but here's direct links to the datasets required for this exercise:
 
@@ -80,8 +80,7 @@ $ tree -P '*.shp|*.flt'
 ## Creating a simple raster map with GMT
 
 To prove that our system is working, let's create a rainbow elevation map from our DEM data in our area of interest.
-We'll use a makefile to build up the products required, and place them all in `build/`.
-Let's go through the makefile components one-by-one.
+We'll use a Makefile and place our generated products in `build/`.
 
 First, we define our area of interest and create a rule for our build directory:
 
@@ -107,7 +106,7 @@ build/dem.tif: build/dem.vrt
 ```
 
 Finally, we create our simple rainbow elevation map.
-I make this a two-step process &mdash; first, create the PostScript file, then use `psconvert` to turn it into a png:
+I do this in two steps &mdash; first I create the PostScript file, then I use `psconvert` to turn it into a png:
 
 ```
 build/hidden-valley.ps: build/dem.tif Makefile | build
@@ -119,8 +118,8 @@ build/hidden-valley.ps: build/dem.tif Makefile | build
 
 A few things to note:
 
-1. `grdimage` takes *many* more options, which we'll use later, but for now we're keeping it simple.
-2. The `psconvert` command converts the PostScript file into a png with transparency (`-TG`), cropped close (`-A`), and rotated into portrait mode (`-P`).
+1. `grdimage` takes *many* more options, but for now we're keeping it simple.
+2. The `psconvert` command converts the PostScript file into a png with transparency (`-TG`), cropped (`-A`), and rotated into portrait mode (`-P`).
 
 We make our map by running `make build/hidden-valley.png`:
 
@@ -143,7 +142,7 @@ build/slope.nc: build/dem.tif
 `grdgradient` does derivative math on gridded data.
 In this case, we use the combination of the `-D` and `-S` options to write the magnitude of the gradient vector to a file, `build/slope.nc`.
 We also need to specify `-fg` because our data is a geographic (lat/lon) grid and we need to convert those latitudes and longitudes to meters before calculating the gradient.
-Once we've calculated the raw gradient magnitude, we convert that to an angle, in degrees, using `grdmath`.
+Once we've calculated the raw gradient magnitude, we convert that scalar value to an angle, in degrees, using `grdmath`.
 
 ### Create a hillshade
 
@@ -158,7 +157,7 @@ We use `-N` to control the intensity of the hillshade &mdash; since we'll be dra
 ### Crop and convert the vector data
 
 ```
-OGR2GMT:="ogr2ogr -f GMT -spat $(XMIN) $(YMIN) $(XMAX) $(YMAX) -clipsrc spat_extent"
+OGR2GMT:=ogr2ogr -f GMT -spat $(XMIN) $(YMIN) $(XMAX) $(YMAX) -clipsrc spat_extent
 
 build/flowline.gmt: water/Shape/NHDFlowline.shp
 	$(OGR2GMT) $@ $< 
