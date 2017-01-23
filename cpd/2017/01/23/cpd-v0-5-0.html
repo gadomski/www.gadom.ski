@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>LiDAR :: snow :: ice :: code</title>
-  <meta name="description" content="I do research, code development, and field work for CRREL.">
+  <title>cpd v0.5.0</title>
+  <meta name="description" content="I’m happy to announce the release of cpd v0.5.0, as well as the associated PDAL plugin update. cpd is a C++ library I have developed for running the Coherent...">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://www.gadom.ski/">
+  <link rel="canonical" href="http://www.gadom.ski/cpd/2017/01/23/cpd-v0-5-0.html">
   <link rel="alternate" type="application/rss+xml" title="LiDAR :: snow :: ice :: code" href="/feed.xml">
   
   
@@ -58,52 +58,35 @@
 
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">cpd v0.5.0</h1>
+    <p class="post-meta"><time datetime="2017-01-23T00:00:00-07:00" itemprop="datePublished">Jan 23, 2017</time></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>I’m happy to announce the release of <a href="https://github.com/gadomski/cpd/releases/tag/v0.5.0">cpd v0.5.0</a>, as well as the associated <a href="https://github.com/PDAL/PDAL/pull/1474">PDAL plugin update</a>.
+<strong>cpd</strong> is a C++ library I have developed for running the <a href="https://sites.google.com/site/myronenko/research/cpd">Coherent Point Drift</a> (CPD) point cloud change detection algorithm.</p>
+
+<p>One of my research areas is whether CPD is a viable tool for point cloud change detection and registration as compared to existing methods. 
+One place where I’ve used <strong>cpd</strong> is with repeat LiDAR scans to measure glacier velocity, e.g. at the Helheim Glacier in southeast Greenland:</p>
+
+<p><img src="/img/helheim-velocity-field.png" alt="Helheim velocity field" /></p>
+
+<p>There’s a lot of space and work to be done with CPD, and at this point I’m just scratching that ol’ surface.
+But the <strong>cpd</strong> codebase is reaching, if not maturity, then the equivalent of its early twenties, so I’m hopeful that I will be able to slow down on direct development and focus more on applications and downstream science.</p>
+
+<p>The PDAL plugin in pretty limited, and it this point exists mostly as a proof-of-concept. 
+Rather than use it directly, I usually create a new project (e.g. <a href="https://github.com/gadomski/hunky-dory">hunky-dory</a>) for a specific use-case.
+However, the plan is to eventually roll all of my external change detection projects back into PDAL once my tools mature enough that I won’t be over-churning the PDAL codebase.
+At that point, the PDAL <strong>cpd</strong> plugin should become more powerful; it might even evolve into a higher-level <strong>changes</strong> plugin that can run multiple change detection algorithms, e.g. <a href="https://en.wikipedia.org/wiki/Iterative_closest_point">ICP</a>.
+Stay tuned.</p>
+
+  </div>
+
   
-  
-
-
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">Jan 23, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/gmt/2017/01/23/slope-maps-with-gmt.html">Slope maps with GMT</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 23, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/cpd/2017/01/23/cpd-v0-5-0.html">cpd v0.5.0</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 20, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/cpd/2017/01/20/cpd-v0-5-0.html">cpd v0.5.0</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 19, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/pdal/2017/01/19/cropping-and-merging-with-pdal.html">Cropping and merging with PDAL</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
-</div>
+</article>
 
       </div>
     </main>
