@@ -10,7 +10,7 @@ A map of slope angles is therefore a useful tool for safe decision making when b
 The excellent [CalTopo](https://caltopo.com/) provides a suite of map building tools, including a slope angle shading map.
 But me being me, I want to make my own maps.
 
-This wakthrough describes how to make a slope angle shading map using free and open data and [Generic Mapping Tools (GMT)](http://gmt.soest.hawaii.edu/).
+This walkthrough describes how to make a slope angle shading map using free and open data and [Generic Mapping Tools (GMT)](http://gmt.soest.hawaii.edu/).
 You'll need the following softwares to follow along:
 
 - GMT
