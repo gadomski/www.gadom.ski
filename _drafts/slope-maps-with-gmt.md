@@ -21,6 +21,7 @@ You'll need the following softwares to follow along:
 
 [Hidden Valley](https://en.wikipedia.org/wiki/Hidden_Valley_(Ski_Estes_Park)) is a abandoned ski area in Rocky Mountain National Park that closed in 1991.
 It now is a popular winter destination for backcountry skiing and sledding.
+We want to create a map with the dangerous slope angles color-coded, with enough additional context to make it a useful map. 
 
 ![Hidden Valley](/img/hidden-valley-slope-angle.png)
 
@@ -73,6 +74,55 @@ $ tree -P '*.shp|*.flt'
 
 7 directories, 23 files
 ```
+
+## Creating a simple raster map with GMT
+
+To prove that our system is working, let's create a rainbow elevation map from our DEM data in our area of interest.
+We'll use a makefile to build up the products required, and place them all in `build/`.
+Let's go through the makefile components one-by-one.
+
+First, we define our area of interest and create a rule for our build directory:
+
+```
+XMIN:=-105.70
+XMAX:=-105.62
+YMIN:=40.37
+YMAX:=40.41
+
+build:
+	mkdir $@
+```
+
+Next, we subset our DEM data to our area of interest using a VRT.
+For some reason GMT (on my system) isn't happy reading VRTs, even though it should be able to use any GDAL-y data source, so we use the VRT to create a GeoTIFF:
+
+```
+build/dem.vrt: Makefile | build
+	gdalbuildvrt -te $(XMIN) $(YMIN) $(XMAX) $(YMAX) $@ $(wildcard dem/*.flt)
+
+build/dem.tif: build/dem.vrt
+	gdal_translate $< $@
+```
+
+Finally, we create our simple rainbow elevation map.
+I make this a two-step process &mdash; first, create the PostScript file, then use `psconvert` to turn it into a png:
+
+```
+build/hidden-valley.ps: build/dem.tif Makefile | build
+	grdimage $< > $@
+
+%.png: %.ps
+	psconvert -TG -A -P $<
+```
+
+A few things to note:
+
+1. `grdimage` takes *many* more options, which we'll use later, but for now we're keeping it simple.
+2. The `psconvert` command converts the PostScript file into a png with transparency (`-TG`), cropped close (`-A`), and rotated into portrait mode (`-P`).
+
+We make our map by running `make build/hidden-valley.png`:
+
+![Rainbow elevation map of Hidden Valley](/img/hidden-valley-rainbow.png)
 
 ## References
 
