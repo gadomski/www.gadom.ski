@@ -1,5 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://www.gadom.ski/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-01-23T12:34:14-07:00</updated><id>http://www.gadom.ski//</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">Slope maps with GMT</title><link href="http://www.gadom.ski/2017/01/23/slope-maps-with-gmt.html" rel="alternate" type="text/html" title="Slope maps with GMT" /><published>2017-01-23T00:00:00-07:00</published><updated>2017-01-23T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/01/23/slope-maps-with-gmt</id><content type="html" xml:base="http://www.gadom.ski/2017/01/23/slope-maps-with-gmt.html">&lt;p&gt;About two-thirds of dry slab avalanches occur on slopes between 30° and 45° &lt;a href=&quot;#McClung2006&quot;&gt;(McClung &amp;amp; Schaerer, 2006)&lt;/a&gt;.
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://www.gadom.ski/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-01-31T10:13:06-07:00</updated><id>http://www.gadom.ski//</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">Using PDAL to clean legacy LiDAR data</title><link href="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html" rel="alternate" type="text/html" title="Using PDAL to clean legacy LiDAR data" /><published>2017-01-31T00:00:00-07:00</published><updated>2017-01-31T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data</id><content type="html" xml:base="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html">&lt;p&gt;The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA &lt;a href=&quot;#Bair2015&quot;&gt;(Bair, Dozier, Davis, Colee, &amp;amp; Claffey, 2015)&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://snow.ucsb.edu/sites/default/files/slides/20120908_122051.jpg&quot; alt=&quot;East-looking panoramic photo of the CUES site&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In February 2011 a &lt;a href=&quot;http://www.riegl.com/&quot;&gt;Riegl&lt;/a&gt; LMS-Z390 LiDAR scanner came online at the site, mounted in a glass enclosure on the central structure.
+This scanner regularly captures snow depths over a portion of the study area, and stores these snow depths on the &lt;a href=&quot;http://snow.ucsb.edu/level-0-raw-data-files&quot;&gt;CUES web server&lt;/a&gt; as &lt;code class=&quot;highlighter-rouge&quot;&gt;.3dd&lt;/code&gt; files:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/cues-scan.png&quot; alt=&quot;An example of a scan of the CUES site&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While these data have been used with some research, in general they have been under-utilized, partially due to their file format.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;.3dd&lt;/code&gt; is an old Riegl file format, so old that the company no longer produces binaries to read from the format — the only binaries are available in &lt;a href=&quot;http://www.riegl.com/index.php?id=234&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;riscanlib&lt;/code&gt; for Windows 32 systems&lt;/a&gt;.
+And because Riegl doesn’t release the layout of their file formats to the public, we can’t&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt; write our own multi-platform reader.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;riscanlib&lt;/code&gt;, which requires a Riegl website account to download, comes with an example executable named &lt;code class=&quot;highlighter-rouge&quot;&gt;conv2asc.exe&lt;/code&gt; that reads a &lt;code class=&quot;highlighter-rouge&quot;&gt;.3dd&lt;/code&gt; file and prints the X, Y, Z, and Intensity coordinates to standard output.
+For now, this is what we’re using to extract information from &lt;code class=&quot;highlighter-rouge&quot;&gt;.3dd&lt;/code&gt; files.
+However, there’s a couple of hangups:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Our trusty ol’ Z390 scanner produces a lot of bogus data at &lt;code class=&quot;highlighter-rouge&quot;&gt;(0., 0., 0.)&lt;/code&gt; that should be filtered out.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.3dd&lt;/code&gt; intensities are floats in [0, 1], but other point cloud formats (e.g. &lt;a href=&quot;https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html&quot;&gt;las&lt;/a&gt;) work best when intensity is scaled from [0, 65536].&lt;/li&gt;
+  &lt;li&gt;Our scanner shifts and moves through time, both intentionally when someone makes and adjustment and naturally due to shifts in the ground.
+We need to apply a rigid transform to our data to ensure all of our scans are in the same reference frame.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We’ll tackle parts 1 and 2 in this post, and save part 3 for a later date.
+If you want to follow along at home with the same data, &lt;a href=&quot;http://snow.ucsb.edu/data/2016/lidar/201612/20161229-1315-30.Z390.frame.3dd.gz&quot;&gt;download it from the CUES website&lt;/a&gt;.
+We’ll assume you’ve already used &lt;code class=&quot;highlighter-rouge&quot;&gt;conv2asc.exe&lt;/code&gt; on the &lt;code class=&quot;highlighter-rouge&quot;&gt;3dd&lt;/code&gt; file and redirected the output to &lt;code class=&quot;highlighter-rouge&quot;&gt;txt/original/20161229-1315-30.Z390.frame.txt&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://pdal.io/&quot;&gt;PDAL&lt;/a&gt; (with the Python plugin enabled) is the only required software for this exercise (assuming you have a unix-y system that includes &lt;code class=&quot;highlighter-rouge&quot;&gt;sed&lt;/code&gt;).&lt;/p&gt;
+
+&lt;h2 id=&quot;filtering-and-scaling&quot;&gt;Filtering and scaling&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.pdal.io/stages/readers.text.html&quot;&gt;PDAL’s text reader&lt;/a&gt; expects reasonably well-formed text files.
+Our &lt;code class=&quot;highlighter-rouge&quot;&gt;conv2asc.exe&lt;/code&gt; output looks like this, which isn’t good enough:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ head txt/original/20161229-1315-30.Z390.frame.txt
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+0.0000, 0.0000, 0.0000, 0.0000
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;We need to remove those spaces between the comma and the next number, and add a header.
+This is a simple two-step process:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;mkdir -p txt/cleaned
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;X,Y,Z,Intensity&quot;&lt;/span&gt; &amp;gt; txt/cleaned/20161229-1315-30.Z390.frame.txt
+sed &lt;span class=&quot;s1&quot;&gt;'s/, /,/g'&lt;/span&gt; txt/original/20161229-1315-30.Z390.frame.txt &amp;gt;&amp;gt; txt/cleaned/20161229-1315-30.Z390.frame.txt&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;We’ll use PDAL to do the &lt;code class=&quot;highlighter-rouge&quot;&gt;(0., 0., 0.)&lt;/code&gt; filtering and intensity scaling.
+The filtering can be done out of the box with &lt;a href=&quot;http://www.pdal.io/stages/filters.range.html&quot;&gt;range filter&lt;/a&gt;, but we need to write some code to do the intensity scaling.
+We’ll use the &lt;a href=&quot;http://www.pdal.io/stages/filters.programmable.html&quot;&gt;programmable filter&lt;/a&gt; to do the scaling work.&lt;/p&gt;
+
+&lt;p&gt;Create a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;scripts/scale_intensity.py&lt;/code&gt; with the following code:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;scale_intensity&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;intensity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Intensity&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;intensity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intensity&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;65536&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Intensity&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;intensity&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This takes our &lt;code class=&quot;highlighter-rouge&quot;&gt;[0, 1]&lt;/code&gt; intensity values and scales them to &lt;code class=&quot;highlighter-rouge&quot;&gt;[0, 65536]&lt;/code&gt;, which happens to be the maximum range of intensity values supported by the las format.&lt;sup id=&quot;fnref:2&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;We then can created a “cleaned” laz file with no origin points&lt;sup id=&quot;fnref:3&quot;&gt;&lt;a href=&quot;#fn:3&quot; class=&quot;footnote&quot;&gt;3&lt;/a&gt;&lt;/sup&gt; and scaled intensity values with this one-liner:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;mkdir -p laz/cleaned
+pdal translate txt/cleaned/20161229-1315-30.Z390.frame.txt laz/cleaned/20161229-1315-30.Z390.frame.laz &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    -f range --filters.range.limits&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'X![0:0],Y![0:0],Z![0:0]'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    -f programmable --filters.programmable.script&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;scripts/scale_intensity.py &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        --filters.programmable.module&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;scale_intensity &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        --filters.programmable.function&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;scale_intensity&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;By combining simple external tools (e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;sed&lt;/code&gt;) with PDAL’s powerful filters, we can transform uncomfortable data formats into more usable layouts.
+I’ve gisted a Makefile and the scale intensity script that are useful for batch processing:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/gadomski/c921e5bffc888f0c5f44ca07d4932de4.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;In a later post I’ll discuss how to use transformation matrices to bring all of these data into the same coordinate system.&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;Bair2015&quot;&gt;Bair, E. H., Dozier, J., Davis, R. E., Colee, M. T., &amp;amp; Claffey, K. J. (2015). CUES—a study site for measuring snowpack energy balance in the Sierra Nevada. &lt;i&gt;Frontiers in Earth Science&lt;/i&gt;, &lt;i&gt;3&lt;/i&gt;(September). http://doi.org/10.3389/feart.2015.00058&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;Hartzell2013a&quot;&gt;Hartzell, P. J., Glennie, C. L., &amp;amp; Finnegan, D. C. (2013). Calibration of a Terrestrial Full Waveform Laser Scanner. &lt;i&gt;ASPRS 2013 Annual Conference Proceedings&lt;/i&gt;, p. 7.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+
+&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;Legally. &lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:2&quot;&gt;
+      &lt;p&gt;Inquiring minds might wonder if we’re corrupting useful data by scaling these values all willy-nilly. By convention, when LiDAR systems report “intensity” values, they are sensor-specific values that have no absolute relationship to a real-world radiometric property of the reflective object. Riegl does attempt to provide an absolute measure of an object’s reflectivity in the laser’s wavelength with the “Reflectivity” attribute, but even this is fraught with issues &lt;a href=&quot;#Hartzell2013a&quot;&gt;(Hartzell, Glennie, &amp;amp; Finnegan, 2013)&lt;/a&gt;. &lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:3&quot;&gt;
+      &lt;p&gt;As of this writing, the negation operator (“!”) is an undocumented feature of the range filter. &lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</content><category term="riegl" /><category term="3dd" /><category term="lidar" /><category term="z390" /><category term="cues" /><category term="snow" /><category term="pdal" /><summary type="html">The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA (Bair, Dozier, Davis, Colee, &amp;amp; Claffey, 2015):</summary></entry><entry><title type="html">Slope maps with GMT</title><link href="http://www.gadom.ski/2017/01/23/slope-maps-with-gmt.html" rel="alternate" type="text/html" title="Slope maps with GMT" /><published>2017-01-23T00:00:00-07:00</published><updated>2017-01-23T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/01/23/slope-maps-with-gmt</id><content type="html" xml:base="http://www.gadom.ski/2017/01/23/slope-maps-with-gmt.html">&lt;p&gt;About two-thirds of dry slab avalanches occur on slopes between 30° and 45° &lt;a href=&quot;#McClung2006&quot;&gt;(McClung &amp;amp; Schaerer, 2006)&lt;/a&gt;.
 A map of slope angles is therefore a useful tool for safe decision making when backcountry skiing.&lt;/p&gt;
 
 &lt;p&gt;The excellent &lt;a href=&quot;https://caltopo.com/&quot;&gt;CalTopo&lt;/a&gt; provides a suite of map building tools, including a slope angle shading map.
