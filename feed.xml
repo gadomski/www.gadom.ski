@@ -1,5 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://www.gadom.ski/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-02-13T06:21:23-07:00</updated><id>http://www.gadom.ski//</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">Using PDAL to clean legacy LiDAR data</title><link href="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html" rel="alternate" type="text/html" title="Using PDAL to clean legacy LiDAR data" /><published>2017-01-31T00:00:00-07:00</published><updated>2017-01-31T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data</id><content type="html" xml:base="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html">&lt;p&gt;The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA &lt;a href=&quot;#Bair2015&quot;&gt;(Bair, Dozier, Davis, Colee, &amp;amp; Claffey, 2015)&lt;/a&gt;:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://www.gadom.ski/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.1">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-02-28T09:34:48-07:00</updated><id>http://www.gadom.ski//</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">Downloading lots of UNAVCO PBO data</title><link href="http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data.html" rel="alternate" type="text/html" title="Downloading lots of UNAVCO PBO data" /><published>2017-02-28T00:00:00-07:00</published><updated>2017-02-28T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data</id><content type="html" xml:base="http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data.html">&lt;p&gt;In November of 2016 we took advantage of record-low water levels in western reservoirs to survey them with airborne LiDAR, with a goal of extracting sedimentation levels.
+This multi-week project was carried out with a “home-built” airborne system, based on a &lt;a href=&quot;http://www.riegl.com/nc/products/airborne-scanning/produktdetail/product/scanner/37/&quot;&gt;Riegl VQ-480i&lt;/a&gt; and an &lt;a href=&quot;https://www.ixblue.com/products/atlans-c&quot;&gt;iXblue ATLANS-C&lt;/a&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/airborne-scanner.jpg&quot; alt=&quot;Our airborne system&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One of the many reservoirs we surveyed:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/dam.jpg&quot; alt=&quot;A reservoir in California&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One small but crucial part of this operation is the control.
+While the iXblue IMU/GNSS system provides real-time location and orientation information, these data are not accurate enough for good airborne surveys.
+Our position, in particular, needs to be corrected using ground-based differential GNSS.
+One source of ground-based control is the extensive &lt;a href=&quot;https://www.unavco.org/instrumentation/networks/status/pbo&quot;&gt;UNAVCO PBO network&lt;/a&gt;, which is particularity useful in the western United States, where we were working.&lt;/p&gt;
+
+&lt;p&gt;Before we began our project, we contacted UNAVCO and requested that they log 1Hz data at 34 PBO sites that were near our regions of interest.
+After the completion of our flights, UNAVCO loaded these 1Hz data to their &lt;a href=&quot;https://www.unavco.org/data/gps-gnss/ftp/ftp.html&quot;&gt;PBO FTP site&lt;/a&gt;, which we then needed to retrieve.
+To ensure that we don’t miss any data, we wanted to download every site for every day in our window (fourteen days total), a process that cries out for a scripting solution.&lt;/p&gt;
+
+&lt;p&gt;First, I created a text file, &lt;code class=&quot;highlighter-rouge&quot;&gt;pbo-sites.txt&lt;/code&gt;, with each PBO site name, e.g.:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;azu1
+bbdm
+bkms
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;I then identified the days of the year I needed to download, in the case 314 to 328.
+I then put these information together in a Makefile, using two &lt;code class=&quot;highlighter-rouge&quot;&gt;foreach&lt;/code&gt;es, and used &lt;a href=&quot;https://www.gnu.org/software/wget/&quot;&gt;wget&lt;/a&gt; to fetch the data themselves.
+A relatively simple recipe to quickly grab a large amount of data.&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/ae1911e490fdc72a69e8bf105426b0d7.js&quot;&gt; &lt;/script&gt;</content><category term="unavco" /><category term="pbo" /><category term="gnss" /><summary type="html">In November of 2016 we took advantage of record-low water levels in western reservoirs to survey them with airborne LiDAR, with a goal of extracting sedimentation levels.
+This multi-week project was carried out with a “home-built” airborne system, based on a Riegl VQ-480i and an iXblue ATLANS-C:</summary></entry><entry><title type="html">Using PDAL to clean legacy LiDAR data</title><link href="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html" rel="alternate" type="text/html" title="Using PDAL to clean legacy LiDAR data" /><published>2017-01-31T00:00:00-07:00</published><updated>2017-01-31T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data</id><content type="html" xml:base="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html">&lt;p&gt;The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA &lt;a href=&quot;#Bair2015&quot;&gt;(Bair, Dozier, Davis, Colee, &amp;amp; Claffey, 2015)&lt;/a&gt;:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://snow.ucsb.edu/sites/default/files/slides/20120908_122051.jpg&quot; alt=&quot;East-looking panoramic photo of the CUES site&quot; /&gt;&lt;/p&gt;
 
