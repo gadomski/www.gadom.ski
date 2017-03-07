@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "SnowEx 2017 week one trip report"
+title: "SnowEx 2017 trip report"
 tags: snowex lidar riegl trip-report
 ---
 
@@ -20,19 +20,6 @@ This instrumentation provides good hydrologic monitoring for the basin system, m
 The [Airborne Snow Observatory](http://aso.jpl.nasa.gov/) has included the basin in its surveys since 2014, and several terrestrial LiDAR (TLS) surveys have been conducted in the basin, the most recent being a snow-free survey in September 2016 as part of the SnowEx mission.
 We returned to the Senator Beck basin in early February, 2017 to collect additional TLS surveys and assist in other ground-based fieldwork.
 
-We arrived in Silverton, CO on February 5th, 2017, and had five total days in the field, split between the lower Swamp Angel study site and the upper basin.
-There were a wide variety of activities taking place each field day, including snow pits, depth transects, ground-based radar surveys, and TLS surveys; our team's activities were:
-
-- **Monday, February 6th**: Swamp Angel
-- **Tuesday, February 7th**: Depth transects in the upper basin
-- **Wednesday, February 8th**: Depth transects and TLS at Swamp Angel
-- **Thursday, February 9th**: TLS in the upper basin
-- **Friday, February 10th**: Depth transects in the upper basin
-
-On Monday and Tuesday, snowy weather focused us to leave the TLS at home and concentrate on depth transects.
-On Friday we left the cars hoping to conduct TLS surveys, but significant wind transport of snow caused us to return the TLS equipment to the car after making it only halfway up to the upper basin.
-That gave us two days of TLS scanning, Wednesday at Swamp Angel and Thursday in the upper basin.
-
 ## TLS results
 
 Our objectives for our February snow-on TLS scanning were (roughly in order of priority):
@@ -40,12 +27,3 @@ Our objectives for our February snow-on TLS scanning were (roughly in order of p
 - Capture an accurate snow surface over as large of an area as possible.
 - Collect the same or a superset of the data captured by our September 2016 snow-free scans.
 - Measure snow depths on and around the snow pit and snow transect measurements.
-
-On Wednesday, at Swamp Angel, we measured on depth transect in the morning, then went back to the car to grab the scanner.
-This gave us roughly four hours, 1200 to 1600, to conduct TLS surveys.
-We collected three scan positions in total, using four tripod-mounted reflectors in addition to the in-situ reflectors mounted around the Swamp Angel study plot.
-It was a nice day to scan:
-
-![Scanning at Swamp Angel](/img/swamp-angel-scanning.jpg)
-
-
