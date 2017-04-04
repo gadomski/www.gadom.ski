@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>cpd v0.5.0</title>
-  <meta name="description" content="I’m happy to announce the release of cpd v0.5.0, as well as the associated PDAL plugin update. cpd is a C++ library I have developed for running the Coherent...">
+  <title>Publications</title>
+  <meta name="description" content="I do research, code development, and field work for CRREL.">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://www.gadom.ski/2017/01/20/cpd-v0-5-0.html">
+  <link rel="canonical" href="http://www.gadom.ski/publications/">
   <link rel="alternate" type="application/rss+xml" title="LiDAR :: snow :: ice :: code" href="/feed.xml">
   
   
@@ -60,34 +60,33 @@
 
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <article class="post">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">cpd v0.5.0</h1>
-    <p class="post-meta"><time datetime="2017-01-20T00:00:00-07:00" itemprop="datePublished">Jan 20, 2017</time></p>
+    <h1 class="post-title">Publications</h1>
   </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>I’m happy to announce the release of <a href="https://github.com/gadomski/cpd/releases/tag/v0.5.0">cpd v0.5.0</a>, as well as the associated <a href="https://github.com/PDAL/PDAL/pull/1474">PDAL plugin update</a>.
-<strong>cpd</strong> is a C++ library I have developed for running the <a href="https://sites.google.com/site/myronenko/research/cpd">Coherent Point Drift</a> (CPD) point cloud change detection algorithm.</p>
+  <div class="post-content">
+    <h2 id="first-author">First author</h2>
 
-<p>One of my research areas is whether CPD is a viable tool for point cloud change detection and registration as compared to existing methods. 
-One place where I’ve used <strong>cpd</strong> is with repeat LiDAR scans to measure glacier velocity, e.g. at the Helheim Glacier in southeast Greenland:</p>
+<ul>
+  <li>Gadomski, P. J. (2016). Measuring Glacier Surface Velocities With LiDAR: A Comparison of Three-Dimensional Change Detection Methods. University of Houston.</li>
+  <li>Gadomski, P. J., Deems, J. S., Glennie, C. L., Hartzell, P. J., Butler, H., &amp; Finnegan, D. C. (2015). Calculating LiDAR Point Cloud Uncertainty and Propagating Uncertainty to Snow-Water Equivalent Data Products. In 2015 AGU Fall Meeting.</li>
+  <li>Gadomski, P. J., Finnegan, D. C., Lawson, D. E., &amp; Hanlon, G. (2009). Investigating Tidewater Glacier Advance/Retreat Cycles Using a Multi-year Dataset Hubbard Glacier, Southeast Alaska. In AGU Fall Meeting Abstracts (Vol. 1, p. 514).</li>
+</ul>
 
-<p><img src="/img/helheim-velocity-field.png" alt="Helheim velocity field" /></p>
+<h2 id="other-publications">Other publications</h2>
 
-<p>There’s a lot of space and work to be done with CPD, and at this point I’m just scratching that ol’ surface.
-But the <strong>cpd</strong> codebase is reaching, if not maturity, then the equivalent of its early twenties, so I’m hopeful that I will be able to slow down on direct development and focus more on applications and downstream science.</p>
-
-<p>The PDAL plugin in pretty limited, and it this point exists mostly as a proof-of-concept. 
-Rather than use it directly, I usually create a new project (e.g. <a href="https://github.com/gadomski/hunky-dory">hunky-dory</a>) for a specific use-case.
-However, the plan is to eventually roll all of my external change detection projects back into PDAL once my tools mature enough that I won’t be over-churning the PDAL codebase.
-At that point, the PDAL <strong>cpd</strong> plugin should become more powerful; it might even evolve into a higher-level <strong>changes</strong> plugin that can run multiple change detection algorithms, e.g. <a href="https://en.wikipedia.org/wiki/Iterative_closest_point">ICP</a>.
-Stay tuned.</p>
+<ul>
+  <li>Deems, J. S., Gadomski, P. J., Vellone, D., Evanczyk, R., LeWinter, A. L., Birkeland, K. W., &amp; Finnegan, D. C. (2015). Mapping starting zone snow depth with a ground-based lidar to assist avalanche control and forecasting. Cold Regions Science and Technology, 120, 101–108. https://doi.org/10.1016/j.coldregions.2015.09.002</li>
+  <li>Finnegan, D. C., LeWinter, A., Hamilton, G. S., Gadomski, P. J., &amp; Stearns, L. A. (2015). Long-term Autonomous Tidewater Glacier Monitoring Using a Long-Range Terrestrial LiDAR Scanner; Helheim Glacier, Southeast Greenland.</li>
+  <li>Hartzell, P. J., Gadomski, P. J., Glennie, C. L., Finnegan, D. C., &amp; Deems, J. S. (2015). Rigorous Error Propagation for Terrestrial Laser Scanning with Application to Snow Volume Uncertainty. Journal of Glaciology, 61(230), 1147–1158. https://doi.org/10.3189/2015JoG15J031</li>
+  <li>Hartzell, P. J., Gadomski, P. J., Finnegan, D. C., Glennie, C. L., &amp; Deems, J. S. (2013). Quantifying Snow Volume Uncertainty from Repeat Terrestrial Laser Scanning Observations.</li>
+  <li>Lawson, D. E., Finnegan, D. C., Waller, T., Butler, W., &amp; Gadomski, P. J. (2009). Quantifying Ice Marginal and Submarine Environments During Seasonal Advance and Retreat, Hubbard Glacier, Southeast Alaska USA. In AGU Fall Meeting Abstracts (Vol. 1, p. 513).</li>
+</ul>
 
   </div>
 
-  
 </article>
 
       </div>
