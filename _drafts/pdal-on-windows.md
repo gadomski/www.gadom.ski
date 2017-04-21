@@ -53,7 +53,7 @@ If you accept the defaults, the code will be downloaded to `Source\Repos\PDAL` i
 ## Create a Visual Studio solution with CMake
 
 Open CMake, and choose `Source/Repos/PDAL` as your source code directory and `Source/Repos/PDAL/build` as your build directory.
-Yes, I meant to type ~normal~ Unix slashes, the CMake GUI displays paths with Unix path separators.
+Yes, I meant to type <s>normal</s> Unix slashes, the CMake GUI displays paths with Unix path separators.
 Click `Configure`.
 You'll be asked to create the build directory, then you'll be asked to specify the generator.
 Choose `Visual Sudio 15 2017 Win64` (notice the `Win64`).
