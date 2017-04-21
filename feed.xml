@@ -1,5 +1,89 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-04-17T16:23:31-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">Downloading lots of UNAVCO PBO data</title><link href="http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data.html" rel="alternate" type="text/html" title="Downloading lots of UNAVCO PBO data" /><published>2017-02-28T00:00:00-07:00</published><updated>2017-02-28T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data</id><content type="html" xml:base="http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data.html">&lt;p&gt;In November of 2016 we took advantage of record-low water levels in western reservoirs to survey them with airborne LiDAR, with a goal of extracting sedimentation levels.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-04-21T16:26:28-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">PDAL on Windows</title><link href="http://www.gadom.ski/2017/04/21/pdal-on-windows.html" rel="alternate" type="text/html" title="PDAL on Windows" /><published>2017-04-21T00:00:00-06:00</published><updated>2017-04-21T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/04/21/pdal-on-windows</id><content type="html" xml:base="http://www.gadom.ski/2017/04/21/pdal-on-windows.html">&lt;p&gt;As much as I try to use free and open-source software for work, there are times when you have to bite the bullet and use Their Software.
+Right now my proprietary stack is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.riegl.com/index.php?id=221&quot;&gt;RiSCAN Pro&lt;/a&gt; for registering and exporting Riegl LiDAR data.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://appliedimagery.com/&quot;&gt;QT Modeler&lt;/a&gt; for visualization and analysis of point clouds.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.trimble.com/survey/trimble-business-center.aspx&quot;&gt;Trimble Business Center&lt;/a&gt; for GNSS post-processing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;While I’m working on replacing each component with a FOSS stack, we’re not there yet.
+All three softwares are Windows-only, so I just got a Windows processing box for work.
+While I’m mostly going to be working in these proprietary GUIs on the ‘doze box, I figure this is a good chance to up my personal Windows hacking chops and maybe sand off some Windows-specific edges for some software projects that I work on.&lt;/p&gt;
+
+&lt;p&gt;A good first step is &lt;a href=&quot;https://www.pdal.io/&quot;&gt;PDAL&lt;/a&gt;.
+It’s widely used, its developer base is mostly &lt;em&gt;not&lt;/em&gt; Windows, but it is expected to be Windows-friendly.
+I also have a colleague who wants to develop his own Windows software that uses PDAL, and so I figured I’d try it myself and report back.&lt;/p&gt;
+
+&lt;p&gt;So let’s get PDAL set up on a tabula rasa Windows box and build a small downstream dependency project.&lt;/p&gt;
+
+&lt;h2 id=&quot;development-dependencies&quot;&gt;Development dependencies&lt;/h2&gt;
+
+&lt;p&gt;I’m working on Windows 10 Enterprise with a 64-bit processor.
+To get this party started, we need the following software:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.visualstudio.com/free-developer-offers/&quot;&gt;Visual Studio Community&lt;/a&gt; is a free version of Visual Studio.
+I’m working with the 2017 version.
+You’ll need to install C++ and Github integration.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cmake.org/&quot;&gt;CMake&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://trac.osgeo.org/osgeo4w/&quot;&gt;OSGeo4W&lt;/a&gt; is open-source geospatial packages.
+The OSGeo installer includes many of the development dependencies for PDAL, so we’ll use it instead of building these dependencies yourself.
+You’ll need the &lt;code class=&quot;highlighter-rouge&quot;&gt;gdal-dev&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;libgeotiff&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;proj&lt;/code&gt; libraries from the 64-bit version of OSGeo.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You’ll need to update your &lt;code class=&quot;highlighter-rouge&quot;&gt;PATH&lt;/code&gt; to include the following (assuming you’ve installed OSGeo to the default path):&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;C:\OSGeo4W64\lib&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;C:\OSGeo4W64\bin&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Users\&amp;lt;youruser&amp;gt;\local\lib&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Users\&amp;lt;youruser&amp;gt;\local\bin&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you plan on installing PDAL to a location other than &lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Users\&amp;lt;youruser&amp;gt;\local&lt;/code&gt;, update those paths accordingly.
+The default CMake install location, &lt;code class=&quot;highlighter-rouge&quot;&gt;C:\Program Files\PDAL&lt;/code&gt;, requires admin permissions to write, so it’s often a good idea to pick a different install spot.
+Also add the environment variable &lt;code class=&quot;highlighter-rouge&quot;&gt;GDAL_DATA&lt;/code&gt; and set its value to &lt;code class=&quot;highlighter-rouge&quot;&gt;C:\OSGeo4W64\share\epsg_csv&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;get-pdal&quot;&gt;Get PDAL&lt;/h2&gt;
+
+&lt;p&gt;Open up Visual Studio, find the &lt;code class=&quot;highlighter-rouge&quot;&gt;Team Explorer&lt;/code&gt; tab, and clone a new GitHub repo: &lt;code class=&quot;highlighter-rouge&quot;&gt;https://github.com/PDAL/PDAL&lt;/code&gt;.
+If you accept the defaults, the code will be downloaded to &lt;code class=&quot;highlighter-rouge&quot;&gt;Source\Repos\PDAL&lt;/code&gt; in your home directory.&lt;/p&gt;
+
+&lt;h2 id=&quot;create-a-visual-studio-solution-with-cmake&quot;&gt;Create a Visual Studio solution with CMake&lt;/h2&gt;
+
+&lt;p&gt;Open CMake, and choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Source/Repos/PDAL&lt;/code&gt; as your source code directory and &lt;code class=&quot;highlighter-rouge&quot;&gt;Source/Repos/PDAL/build&lt;/code&gt; as your build directory.
+Yes, I meant to type &lt;s&gt;normal&lt;/s&gt; Unix slashes, the CMake GUI displays paths with Unix path separators.
+Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Configure&lt;/code&gt;.
+You’ll be asked to create the build directory, then you’ll be asked to specify the generator.
+Choose &lt;code class=&quot;highlighter-rouge&quot;&gt;Visual Sudio 15 2017 Win64&lt;/code&gt; (notice the &lt;code class=&quot;highlighter-rouge&quot;&gt;Win64&lt;/code&gt;).
+Go on through, and make sure CMake configuration completes successfully.
+Set &lt;code class=&quot;highlighter-rouge&quot;&gt;CMAKE_INSTALL_PREFIX&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;C:/Users/&amp;lt;youruser&amp;gt;/local&lt;/code&gt; (or whatever value you picked when you set up your environment variables).
+Click &lt;code class=&quot;highlighter-rouge&quot;&gt;Generate&lt;/code&gt; and you’ll have a solution in &lt;code class=&quot;highlighter-rouge&quot;&gt;Source/Repos/PDAL/build/&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;build-pdal-with-visual-studio&quot;&gt;Build PDAL with Visual Studio&lt;/h2&gt;
+
+&lt;p&gt;Open or go back to Visual Studio and open &lt;code class=&quot;highlighter-rouge&quot;&gt;Source\Repos\PDAL\build\PDAL.sln&lt;/code&gt;.
+Switch to the &lt;code class=&quot;highlighter-rouge&quot;&gt;Solution Explorer&lt;/code&gt;, then build the &lt;code class=&quot;highlighter-rouge&quot;&gt;ALL_BUILD&lt;/code&gt; target.
+If that completes successfully, build the &lt;code class=&quot;highlighter-rouge&quot;&gt;INSTALL&lt;/code&gt; target.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note: I usually like to run tests before I install, but the PDAL test suite is broken in Visual Studio at the moment.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;create-and-build-a-downstream-project&quot;&gt;Create and build a downstream project&lt;/h2&gt;
+
+&lt;p&gt;A “downstream” is a project that depends on, in this case, PDAL.
+I’ve created a project &lt;code class=&quot;highlighter-rouge&quot;&gt;pdal-downstream&lt;/code&gt; and added the following two files:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/a4c5f04a37231fb20355d890768b4eaa.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Following the same procedure as we did for PDAL, configure this project with CMake and build it in Visual Studio.
+That should create a file &lt;code class=&quot;highlighter-rouge&quot;&gt;pdal-downstream\build\Debug\pdal-downstream.exe&lt;/code&gt; that you can run to report the installed PDAL version.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;And that’s it!
+As you can see, most of the hard work is &lt;code class=&quot;highlighter-rouge&quot;&gt;PATH&lt;/code&gt; configuration and getting the correct software onto your system.&lt;/p&gt;</content><author><name></name></author><category term="pdal" /><category term="windows" /><summary type="html">As much as I try to use free and open-source software for work, there are times when you have to bite the bullet and use Their Software. Right now my proprietary stack is:</summary></entry><entry><title type="html">Downloading lots of UNAVCO PBO data</title><link href="http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data.html" rel="alternate" type="text/html" title="Downloading lots of UNAVCO PBO data" /><published>2017-02-28T00:00:00-07:00</published><updated>2017-02-28T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data</id><content type="html" xml:base="http://www.gadom.ski/2017/02/28/downloading-lots-of-unavco-pbo-data.html">&lt;p&gt;In November of 2016 we took advantage of record-low water levels in western reservoirs to survey them with airborne LiDAR, with a goal of extracting sedimentation levels.
 This multi-week project was carried out with a “home-built” airborne system, based on a &lt;a href=&quot;http://www.riegl.com/nc/products/airborne-scanning/produktdetail/product/scanner/37/&quot;&gt;Riegl VQ-480i&lt;/a&gt; and an &lt;a href=&quot;https://www.ixblue.com/products/atlans-c&quot;&gt;iXblue ATLANS-C&lt;/a&gt;:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/img/airborne-scanner.jpg&quot; alt=&quot;Our airborne system&quot; /&gt;&lt;/p&gt;
