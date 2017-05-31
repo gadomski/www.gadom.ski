@@ -1,5 +1,35 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-04-21T16:26:28-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">PDAL on Windows</title><link href="http://www.gadom.ski/2017/04/21/pdal-on-windows.html" rel="alternate" type="text/html" title="PDAL on Windows" /><published>2017-04-21T00:00:00-06:00</published><updated>2017-04-21T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/04/21/pdal-on-windows</id><content type="html" xml:base="http://www.gadom.ski/2017/04/21/pdal-on-windows.html">&lt;p&gt;As much as I try to use free and open-source software for work, there are times when you have to bite the bullet and use Their Software.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-05-31T16:38:55-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">Vertical datum conversions with PDAL</title><link href="http://www.gadom.ski/2017/05/31/vdatum-with-pdal.html" rel="alternate" type="text/html" title="Vertical datum conversions with PDAL" /><published>2017-05-31T00:00:00-06:00</published><updated>2017-05-31T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/05/31/vdatum-with-pdal</id><content type="html" xml:base="http://www.gadom.ski/2017/05/31/vdatum-with-pdal.html">&lt;p&gt;In order to match collected point cloud data to existing records, it is often necessary to convert the data from one coordinate system to another.
+Some types of conversions, e.g. basic reprojections, can be completely described by mathematical functions, making them relatively straightforward.
+Converting between vertical datums, however, can be more challenging.&lt;/p&gt;
+
+&lt;p&gt;For a good introduction to vertical datums, &lt;a href=&quot;https://vdatum.noaa.gov/docs/datums.html&quot;&gt;NOAA has a quality tutorial&lt;/a&gt;.
+In this exercise, we are going to convert the vertical coordinates of a point cloud from a three-dimensional reference system, NAD 83 (1986), to a vertical datum, the North American Vertical Datum 1988 (NAVD 88).
+NAVD 88 is based on the Earth’s gravity field, which varies in space (and in time) based upon rock density, crustal thickness, and a variety of other factors.
+Earth’s gravity field can be expressed through a geoid, which is a (from the NOAA tutorial):&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;equipotential surface, defined in the Earth’s gravity field, which best fits, in a least squares sense, global mean sea level (MSL)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;In order to use &lt;a href=&quot;https://www.pdal.io/&quot;&gt;PDAL&lt;/a&gt; to convert vertical coordinates to a new vertical datum, we’ll need to fetch the appropriate geoid.
+PDAL uses &lt;a href=&quot;http://proj4.org/&quot;&gt;proj.4&lt;/a&gt; under the hood, and proj.4 accepts geoid’s in NOAA VDatum’s &lt;code class=&quot;highlighter-rouge&quot;&gt;gtx&lt;/code&gt; file format.
+We can fetch the 12B geoid from the &lt;a href=&quot;https://vdatum.noaa.gov/download.php&quot;&gt;VDatum download website&lt;/a&gt;.
+Inside the 12B zipfile there is a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;g2012b_conus.gtx&lt;/code&gt;; this is the geoid for the Continental United States (CONUS).
+We’ll use this file to convert our data.&lt;/p&gt;
+
+&lt;p&gt;For this example, we’ll convert data in NAD83 / UTM 18N, which has an &lt;a href=&quot;http://www.epsg.org/&quot;&gt;EPSG code&lt;/a&gt; of &lt;code class=&quot;highlighter-rouge&quot;&gt;EPSG:26918&lt;/code&gt; using the &lt;code class=&quot;highlighter-rouge&quot;&gt;pdal translate&lt;/code&gt; subcommand.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pdal translate -i infile.las -o outfile.las &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    -f reprojection &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    --filters.reprojection.out_srs&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;+init=EPSG:26918 +geoidgrids=/path/to/vdatum/g2012b_conus.gtx&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    --writers.las.a_srs&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;EPSG:26918+5703
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;By providing the geoid path, PDAL will use proj.4 to convert each point to the NAVD88 vertical datum.
+The &lt;code class=&quot;highlighter-rouge&quot;&gt;--writers.las.a_srs=EPSG:26918+5703&lt;/code&gt; option sets the spatial reference system of the output file to the compound EPSG code &lt;code class=&quot;highlighter-rouge&quot;&gt;ESG:26918+5703&lt;/code&gt;.
+&lt;a href=&quot;http://spatialreference.org/ref/epsg/north-american-vertical-datum-of-1988-height/&quot;&gt;EPSG:5703&lt;/a&gt; is NAVD88.&lt;/p&gt;</content><author><name></name></author><category term="pdal" /><category term="vertical-datum" /><summary type="html">In order to match collected point cloud data to existing records, it is often necessary to convert the data from one coordinate system to another. Some types of conversions, e.g. basic reprojections, can be completely described by mathematical functions, making them relatively straightforward. Converting between vertical datums, however, can be more challenging.</summary></entry><entry><title type="html">PDAL on Windows</title><link href="http://www.gadom.ski/2017/04/21/pdal-on-windows.html" rel="alternate" type="text/html" title="PDAL on Windows" /><published>2017-04-21T00:00:00-06:00</published><updated>2017-04-21T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/04/21/pdal-on-windows</id><content type="html" xml:base="http://www.gadom.ski/2017/04/21/pdal-on-windows.html">&lt;p&gt;As much as I try to use free and open-source software for work, there are times when you have to bite the bullet and use Their Software.
 Right now my proprietary stack is:&lt;/p&gt;
 
 &lt;ul&gt;

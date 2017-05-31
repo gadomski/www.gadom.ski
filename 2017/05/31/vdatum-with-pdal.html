@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>LiDAR :: snow :: ice :: code</title>
-  <meta name="description" content="I do research, code development, and field work for CRREL.">
+  <title>Vertical datum conversions with PDAL</title>
+  <meta name="description" content="In order to match collected point cloud data to existing records, it is often necessary to convert the data from one coordinate system to another. Some types...">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://www.gadom.ski/">
+  <link rel="canonical" href="http://www.gadom.ski/2017/05/31/vdatum-with-pdal.html">
   <link rel="alternate" type="application/rss+xml" title="LiDAR :: snow :: ice :: code" href="/feed.xml">
   
   
@@ -60,76 +60,50 @@
 
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
-  
-  
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Vertical datum conversions with PDAL</h1>
+    <p class="post-meta"><time datetime="2017-05-31T00:00:00-06:00" itemprop="datePublished">May 31, 2017</time></p>
+  </header>
 
+  <div class="post-content" itemprop="articleBody">
+    <p>In order to match collected point cloud data to existing records, it is often necessary to convert the data from one coordinate system to another.
+Some types of conversions, e.g. basic reprojections, can be completely described by mathematical functions, making them relatively straightforward.
+Converting between vertical datums, however, can be more challenging.</p>
 
-  <ul class="post-list">
-    
-      <li>
-        <span class="post-meta">May 31, 2017</span>
+<p>For a good introduction to vertical datums, <a href="https://vdatum.noaa.gov/docs/datums.html">NOAA has a quality tutorial</a>.
+In this exercise, we are going to convert the vertical coordinates of a point cloud from a three-dimensional reference system, NAD 83 (1986), to a vertical datum, the North American Vertical Datum 1988 (NAVD 88).
+NAVD 88 is based on the Earth’s gravity field, which varies in space (and in time) based upon rock density, crustal thickness, and a variety of other factors.
+Earth’s gravity field can be expressed through a geoid, which is a (from the NOAA tutorial):</p>
 
-        <h2>
-          <a class="post-link" href="/2017/05/31/vdatum-with-pdal.html">Vertical datum conversions with PDAL</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Apr 21, 2017</span>
+<blockquote>
+  <p>equipotential surface, defined in the Earth’s gravity field, which best fits, in a least squares sense, global mean sea level (MSL)</p>
+</blockquote>
 
-        <h2>
-          <a class="post-link" href="/2017/04/21/pdal-on-windows.html">PDAL on Windows</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Feb 28, 2017</span>
+<p>In order to use <a href="https://www.pdal.io/">PDAL</a> to convert vertical coordinates to a new vertical datum, we’ll need to fetch the appropriate geoid.
+PDAL uses <a href="http://proj4.org/">proj.4</a> under the hood, and proj.4 accepts geoid’s in NOAA VDatum’s <code class="highlighter-rouge">gtx</code> file format.
+We can fetch the 12B geoid from the <a href="https://vdatum.noaa.gov/download.php">VDatum download website</a>.
+Inside the 12B zipfile there is a file called <code class="highlighter-rouge">g2012b_conus.gtx</code>; this is the geoid for the Continental United States (CONUS).
+We’ll use this file to convert our data.</p>
 
-        <h2>
-          <a class="post-link" href="/2017/02/28/downloading-lots-of-unavco-pbo-data.html">Downloading lots of UNAVCO PBO data</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 31, 2017</span>
+<p>For this example, we’ll convert data in NAD83 / UTM 18N, which has an <a href="http://www.epsg.org/">EPSG code</a> of <code class="highlighter-rouge">EPSG:26918</code> using the <code class="highlighter-rouge">pdal translate</code> subcommand.</p>
 
-        <h2>
-          <a class="post-link" href="/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html">Using PDAL to clean legacy LiDAR data</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 23, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/01/23/slope-maps-with-gmt.html">Slope maps with GMT</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 20, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/01/20/cpd-v0-5-0.html">cpd v0.5.0</a>
-        </h2>
-      </li>
-    
-      <li>
-        <span class="post-meta">Jan 19, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/01/19/cropping-and-merging-with-pdal.html">Cropping and merging with PDAL</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>pdal translate -i infile.las -o outfile.las <span class="se">\</span>
+    -f reprojection <span class="se">\</span>
+    --filters.reprojection.out_srs<span class="o">=</span><span class="s2">"+init=EPSG:26918 +geoidgrids=/path/to/vdatum/g2012b_conus.gtx"</span> <span class="se">\</span>
+    --writers.las.a_srs<span class="o">=</span>EPSG:26918+5703
+</code></pre>
 </div>
+
+<p>By providing the geoid path, PDAL will use proj.4 to convert each point to the NAVD88 vertical datum.
+The <code class="highlighter-rouge">--writers.las.a_srs=EPSG:26918+5703</code> option sets the spatial reference system of the output file to the compound EPSG code <code class="highlighter-rouge">ESG:26918+5703</code>.
+<a href="http://spatialreference.org/ref/epsg/north-american-vertical-datum-of-1988-height/">EPSG:5703</a> is NAVD88.</p>
+
+  </div>
+
+  
+</article>
 
       </div>
     </main>
