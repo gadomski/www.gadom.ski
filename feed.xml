@@ -1,5 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-05-31T16:38:55-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">Vertical datum conversions with PDAL</title><link href="http://www.gadom.ski/2017/05/31/vdatum-with-pdal.html" rel="alternate" type="text/html" title="Vertical datum conversions with PDAL" /><published>2017-05-31T00:00:00-06:00</published><updated>2017-05-31T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/05/31/vdatum-with-pdal</id><content type="html" xml:base="http://www.gadom.ski/2017/05/31/vdatum-with-pdal.html">&lt;p&gt;In order to match collected point cloud data to existing records, it is often necessary to convert the data from one coordinate system to another.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.4.3">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-09-12T10:08:20-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">atlas.lidar.io</title><link href="http://www.gadom.ski/2017/09/12/atlas-lidar-io.html" rel="alternate" type="text/html" title="atlas.lidar.io" /><published>2017-09-12T00:00:00-06:00</published><updated>2017-09-12T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/09/12/atlas-lidar-io</id><content type="html" xml:base="http://www.gadom.ski/2017/09/12/atlas-lidar-io.html">&lt;p&gt;We have a remote &lt;a href=&quot;https://en.wikipedia.org/wiki/Lidar&quot;&gt;LiDAR&lt;/a&gt; system at the &lt;a href=&quot;https://en.wikipedia.org/wiki/Helheim_Glacier&quot;&gt;Helheim Glacier&lt;/a&gt; in southeast Greenland.
+This system, called ATLAS, was installed in the summer of 2015 to capture 3D scans of the glacier at regular intervals.
+These 3D scans can then be used to extract glacier velocities using, among other technologies, &lt;a href=&quot;/2017/01/20/cpd-v0-5-0.html&quot;&gt;cpd&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://glacio.gadom.ski/cameras/ATLAS_CAM/images/latest/redirect&quot; alt=&quot;The latest image from ATLAS_CAM, looking at the ATLAS system&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The latest image from ATLAS_CAM, a remote camera looking at the ATLAS LiDAR system.&lt;/p&gt;
+
+&lt;p&gt;In addition to the 3D LiDAR data, the ATLAS system produces a slew of other information, including data on battery charge status, temperature inside the scanner and inside of the scanner mount, and more.
+The engineers who built and maintain the system (us) need to keep an eye on these values, so we can see what’s happening with the system and find out quickly if something is going wrong (not that there’s much we can do about it — the system is more-or-less autonomous).
+This information is also of interest to other stakeholders in the project, including the non-profit Heising-Simons Foundation who funds the work, and our scientific partners.&lt;/p&gt;
+
+&lt;p&gt;I’ve created &lt;a href=&quot;http://atlas.lidar.io&quot;&gt;http://atlas.lidar.io&lt;/a&gt; to serve this information.
+The rest of this post walks through the component parts of the atlas.lidar.io system.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-path&quot;&gt;Data path&lt;/h2&gt;
+
+&lt;p&gt;The ATLAS system is constantly logging information such as LiDAR scanner status, temperatures, power system status, and more.
+These data are compiled into hourly digest messages called “heartbeats”.
+Heartbeats are transmitted via &lt;a href=&quot;https://en.wikipedia.org/wiki/Iridium_satellite_constellation&quot;&gt;Iridium&lt;/a&gt; &lt;a href=&quot;https://www.iridium.com/services/details/iridium-sbd&quot;&gt;Short-Burst Data (SBD)&lt;/a&gt; messages and received by a server process, &lt;a href=&quot;https://github.com/gadomski/sbd-rs&quot;&gt;sbd-rs&lt;/a&gt;, running on our lidar.io box located at CRREL.
+The lidar.io box also receives remote camera images from multiple remote cameras via FTP.&lt;/p&gt;
+
+&lt;h3 id=&quot;sbd-rs&quot;&gt;sbd-rs&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;sbd-rs&lt;/strong&gt; is the first of several server-side components that drive our atlas.lidar.io website.
+It is a http server written in &lt;a href=&quot;https://www.rust-lang.org/en-US/&quot;&gt;Rust&lt;/a&gt; and using the &lt;a href=&quot;http://ironframework.io/&quot;&gt;Iron web framework&lt;/a&gt;.
+The server listens for incoming SBD messages, receives and parses these messages, and then stores the messages on the filesystem.
+The &lt;strong&gt;sbd-rs&lt;/strong&gt; crate includes both a binary executable, for running the server, and a Rust library to provide an API for retrieving SBD messages from Rust code.&lt;/p&gt;
+
+&lt;p&gt;Many of the server-side components of the atlas.lidar.io system are written in Rust.
+I choose Rust because:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;I love programming in it.&lt;/li&gt;
+  &lt;li&gt;It is strongly typed and has first-class documentation tests, making it very easy to write robust code that isn’t terrible to revisit six months or two years later.&lt;/li&gt;
+  &lt;li&gt;Because of its memory-safety guarantees, servers I write in Rust are &lt;em&gt;stable&lt;/em&gt;. I’ve had zero production-time issues (knock on wood) with the &lt;strong&gt;sbd-rs&lt;/strong&gt; server — it Just Works™.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A downside of Rust is that it isn’t widely used or read by other programmers, so components I write in Rust are usually my responsibility alone.
+As we’ll see, that’s led to some design decisions to &lt;em&gt;not&lt;/em&gt; use Rust for components I want other people to be able to work on.&lt;/p&gt;
+
+&lt;h3 id=&quot;glacio&quot;&gt;glacio&lt;/h3&gt;
+
+&lt;p&gt;Once the heartbeat messages have been stored on the filesystem as SBD messages, they need to be read and reconstructed into their heartbeat content.
+This work is done by the &lt;a href=&quot;https://github.com/CRREL/glacio&quot;&gt;glacio&lt;/a&gt; Rust library.&lt;/p&gt;
+
+&lt;p&gt;Rust’s packaging system, Cargo, permits &lt;a href=&quot;https://doc.rust-lang.org/book/second-edition/ch14-03-cargo-workspaces.html&quot;&gt;workspaces&lt;/a&gt;, which group multiple &lt;a href=&quot;https://crates.io/&quot;&gt;crates&lt;/a&gt;.
+The &lt;strong&gt;glacio&lt;/strong&gt; workspace has three crates:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;glacio&lt;/strong&gt;, the Rust library for reading heartbeats and remote camera images.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;glacio-http&lt;/strong&gt;, an Iron HTTP library for serving ATLAS and other remote station data via a JSON HTTP API.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;glacio-bin&lt;/strong&gt;, a binary executable for querying serverside and starting the JSON HTTP API.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This separation makes it easier to enforce clean code boundaries, ensuring that, e.g., I don’t pollute the Rust API with HTTP-specific functionality.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;glacio&lt;/strong&gt; library uses the &lt;strong&gt;sbd-rs&lt;/strong&gt; library to read the SBD messages from the filesystem and re-construct the heartbeat messages.
+Because SBD messages are byte-limited, a heartbeat message may or may not be broken up into multiple SBD transmissions.
+The &lt;strong&gt;glacio-http&lt;/strong&gt; library uses the &lt;strong&gt;glacio&lt;/strong&gt; Rust API to build JSON-serializable structures and return those structures to HTTP requests using an Iron server.
+Finally, the &lt;strong&gt;glacio-bin&lt;/strong&gt; binary reads in a configuration file, builds the appropriately-configured HTTP server, and starts that server on lidar.io.&lt;/p&gt;
+
+&lt;p&gt;The data are now available to the world, but this HTTP API does &lt;em&gt;no&lt;/em&gt; actual web presentation work.
+I’ve separated out the web content into a non-Rust project of its own, so that other developers, who might not know Rust, can work on the front-end.
+The HTTP API can be used by multiple applications; in fact, the ATLAS_CAM picture at the top of this page is provided by the HTTP API, via the url &lt;a href=&quot;http://glacio.gadom.ski/cameras/ATLAS_CAM/images/latest/redirect&quot;&gt;http://glacio.gadom.ski/cameras/ATLAS_CAM/images/latest/redirect&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;data-presentation&quot;&gt;Data presentation&lt;/h2&gt;
+
+&lt;p&gt;Data presentation is handled by an &lt;a href=&quot;https://angular.io/&quot;&gt;Angular&lt;/a&gt; frontend, &lt;a href=&quot;https://github.com/CRREL/atlas.lidar.io&quot;&gt;atlas.lidar.io&lt;/a&gt;.
+I wanted a JavaScript web framework front end because they are made to work with external JSON APIs, and I wanted to enforce separation between my data crunching (&lt;strong&gt;glacio&lt;/strong&gt;) and data presentation.
+I researched and demoed a couple of options, and I ended up with Angular because (a) its demo was clean and (b) it has first-class routing.
+Since I’m not building a web app, but instead emulating a traditional static web page, I needed routing to be easy, and Angular provided that.&lt;/p&gt;
+
+&lt;p&gt;I used &lt;a href=&quot;https://getbootstrap.com/&quot;&gt;Bootstrap&lt;/a&gt; (of course) for styles, and &lt;a href=&quot;https://d3js.org/&quot;&gt;d3&lt;/a&gt; for graphing.
+Angular compiles to a couple of static files when deploying, so it can be served directly by Apache, which reduces the number of moving parts/running processes on the lidar.io box.
+The documentation for Angular isn’t roadmapped out very well, so figuring out the right way to deploy took a bit of figuring, but once I found the correct instructions things turned out to be &lt;em&gt;very&lt;/em&gt; easy.&lt;/p&gt;
+
+&lt;h2 id=&quot;deployment&quot;&gt;Deployment&lt;/h2&gt;
+
+&lt;p&gt;To update both the &lt;strong&gt;glacio&lt;/strong&gt; API and the &lt;strong&gt;atlas.lidar.io&lt;/strong&gt; website, I use basic &lt;a href=&quot;http://www.fabfile.org/&quot;&gt;fabric&lt;/a&gt; recipes.
+Deploying is as simple as:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fab deploy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This makes it easy to do quick, incremental iterations of the website and JSON API.&lt;/p&gt;
+
+&lt;h3 id=&quot;development-versions&quot;&gt;Development versions&lt;/h3&gt;
+
+&lt;p&gt;Right now I develop new versions of the atlas.lidar.io website against a &lt;strong&gt;glacio&lt;/strong&gt; server running locally on my laptop.
+I copy down all the necessary source data from lidar.io, and use a me-specific configuration file to serve the glacio data.
+This works for my small-scale, local development, but I will eventually need to have a development API available for testing development frontends.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Rust JSON API backend + Angular web frontend is a pretty swell combination that allows maximum flexibility and power for processing on the backend and good separability and performance on the frontend.
+With responsive styling from Bootstrap, this was a really easy way to stand up a mobile-and-desktop enabled website with custom data presentation quickly.&lt;/p&gt;</content><author><name></name></author><category term="atlas" /><category term="rust" /><category term="angular" /><category term="fabric" /><category term="bootstrap" /><category term="d3" /><summary type="html">We have a remote LiDAR system at the Helheim Glacier in southeast Greenland. This system, called ATLAS, was installed in the summer of 2015 to capture 3D scans of the glacier at regular intervals. These 3D scans can then be used to extract glacier velocities using, among other technologies, cpd.</summary></entry><entry><title type="html">Vertical datum conversions with PDAL</title><link href="http://www.gadom.ski/2017/05/31/vdatum-with-pdal.html" rel="alternate" type="text/html" title="Vertical datum conversions with PDAL" /><published>2017-05-31T00:00:00-06:00</published><updated>2017-05-31T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/05/31/vdatum-with-pdal</id><content type="html" xml:base="http://www.gadom.ski/2017/05/31/vdatum-with-pdal.html">&lt;p&gt;In order to match collected point cloud data to existing records, it is often necessary to convert the data from one coordinate system to another.
 Some types of conversions, e.g. basic reprojections, can be completely described by mathematical functions, making them relatively straightforward.
 Converting between vertical datums, however, can be more challenging.&lt;/p&gt;
 
