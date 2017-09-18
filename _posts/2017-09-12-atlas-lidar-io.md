@@ -30,7 +30,7 @@ The lidar.io box also receives remote camera images from multiple remote cameras
 ### sbd-rs
 
 **sbd-rs** is the first of several server-side components that drive our atlas.lidar.io website.
-It is a http server written in [Rust](https://www.rust-lang.org/en-US/) and using the [Iron web framework](http://ironframework.io/).
+It is a http server written in [Rust](https://www.rust-lang.org/en-US/).
 The server listens for incoming SBD messages, receives and parses these messages, and then stores the messages on the filesystem.
 The **sbd-rs** crate includes both a binary executable, for running the server, and a Rust library to provide an API for retrieving SBD messages from Rust code.
 
