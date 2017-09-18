@@ -65,7 +65,7 @@ Finally, the **glacio-bin** binary reads in a configuration file, builds the app
 
 The data are now available to the world, but this HTTP API does *no* actual web presentation work.
 I've separated out the web content into a non-Rust project of its own, so that other developers, who might not know Rust, can work on the front-end.
-The HTTP API can be used by multiple applications; in fact, the ATLAS_CAM picture at the top of this page is provided by the HTTP API, via the url <http://glacio.gadom.ski/cameras/ATLAS_CAM/images/latest/redirect>.
+The HTTP API can be used by multiple applications; in fact, the ATLAS_CAM picture at the top of this page is provided by the HTTP API, via the url <http://api.glac.io/cameras/ATLAS_CAM/images/latest/redirect>.
 
 ## Data presentation
 
