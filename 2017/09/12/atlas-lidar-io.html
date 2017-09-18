@@ -64,7 +64,7 @@
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">atlas.lidar.io</h1>
-    <p class="post-meta"><time datetime="2017-09-12T00:00:00-06:00" itemprop="datePublished">Sep 12, 2017</time></p>
+    <p class="post-meta"><time datetime="2017-09-12T00:00:00-04:00" itemprop="datePublished">Sep 12, 2017</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
@@ -93,7 +93,7 @@ The lidar.io box also receives remote camera images from multiple remote cameras
 <h3 id="sbd-rs">sbd-rs</h3>
 
 <p><strong>sbd-rs</strong> is the first of several server-side components that drive our atlas.lidar.io website.
-It is a http server written in <a href="https://www.rust-lang.org/en-US/">Rust</a> and using the <a href="http://ironframework.io/">Iron web framework</a>.
+It is a http server written in <a href="https://www.rust-lang.org/en-US/">Rust</a>.
 The server listens for incoming SBD messages, receives and parses these messages, and then stores the messages on the filesystem.
 The <strong>sbd-rs</strong> crate includes both a binary executable, for running the server, and a Rust library to provide an API for retrieving SBD messages from Rust code.</p>
 
