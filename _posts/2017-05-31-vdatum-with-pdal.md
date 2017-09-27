@@ -31,5 +31,5 @@ pdal translate -i infile.las -o outfile.las \
 ```
 
 By providing the geoid path, PDAL will use proj.4 to convert each point to the NAVD88 vertical datum.
-The `--writers.las.a_srs=EPSG:26918+5703` option sets the spatial reference system of the output file to the compound EPSG code `ESG:26918+5703`.
+The `--writers.las.a_srs=EPSG:26918+5703` option sets the spatial reference system of the output file to the compound EPSG code `EPSG:26918+5703`.
 [EPSG:5703](http://spatialreference.org/ref/epsg/north-american-vertical-datum-of-1988-height/) is NAVD88.
