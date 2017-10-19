@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Bespoke thermal-LiDAR integration at the South Pole</title>
+  <meta name="description" content="We’ve worked with Riegl and InfraTec to integrate an InfraTec VarioCAM HD with Riegl TLS scanners. To date, this integration is not complete; we can take pic...">
+
+  <link rel="stylesheet" href="/assets/main.css">
+  <link rel="canonical" href="http://www.gadom.ski/2017/10/19/bespoke-thermal.html">
+  <link rel="alternate" type="application/rss+xml" title="LiDAR :: snow :: ice :: code" href="/feed.xml">
+  
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header" role="banner">
+
+  <div class="wrapper">
+    
+    
+    <a class="site-title" href="/">LiDAR :: snow :: ice :: code</a>
+  
+    
+      <nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger">
+          
+            
+            
+            <a class="page-link" href="/about/">About</a>
+            
+          
+            
+            
+          
+            
+            
+            <a class="page-link" href="/publications/">Publications</a>
+            
+          
+            
+            
+          
+            
+            
+          
+        </div>
+      </nav>
+    
+  </div>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Bespoke thermal-LiDAR integration at the South Pole</h1>
+    <p class="post-meta">
+      <time datetime="2017-10-19T00:00:00-06:00" itemprop="datePublished">
+        
+        Oct 19, 2017
+      </time>
+      </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>We’ve worked with <a href="http://www.riegl.com/">Riegl</a> and <a href="http://www.infratec.eu/">InfraTec</a> to integrate an InfraTec VarioCAM HD with Riegl <a href="https://en.wikipedia.org/wiki/Lidar#Terrestrial_lidar">TLS</a> scanners.
+To date, this integration is not complete; we can take pictures with an InfraTec camera on top of a Riegl scanner, and we have developed a calibration for the camera and the mounting, but full software integration is still in the future.
+Even with incomplete integration, we brought a Riegl scanner and a InfraTec camera to the South Pole in January of 2017 to perform a three-dimensional survey of infrastructure with integrated thermal information.</p>
+
+<p><img src="/img/2017-01-SouthPole-overview.png" alt="2017-01-SouthPole overview image" /></p>
+
+<p>This is an overview picture of the resultant data.
+The legend is incorrect, the colorization is in degrees Celsius; I’ll explain why that’s “time” later in this post.</p>
+
+<p>This post walks through the procedures and the software used to do the integration.</p>
+
+<h2 id="source-data">Source data</h2>
+
+<p>The TLS data were collected in 23 individual scan positions throughout the facility.</p>
+
+<p><img src="/img/2017-01-SouthPole-scan-positions.jpg" alt="2017-01-SouthPole scan positions" /></p>
+
+<p>Each scan position included between five and nine thermal images, captured from a camera mounted on top of the TLS scanner.
+The heavy lifting of registering and QC-ing all of these scans was done by my colleague Adam.
+He also used InfraTec’s software to convert each thermal image (in the <code class="highlighter-rouge">irb</code> format, discussed later) to a simple colormap jpg, and imported these colormaps into Riegl.
+This ensured that each thermal image had an associated image record in the RiSCAN Pro project<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup>.</p>
+
+<h2 id="coordinate-systems">Coordinate systems</h2>
+
+<p>As a part of the registration process, each scan position has its own Scanner’s Own Position (SOP) matrix, a 4x4 transformation matrix that brings points from the Scanner’s Own Coordinate System (SOCS) to the PRoject Coordinate System (PRCS).
+The project as a whole then has one Project’s Own Position (POP) matrix, which brings points from PRCS to the GLobal Coordinate System (GLCS).</p>
+
+<p>Each thermal image also has an associated Camera’s Own Position (COP) matrix, which changes with each picture because the scanner head rotates for each new image.
+The camera mounting also has its own transformation matrix that represents the camera’s position with relation to the scanner origin, known as the mounting matrix (MM).
+Together, the mounting matrix and the COP matrix can bring a point from SOCS to the CaMera’s Coordinate System (CMCS).</p>
+
+<p><img src="/img/riegl-coordinate-systems.png" alt="Riegl coordinate systems" /></p>
+
+<p>These matrices are all contained in the the RiSCAN Pro project file, an xml file that resides in each RiSCAN Pro project directory.
+I created the <a href="https://github.com/gadomski/riscan-pro">riscan-pro</a> Rust library to parse these matrics from RiSCAN Pro projects and use them for coordinate conversions (and more).
+You can see the methods used to go up and down this “coordinate ladder” in <a href="https://docs.rs/riscan-pro/0.2.1/riscan_pro/struct.Point.html">the library’s documentation</a>.</p>
+
+<h2 id="camera-calibration">Camera calibration</h2>
+
+<p>In order to convert points from the CMCS to actual image pixels, certain properties of the camera itself must be known or discovered.
+We’ve developed a camera calibration for our InfraTec VarioCAM HD, and this calibration is contained inside of the RiSCAN Pro project.
+The math underlying this calibration is beyond me, but it is laid out exactly in the Riegl project documentation, so I simply tranferred it over to <a href="https://docs.rs/riscan-pro/0.2.1/src/riscan_pro/camera_calibration.rs.html#70-105">my Rust library</a>.</p>
+
+<p>The camera calibration converts three-dimensional CMCS points to a two-dimensional pixel.
+This math isn’t perfect — it can produce “valid” pixel values for points that are, e.g., behind the camera.
+My library does some additional filtering to ensure that each CMCS point maps to a valid pixel value or <a href="https://doc.rust-lang.org/std/option/">None</a>.</p>
+
+<h2 id="putting-it-together">Putting it together</h2>
+
+<p>We now have all the math we need to:</p>
+
+<ol>
+  <li>Find the corresponding thermal pixel, if one exists, for each SOCS point.</li>
+  <li>Convert SOCS points to GLCS points.</li>
+</ol>
+
+<p>Now we just need to read our data.</p>
+
+<p>Our point clouds are stored as <code class="highlighter-rouge">rxp</code> files, which is the proprietary file format from Riegl.
+Thankfully, they provide <a href="http://www.riegl.com/index.php?id=224">RiVLib</a><sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup>, which provides a library for reading <code class="highlighter-rouge">rxp</code> data.
+I made a FFI wrapper around their library and a helper library in the Rust workspace <a href="https://github.com/gadomski/rivlib-rs">rivlib-rs</a>, which I use to read rxp points into Rust.</p>
+
+<p>A similar situation presents itself with the thermal data.
+InfraTec’s <code class="highlighter-rouge">irb</code> format is closed and proprietary, but they also provide a library<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> for reading <code class="highlighter-rouge">irb</code> files.
+Again, I wrote a FFI wrapper and helper library<sup id="fnref:4"><a href="#fn:4" class="footnote">4</a></sup>, this time named <a href="https://github.com/gadomski/irbacs-sys">irbacs-sys</a> and <a href="https://github.com/gadomski/irb-rs">irb-rs</a> respectively.</p>
+
+<p>The pieces are now all set up.
+To review, these are the individual rust crates we have so far:</p>
+
+<ul>
+  <li><strong>riscan-pro</strong></li>
+  <li><strong>irb</strong>
+    <ul>
+      <li>depends on <strong>irbacs-sys</strong></li>
+    </ul>
+  </li>
+  <li><strong>scanifc</strong>
+    <ul>
+      <li>depends on <strong>scanifc-sys</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p>Each one of these crates stands more-or-less on its own, and could be used in other projects.
+Everything from here on out will be pretty us-specific, so it probably belongs in its own crate: the <strong>Thermal Colorization Engine</strong>, or <a href="https://github.com/gadomski/tce"><strong>tce</strong></a>.</p>
+
+<p>The basic mechanics are pretty simple:</p>
+
+<ol>
+  <li>For each SOCS point in each rxp file, find all temperature values that overlap that point.</li>
+  <li>Average these temperature values to produce a single temperature value.</li>
+  <li>Create a <code class="highlighter-rouge">las</code> point with the following attributes:
+    <ol>
+      <li>XYZ in GLCS.</li>
+      <li>GpsTime set to the temperature, in °C.</li>
+      <li>RGB set to a color-ramp value, as determined by the temperature.</li>
+    </ol>
+  </li>
+  <li>Write the <code class="highlighter-rouge">las</code> point out to a file, one output file per input <code class="highlighter-rouge">rxp</code> file.</li>
+</ol>
+
+<p>The <code class="highlighter-rouge">las</code> format doesn’t do custom attributes well.
+The extra bytes mechanism does exist for las 1.4, but it’s not universally supported<sup id="fnref:5"><a href="#fn:5" class="footnote">5</a></sup>.
+The <code class="highlighter-rouge">GpsTime</code> field is convenient for us, since it’s (a) a double field and (b) pretty useless for our TLS data.
+So we shove the temperature value into there.</p>
+
+<h2 id="coordinate-reference-system-and-compression">Coordinate reference system and compression</h2>
+
+<p>My <a href="https://github.com/gadomski/las-rs">las-rs</a> library doesn’t support compressed output or coordinate reference system information, so we use PDAL to do a bit of post-processing.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>pdal translate -i infile.las -o outfile.laz -f sample -f outlier --filters.sample.radius<span class="o">=</span>0.02 --writers.las.a_srs<span class="o">=</span><span class="s2">"EPSG:32761+5773"</span>
+</code></pre>
+</div>
+
+<p>The <code class="highlighter-rouge">outfile.laz</code> tells PDAL to write a compressed laz output.
+The sample filter resamples the data to roughly 0.02m sampling using the <a href="https://www.pdal.io/stages/filters.sample.html">poisson method</a>.
+And the outlier filter removes blatantly invalid in-air points.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>It took a decent amount of work, but we now have an engine that can be used to colorize Riegl-collected TLS data with InfraTec thermal imagery.
+I won’t be sad when Riegl does this integration themselves, but until then, this’ll do.</p>
+
+<h2 id="footnotes">Footnotes</h2>
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>RiSCAN Pro is Riegl’s terrestrial laser scanning software. It’s not a terrible piece of kit, but it’s a pretty black-box system, and doing the same thing over and over again isn’t it’s strongest suit. Highly manual tasks, such as registration, are best done in RiSCAN Pro, so we use RiSCAN Pro projects as our starting point for this custom integration.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p>To their customers.&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:3">
+      <p>You think they’d give this to non-customers? SMH.&nbsp;<a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:4">
+      <p>Discerning readers might notice that I used a workspace for my Riegl wrappers, but two seperate repositories for my InfraTec wrappers. Why? The <code class="highlighter-rouge">irb-rs</code> library includes some code that doesn’t require <code class="highlighter-rouge">irbacs-sys</code> to run, namely the ability to read text exports created by InfraTec software. Workspaces seem to work best when you don’t fiddle with features much – when <code class="highlighter-rouge">cargo build --all</code> Just Works and builds everything. Since the Riegl stuff is very tightly integrated, it made sense to be a workspace – less so for the InfraTec stuff.&nbsp;<a href="#fnref:4" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:5">
+      <p>In particular, QT Modeler does not support extra bytes AFAICT.&nbsp;<a href="#fnref:5" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+  </div>
+
+  
+</article>
+
+      </div>
+    </main>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">LiDAR :: snow :: ice :: code</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>
+            
+              LiDAR :: snow :: ice :: code
+            
+            </li>
+            
+            <li><a href="mailto:pete@gadom.ski">pete@gadom.ski</a></li>
+            
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/gadomski"><span class="icon icon--github"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">gadomski</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/petegadomski"><span class="icon icon--twitter"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">petegadomski</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Research, code development, and field work for CRREL.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

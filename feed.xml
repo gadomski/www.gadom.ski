@@ -1,5 +1,148 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-09-27T08:01:46-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>I do research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">atlas.lidar.io</title><link href="http://www.gadom.ski/2017/09/12/atlas-lidar-io.html" rel="alternate" type="text/html" title="atlas.lidar.io" /><published>2017-09-12T00:00:00-06:00</published><updated>2017-09-12T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/09/12/atlas-lidar-io</id><content type="html" xml:base="http://www.gadom.ski/2017/09/12/atlas-lidar-io.html">&lt;p&gt;We have a remote &lt;a href=&quot;https://en.wikipedia.org/wiki/Lidar&quot;&gt;LiDAR&lt;/a&gt; system at the &lt;a href=&quot;https://en.wikipedia.org/wiki/Helheim_Glacier&quot;&gt;Helheim Glacier&lt;/a&gt; in southeast Greenland.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-10-19T13:55:28-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>Research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">Bespoke thermal-LiDAR integration at the South Pole</title><link href="http://www.gadom.ski/2017/10/19/bespoke-thermal.html" rel="alternate" type="text/html" title="Bespoke thermal-LiDAR integration at the South Pole" /><published>2017-10-19T00:00:00-06:00</published><updated>2017-10-19T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/10/19/bespoke-thermal</id><content type="html" xml:base="http://www.gadom.ski/2017/10/19/bespoke-thermal.html">&lt;p&gt;We’ve worked with &lt;a href=&quot;http://www.riegl.com/&quot;&gt;Riegl&lt;/a&gt; and &lt;a href=&quot;http://www.infratec.eu/&quot;&gt;InfraTec&lt;/a&gt; to integrate an InfraTec VarioCAM HD with Riegl &lt;a href=&quot;https://en.wikipedia.org/wiki/Lidar#Terrestrial_lidar&quot;&gt;TLS&lt;/a&gt; scanners.
+To date, this integration is not complete; we can take pictures with an InfraTec camera on top of a Riegl scanner, and we have developed a calibration for the camera and the mounting, but full software integration is still in the future.
+Even with incomplete integration, we brought a Riegl scanner and a InfraTec camera to the South Pole in January of 2017 to perform a three-dimensional survey of infrastructure with integrated thermal information.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/2017-01-SouthPole-overview.png&quot; alt=&quot;2017-01-SouthPole overview image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;This is an overview picture of the resultant data.
+The legend is incorrect, the colorization is in degrees Celsius; I’ll explain why that’s “time” later in this post.&lt;/p&gt;
+
+&lt;p&gt;This post walks through the procedures and the software used to do the integration.&lt;/p&gt;
+
+&lt;h2 id=&quot;source-data&quot;&gt;Source data&lt;/h2&gt;
+
+&lt;p&gt;The TLS data were collected in 23 individual scan positions throughout the facility.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/2017-01-SouthPole-scan-positions.jpg&quot; alt=&quot;2017-01-SouthPole scan positions&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Each scan position included between five and nine thermal images, captured from a camera mounted on top of the TLS scanner.
+The heavy lifting of registering and QC-ing all of these scans was done by my colleague Adam.
+He also used InfraTec’s software to convert each thermal image (in the &lt;code class=&quot;highlighter-rouge&quot;&gt;irb&lt;/code&gt; format, discussed later) to a simple colormap jpg, and imported these colormaps into Riegl.
+This ensured that each thermal image had an associated image record in the RiSCAN Pro project&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;coordinate-systems&quot;&gt;Coordinate systems&lt;/h2&gt;
+
+&lt;p&gt;As a part of the registration process, each scan position has its own Scanner’s Own Position (SOP) matrix, a 4x4 transformation matrix that brings points from the Scanner’s Own Coordinate System (SOCS) to the PRoject Coordinate System (PRCS).
+The project as a whole then has one Project’s Own Position (POP) matrix, which brings points from PRCS to the GLobal Coordinate System (GLCS).&lt;/p&gt;
+
+&lt;p&gt;Each thermal image also has an associated Camera’s Own Position (COP) matrix, which changes with each picture because the scanner head rotates for each new image.
+The camera mounting also has its own transformation matrix that represents the camera’s position with relation to the scanner origin, known as the mounting matrix (MM).
+Together, the mounting matrix and the COP matrix can bring a point from SOCS to the CaMera’s Coordinate System (CMCS).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/riegl-coordinate-systems.png&quot; alt=&quot;Riegl coordinate systems&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;These matrices are all contained in the the RiSCAN Pro project file, an xml file that resides in each RiSCAN Pro project directory.
+I created the &lt;a href=&quot;https://github.com/gadomski/riscan-pro&quot;&gt;riscan-pro&lt;/a&gt; Rust library to parse these matrics from RiSCAN Pro projects and use them for coordinate conversions (and more).
+You can see the methods used to go up and down this “coordinate ladder” in &lt;a href=&quot;https://docs.rs/riscan-pro/0.2.1/riscan_pro/struct.Point.html&quot;&gt;the library’s documentation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;camera-calibration&quot;&gt;Camera calibration&lt;/h2&gt;
+
+&lt;p&gt;In order to convert points from the CMCS to actual image pixels, certain properties of the camera itself must be known or discovered.
+We’ve developed a camera calibration for our InfraTec VarioCAM HD, and this calibration is contained inside of the RiSCAN Pro project.
+The math underlying this calibration is beyond me, but it is laid out exactly in the Riegl project documentation, so I simply tranferred it over to &lt;a href=&quot;https://docs.rs/riscan-pro/0.2.1/src/riscan_pro/camera_calibration.rs.html#70-105&quot;&gt;my Rust library&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The camera calibration converts three-dimensional CMCS points to a two-dimensional pixel.
+This math isn’t perfect — it can produce “valid” pixel values for points that are, e.g., behind the camera.
+My library does some additional filtering to ensure that each CMCS point maps to a valid pixel value or &lt;a href=&quot;https://doc.rust-lang.org/std/option/&quot;&gt;None&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;putting-it-together&quot;&gt;Putting it together&lt;/h2&gt;
+
+&lt;p&gt;We now have all the math we need to:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Find the corresponding thermal pixel, if one exists, for each SOCS point.&lt;/li&gt;
+  &lt;li&gt;Convert SOCS points to GLCS points.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Now we just need to read our data.&lt;/p&gt;
+
+&lt;p&gt;Our point clouds are stored as &lt;code class=&quot;highlighter-rouge&quot;&gt;rxp&lt;/code&gt; files, which is the proprietary file format from Riegl.
+Thankfully, they provide &lt;a href=&quot;http://www.riegl.com/index.php?id=224&quot;&gt;RiVLib&lt;/a&gt;&lt;sup id=&quot;fnref:2&quot;&gt;&lt;a href=&quot;#fn:2&quot; class=&quot;footnote&quot;&gt;2&lt;/a&gt;&lt;/sup&gt;, which provides a library for reading &lt;code class=&quot;highlighter-rouge&quot;&gt;rxp&lt;/code&gt; data.
+I made a FFI wrapper around their library and a helper library in the Rust workspace &lt;a href=&quot;https://github.com/gadomski/rivlib-rs&quot;&gt;rivlib-rs&lt;/a&gt;, which I use to read rxp points into Rust.&lt;/p&gt;
+
+&lt;p&gt;A similar situation presents itself with the thermal data.
+InfraTec’s &lt;code class=&quot;highlighter-rouge&quot;&gt;irb&lt;/code&gt; format is closed and proprietary, but they also provide a library&lt;sup id=&quot;fnref:3&quot;&gt;&lt;a href=&quot;#fn:3&quot; class=&quot;footnote&quot;&gt;3&lt;/a&gt;&lt;/sup&gt; for reading &lt;code class=&quot;highlighter-rouge&quot;&gt;irb&lt;/code&gt; files.
+Again, I wrote a FFI wrapper and helper library&lt;sup id=&quot;fnref:4&quot;&gt;&lt;a href=&quot;#fn:4&quot; class=&quot;footnote&quot;&gt;4&lt;/a&gt;&lt;/sup&gt;, this time named &lt;a href=&quot;https://github.com/gadomski/irbacs-sys&quot;&gt;irbacs-sys&lt;/a&gt; and &lt;a href=&quot;https://github.com/gadomski/irb-rs&quot;&gt;irb-rs&lt;/a&gt; respectively.&lt;/p&gt;
+
+&lt;p&gt;The pieces are now all set up.
+To review, these are the individual rust crates we have so far:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;riscan-pro&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;irb&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;depends on &lt;strong&gt;irbacs-sys&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;scanifc&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;depends on &lt;strong&gt;scanifc-sys&lt;/strong&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Each one of these crates stands more-or-less on its own, and could be used in other projects.
+Everything from here on out will be pretty us-specific, so it probably belongs in its own crate: the &lt;strong&gt;Thermal Colorization Engine&lt;/strong&gt;, or &lt;a href=&quot;https://github.com/gadomski/tce&quot;&gt;&lt;strong&gt;tce&lt;/strong&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;The basic mechanics are pretty simple:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;For each SOCS point in each rxp file, find all temperature values that overlap that point.&lt;/li&gt;
+  &lt;li&gt;Average these temperature values to produce a single temperature value.&lt;/li&gt;
+  &lt;li&gt;Create a &lt;code class=&quot;highlighter-rouge&quot;&gt;las&lt;/code&gt; point with the following attributes:
+    &lt;ol&gt;
+      &lt;li&gt;XYZ in GLCS.&lt;/li&gt;
+      &lt;li&gt;GpsTime set to the temperature, in °C.&lt;/li&gt;
+      &lt;li&gt;RGB set to a color-ramp value, as determined by the temperature.&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Write the &lt;code class=&quot;highlighter-rouge&quot;&gt;las&lt;/code&gt; point out to a file, one output file per input &lt;code class=&quot;highlighter-rouge&quot;&gt;rxp&lt;/code&gt; file.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;las&lt;/code&gt; format doesn’t do custom attributes well.
+The extra bytes mechanism does exist for las 1.4, but it’s not universally supported&lt;sup id=&quot;fnref:5&quot;&gt;&lt;a href=&quot;#fn:5&quot; class=&quot;footnote&quot;&gt;5&lt;/a&gt;&lt;/sup&gt;.
+The &lt;code class=&quot;highlighter-rouge&quot;&gt;GpsTime&lt;/code&gt; field is convenient for us, since it’s (a) a double field and (b) pretty useless for our TLS data.
+So we shove the temperature value into there.&lt;/p&gt;
+
+&lt;h2 id=&quot;coordinate-reference-system-and-compression&quot;&gt;Coordinate reference system and compression&lt;/h2&gt;
+
+&lt;p&gt;My &lt;a href=&quot;https://github.com/gadomski/las-rs&quot;&gt;las-rs&lt;/a&gt; library doesn’t support compressed output or coordinate reference system information, so we use PDAL to do a bit of post-processing.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;pdal translate -i infile.las -o outfile.laz -f sample -f outlier --filters.sample.radius&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.02 --writers.las.a_srs&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;EPSG:32761+5773&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;outfile.laz&lt;/code&gt; tells PDAL to write a compressed laz output.
+The sample filter resamples the data to roughly 0.02m sampling using the &lt;a href=&quot;https://www.pdal.io/stages/filters.sample.html&quot;&gt;poisson method&lt;/a&gt;.
+And the outlier filter removes blatantly invalid in-air points.&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;It took a decent amount of work, but we now have an engine that can be used to colorize Riegl-collected TLS data with InfraTec thermal imagery.
+I won’t be sad when Riegl does this integration themselves, but until then, this’ll do.&lt;/p&gt;
+
+&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;RiSCAN Pro is Riegl’s terrestrial laser scanning software. It’s not a terrible piece of kit, but it’s a pretty black-box system, and doing the same thing over and over again isn’t it’s strongest suit. Highly manual tasks, such as registration, are best done in RiSCAN Pro, so we use RiSCAN Pro projects as our starting point for this custom integration.&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:2&quot;&gt;
+      &lt;p&gt;To their customers.&amp;nbsp;&lt;a href=&quot;#fnref:2&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:3&quot;&gt;
+      &lt;p&gt;You think they’d give this to non-customers? SMH.&amp;nbsp;&lt;a href=&quot;#fnref:3&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:4&quot;&gt;
+      &lt;p&gt;Discerning readers might notice that I used a workspace for my Riegl wrappers, but two seperate repositories for my InfraTec wrappers. Why? The &lt;code class=&quot;highlighter-rouge&quot;&gt;irb-rs&lt;/code&gt; library includes some code that doesn’t require &lt;code class=&quot;highlighter-rouge&quot;&gt;irbacs-sys&lt;/code&gt; to run, namely the ability to read text exports created by InfraTec software. Workspaces seem to work best when you don’t fiddle with features much – when &lt;code class=&quot;highlighter-rouge&quot;&gt;cargo build --all&lt;/code&gt; Just Works and builds everything. Since the Riegl stuff is very tightly integrated, it made sense to be a workspace – less so for the InfraTec stuff.&amp;nbsp;&lt;a href=&quot;#fnref:4&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+    &lt;li id=&quot;fn:5&quot;&gt;
+      &lt;p&gt;In particular, QT Modeler does not support extra bytes AFAICT.&amp;nbsp;&lt;a href=&quot;#fnref:5&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</content><author><name></name></author><category term="infratec" /><category term="riegl" /><category term="south-pole" /><category term="tls" /><summary type="html">We’ve worked with Riegl and InfraTec to integrate an InfraTec VarioCAM HD with Riegl TLS scanners. To date, this integration is not complete; we can take pictures with an InfraTec camera on top of a Riegl scanner, and we have developed a calibration for the camera and the mounting, but full software integration is still in the future. Even with incomplete integration, we brought a Riegl scanner and a InfraTec camera to the South Pole in January of 2017 to perform a three-dimensional survey of infrastructure with integrated thermal information.</summary></entry><entry><title type="html">atlas.lidar.io</title><link href="http://www.gadom.ski/2017/09/12/atlas-lidar-io.html" rel="alternate" type="text/html" title="atlas.lidar.io" /><published>2017-09-12T00:00:00-06:00</published><updated>2017-09-12T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/09/12/atlas-lidar-io</id><content type="html" xml:base="http://www.gadom.ski/2017/09/12/atlas-lidar-io.html">&lt;p&gt;We have a remote &lt;a href=&quot;https://en.wikipedia.org/wiki/Lidar&quot;&gt;LiDAR&lt;/a&gt; system at the &lt;a href=&quot;https://en.wikipedia.org/wiki/Helheim_Glacier&quot;&gt;Helheim Glacier&lt;/a&gt; in southeast Greenland.
 This system, called ATLAS, was installed in the summer of 2015 to capture 3D scans of the glacier at regular intervals.
 These 3D scans can then be used to extract glacier velocities using, among other technologies, &lt;a href=&quot;/2017/01/20/cpd-v0-5-0.html&quot;&gt;cpd&lt;/a&gt;.&lt;/p&gt;
 

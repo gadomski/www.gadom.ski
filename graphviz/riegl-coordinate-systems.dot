@@ -1,0 +1,6 @@
+graph "Riegl coordinate systems" {
+    rankdir = LR;
+    GLCS -- PRCS [label="POP"];
+    PRCS -- SOCS [label="SOP"];
+    SOCS -- CMCS [label="MM & COP"];
+}
