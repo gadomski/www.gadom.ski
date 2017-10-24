@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-10-19T13:55:28-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>Research, code development, and field work for CRREL.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-10-24T15:49:15-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>Research, code development, and field work for CRREL.
 </subtitle><entry><title type="html">Bespoke thermal-LiDAR integration at the South Pole</title><link href="http://www.gadom.ski/2017/10/19/bespoke-thermal.html" rel="alternate" type="text/html" title="Bespoke thermal-LiDAR integration at the South Pole" /><published>2017-10-19T00:00:00-06:00</published><updated>2017-10-19T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/10/19/bespoke-thermal</id><content type="html" xml:base="http://www.gadom.ski/2017/10/19/bespoke-thermal.html">&lt;p&gt;We’ve worked with &lt;a href=&quot;http://www.riegl.com/&quot;&gt;Riegl&lt;/a&gt; and &lt;a href=&quot;http://www.infratec.eu/&quot;&gt;InfraTec&lt;/a&gt; to integrate an InfraTec VarioCAM HD with Riegl &lt;a href=&quot;https://en.wikipedia.org/wiki/Lidar#Terrestrial_lidar&quot;&gt;TLS&lt;/a&gt; scanners.
 To date, this integration is not complete; we can take pictures with an InfraTec camera on top of a Riegl scanner, and we have developed a calibration for the camera and the mounting, but full software integration is still in the future.
 Even with incomplete integration, we brought a Riegl scanner and a InfraTec camera to the South Pole in January of 2017 to perform a three-dimensional survey of infrastructure with integrated thermal information.&lt;/p&gt;
@@ -121,6 +121,10 @@ And the outlier filter removes blatantly invalid in-air points.&lt;/p&gt;
 
 &lt;p&gt;It took a decent amount of work, but we now have an engine that can be used to colorize Riegl-collected TLS data with InfraTec thermal imagery.
 I won’t be sad when Riegl does this integration themselves, but until then, this’ll do.&lt;/p&gt;
+
+&lt;h2 id=&quot;updates&quot;&gt;Updates&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;2017-10-24&lt;/strong&gt;: I’ve put the commented source of the Thermal Colorization Engine up &lt;a href=&quot;http://www.gadom.ski/tce/&quot;&gt;here&lt;/a&gt;, if you’re curious how it all works.&lt;/p&gt;
 
 &lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
 
