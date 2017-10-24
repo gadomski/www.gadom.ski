@@ -112,6 +112,10 @@ And the outlier filter removes blatantly invalid in-air points.
 It took a decent amount of work, but we now have an engine that can be used to colorize Riegl-collected TLS data with InfraTec thermal imagery.
 I won't be sad when Riegl does this integration themselves, but until then, this'll do.
 
+## Updates
+
+**2017-10-24**: I've put the commented source of the Thermal Colorization Engine up [here](http://www.gadom.ski/tce/), if you're curious how it all works.
+
 ## Footnotes
 
 [^1]: RiSCAN Pro is Riegl's terrestrial laser scanning software. It's not a terrible piece of kit, but it's a pretty black-box system, and doing the same thing over and over again isn't it's strongest suit. Highly manual tasks, such as registration, are best done in RiSCAN Pro, so we use RiSCAN Pro projects as our starting point for this custom integration.
