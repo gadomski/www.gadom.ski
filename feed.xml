@@ -1,5 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-10-28T11:15:46-06:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>Research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">2017 voting guide for Longmont, CO</title><link href="http://www.gadom.ski/2017/10/28/voting-guide.html" rel="alternate" type="text/html" title="2017 voting guide for Longmont, CO" /><published>2017-10-28T00:00:00-06:00</published><updated>2017-10-28T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/10/28/voting-guide</id><content type="html" xml:base="http://www.gadom.ski/2017/10/28/voting-guide.html">&lt;ul id=&quot;markdown-toc&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-12-15T06:08:10-07:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>Research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">AGU 2017</title><link href="http://www.gadom.ski/2017/12/15/AGU.html" rel="alternate" type="text/html" title="AGU 2017" /><published>2017-12-15T00:00:00-07:00</published><updated>2017-12-15T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/12/15/AGU</id><content type="html" xml:base="http://www.gadom.ski/2017/12/15/AGU.html">&lt;p&gt;I presented a poster at &lt;a href=&quot;https://fallmeeting.agu.org/2017/program-overview/&quot;&gt;the AGU 2017 fall meeting&lt;/a&gt;.
+The long-winded title was “Three summer of high-resolution, high-accuracy velocity data of Helheim Glacier, as measured by an automated terrestrial LiDAR scanner: methods, challenges, and applications.”
+If you want to look at the PDF version of the poster, I have it &lt;a href=&quot;/pdf/2017-AGU-Gadomski-Poster.pdf&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/2016-07-08-1200-helheim-vz.png&quot; alt=&quot;One of the z-velocity images I made for the poster&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A few quick things I learned while making this thing:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;http://gmt.soest.hawaii.edu/&quot;&gt;GMT&lt;/a&gt; is The Jam.
+As a part of this work, I had to create a velocity map for each dimension for each pair of scans, i.e. over two thousand maps.
+Totally undoable with a point-and-click GIS.
+GMT scripted everything and let me update my map styles by changing a script and running make.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.ffmpeg.org/&quot;&gt;ffmpeg&lt;/a&gt; is some good stuff as well.
+I’m using it to make movies out of those maps.
+I have a couple of tweaks to make before I want to publish anything, but standby for those movies, they’re a good way to visualize what’s going on.&lt;/li&gt;
+  &lt;li&gt;Even though the AGU site says that their poster boards are 6’ x 4’, they’re not.
+Make a 5’ x 4’ or 5’ x 3 poster if you don’t want to look like a giant goober.&lt;/li&gt;
+  &lt;li&gt;I’m still not totally sold on &lt;a href=&quot;https://github.com/kahing/goofys&quot;&gt;goofys&lt;/a&gt; for working with files in s3 buckets.
+On one hand, it &lt;em&gt;can&lt;/em&gt; streamline a lot of operations.
+On the other hand, I find that stuff like &lt;a href=&quot;http://www.gdal.org/&quot;&gt;gdal&lt;/a&gt; can error when trying to write to goofys mounts, forcing an extra tmp-file-then-copy-then-remove step.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;All in all, though, it was a great experience and some work I’m actually proud of!&lt;/p&gt;</content><author><name></name></author><category term="cpd" /><category term="helheim" /><summary type="html">I presented a poster at the AGU 2017 fall meeting. The long-winded title was “Three summer of high-resolution, high-accuracy velocity data of Helheim Glacier, as measured by an automated terrestrial LiDAR scanner: methods, challenges, and applications.” If you want to look at the PDF version of the poster, I have it here.</summary></entry><entry><title type="html">2017 voting guide for Longmont, CO</title><link href="http://www.gadom.ski/2017/10/28/voting-guide.html" rel="alternate" type="text/html" title="2017 voting guide for Longmont, CO" /><published>2017-10-28T00:00:00-06:00</published><updated>2017-10-28T00:00:00-06:00</updated><id>http://www.gadom.ski/2017/10/28/voting-guide</id><content type="html" xml:base="http://www.gadom.ski/2017/10/28/voting-guide.html">&lt;ul id=&quot;markdown-toc&quot;&gt;
   &lt;li&gt;&lt;a href=&quot;#introduction&quot; id=&quot;markdown-toc-introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#city-of-longmont-mayor-brian-bagley-or-sarah-levison&quot; id=&quot;markdown-toc-city-of-longmont-mayor-brian-bagley-or-sarah-levison&quot;&gt;City of Longmont Mayor: &lt;strong&gt;Brian Bagley&lt;/strong&gt; (or Sarah Levison)&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;#city-of-longmont-council-member-at-large-ron-gallegos-polly-christensen-or-aren-rodriguez&quot; id=&quot;markdown-toc-city-of-longmont-council-member-at-large-ron-gallegos-polly-christensen-or-aren-rodriguez&quot;&gt;City of Longmont Council Member At Large: &lt;strong&gt;Ron Gallegos, Polly Christensen&lt;/strong&gt; (or Aren Rodriguez)&lt;/a&gt;&lt;/li&gt;
@@ -947,155 +970,4 @@ But the &lt;strong&gt;cpd&lt;/strong&gt; codebase is reaching, if not maturity, 
 Rather than use it directly, I usually create a new project (e.g. &lt;a href=&quot;https://github.com/gadomski/hunky-dory&quot;&gt;hunky-dory&lt;/a&gt;) for a specific use-case.
 However, the plan is to eventually roll all of my external change detection projects back into PDAL once my tools mature enough that I won’t be over-churning the PDAL codebase.
 At that point, the PDAL &lt;strong&gt;cpd&lt;/strong&gt; plugin should become more powerful; it might even evolve into a higher-level &lt;strong&gt;changes&lt;/strong&gt; plugin that can run multiple change detection algorithms, e.g. &lt;a href=&quot;https://en.wikipedia.org/wiki/Iterative_closest_point&quot;&gt;ICP&lt;/a&gt;.
-Stay tuned.&lt;/p&gt;</content><author><name></name></author><category term="cpd" /><category term="pdal" /><summary type="html">I’m happy to announce the release of cpd v0.5.0, as well as the associated PDAL plugin update. cpd is a C++ library I have developed for running the Coherent Point Drift (CPD) point cloud change detection algorithm.</summary></entry><entry><title type="html">Cropping and merging with PDAL</title><link href="http://www.gadom.ski/2017/01/19/cropping-and-merging-with-pdal.html" rel="alternate" type="text/html" title="Cropping and merging with PDAL" /><published>2017-01-19T15:00:00-07:00</published><updated>2017-01-19T15:00:00-07:00</updated><id>http://www.gadom.ski/2017/01/19/cropping-and-merging-with-pdal</id><content type="html" xml:base="http://www.gadom.ski/2017/01/19/cropping-and-merging-with-pdal.html">&lt;p&gt;This is the first in a series of posts describing how to use &lt;a href=&quot;http://www.pdal.io/&quot;&gt;PDAL&lt;/a&gt; to develop automated, repeatable processes, the kind that can be tedious to do manually in &lt;a href=&quot;http://www.riegl.com/products/software-packages/riscan-pro/&quot;&gt;RiSCAN Pro&lt;/a&gt; or other such software.
-These posts are aimed at a medium-to-high-level user, one who is comfortable with the command line, writing makefiles, and basic scripting.
-The PDAL &lt;a href=&quot;http://www.pdal.io/tutorial/index.html&quot;&gt;tutorials&lt;/a&gt; and &lt;a href=&quot;http://www.pdal.io/workshop/index.html&quot;&gt;workshop&lt;/a&gt; might be a better start for a beginner user.&lt;/p&gt;
-
-&lt;p&gt;You’ll need the following softwares for this exercise:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.pdal.io/&quot;&gt;PDAL&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://gdal.org/1.11/ogr/&quot;&gt;OGR&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.python.org/&quot;&gt;Python&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;the-problem&quot;&gt;The problem&lt;/h2&gt;
-
-&lt;p&gt;Given data from five terrestrial laser scanning (TLS) scan positions, crop the data to an area of interest (AOI) and provide those cropped data to the downstream user as a single file.&lt;/p&gt;
-
-&lt;p&gt;About as simple as it gets.&lt;/p&gt;
-
-&lt;p&gt;The data of interest were collected with a &lt;a href=&quot;http://www.riegl.com/nc/products/terrestrial-scanning/produktdetail/product/scanner/33/&quot;&gt;Riegl VZ-6000&lt;/a&gt; on May 01, 2013 in the Tuolumne Meadows area of Yosemite National Park in California.
-Not bad livin’:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/2013-05-01-tuolumne.jpg&quot; alt=&quot;Tuolumne Meadows&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The area of interest is a rectangular box in the east side of the meadow, south of the &lt;a href=&quot;https://en.wikipedia.org/wiki/Lembert_Dome&quot;&gt;Lembert Dome&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/2013-05-01-tuolumne-aoi.png&quot; alt=&quot;Area of interest&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Note: there were actually six scan positions collected that day, but ScanPos006 did not contain any useful data inside the area of interest, so we’ve not included it in this exercise other than to plot it on the above map.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;the-process&quot;&gt;The process&lt;/h2&gt;
-
-&lt;p&gt;We pick things up after we’ve exported a file for each scan position from RiSCAN Pro.
-We could have used PDAL to do the exporting, but that’s a more advanced subject for a later day.
-I’ve organized the laz files and our AOI shapefile like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ tree .
-.
-├── Makefile
-├── aoi
-│   ├── study_area1.dbf
-│   ├── study_area1.gmt
-│   ├── study_area1.prj
-│   ├── study_area1.shp
-│   └── study_area1.shx
-└── laz
-    └── original
-        ├── ScanPos001.laz
-        ├── ScanPos002.laz
-        ├── ScanPos003.laz
-        ├── ScanPos004.laz
-        └── ScanPos005.laz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;We’ll use that &lt;code class=&quot;highlighter-rouge&quot;&gt;Makefile&lt;/code&gt; to drive our processing.&lt;/p&gt;
-
-&lt;h3 id=&quot;cropping&quot;&gt;Cropping&lt;/h3&gt;
-
-&lt;p&gt;We’re going to crop the data with &lt;a href=&quot;http://www.pdal.io/stages/filters.crop.html&quot;&gt;PDAL’s crop filter&lt;/a&gt; by providing it a &lt;a href=&quot;https://en.wikipedia.org/wiki/Well-known_text&quot;&gt;WKT&lt;/a&gt; polygon of our AOI.
-Because our AOI is a shapefile, we need to convert it to WKT with &lt;a href=&quot;http://www.gdal.org/ogr2ogr.html&quot;&gt;ogr2ogr&lt;/a&gt;.
-Since shapefiles can be complicated, there’s no straightforward way to convert a shapefile to WKT; in this case, however, we know that our shapefile is simple enough to use this simple Python script, located in &lt;code class=&quot;highlighter-rouge&quot;&gt;~/bin/ogr2wkt&lt;/code&gt; (which is on my &lt;code class=&quot;highlighter-rouge&quot;&gt;$PATH&lt;/code&gt;):&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;table style=&quot;border-spacing: 0&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot; style=&quot;text-align: right&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;osgeo&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ogr&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;ERROR: invalid number of arguments&quot;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ogr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GetLayer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GetGeometryRef&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ExportToWkt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;We glue everything together with a couple of make rules (in &lt;code class=&quot;highlighter-rouge&quot;&gt;Makefile&lt;/code&gt;):&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;CROPPED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;patsubst laz/original/%.laz,las/cropped/%.laz,&lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;wildcard laz/original/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.laz&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;SRS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt;EPSG:32611
-
-&lt;span class=&quot;nl&quot;&gt;cropped&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;$(CROPPED)&lt;/span&gt;
-&lt;span class=&quot;nl&quot;&gt;.PHONY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;cropped&lt;/span&gt;
-
-&lt;span class=&quot;nl&quot;&gt;laz/cropped/%.laz&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;laz/original/%.laz aoi/study_area1.shp&lt;/span&gt;
-    &lt;span class=&quot;err&quot;&gt;pdal&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;translate&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-i&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$&amp;lt;&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;$@&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;--readers.las.spatialreference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$(SRS)&lt;/span&gt; -f crop --filters.crop.polygon&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;shell&lt;/span&gt; ogr2wkt &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;word 2,&lt;span class=&quot;nv&quot;&gt;$^))&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;RiSCAN Pro doesn’t export laz data with spatial reference information (at least, it doesn’t without diving deep into their GeoSysManager, which I’ve never found worth it).
-So we manually specify the source spatial reference system with &lt;code class=&quot;highlighter-rouge&quot;&gt;--readers.las.spatialreference&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;We can use make’s parallelization to process all the files at once:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ make -j 5 cropped
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Boom.
-We’ve got five cropped laz files in &lt;code class=&quot;highlighter-rouge&quot;&gt;las/cropped&lt;/code&gt;, taking advantage of multiple cores.&lt;/p&gt;
-
-&lt;h3 id=&quot;merging&quot;&gt;Merging&lt;/h3&gt;
-
-&lt;p&gt;Merging these cropped files into one big deliverable is even simpler with &lt;code class=&quot;highlighter-rouge&quot;&gt;pdal merge&lt;/code&gt;.
-I still like to use a make rule, for repeatability:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;laz/2013-05-01-StudyArea1.laz: $(CROPPED)
-    pdal merge $^ $@
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
-
-&lt;p&gt;Our tree should now look like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ tree .
-.
-├── Makefile
-├── aoi
-│   ├── study_area1.dbf
-│   ├── study_area1.gmt
-│   ├── study_area1.prj
-│   ├── study_area1.shp
-│   └── study_area1.shx
-└── laz
-    ├── 2013-05-01-StudyArea1.laz
-    ├── cropped
-    │   ├── ScanPos001.laz
-    │   ├── ScanPos002.laz
-    │   ├── ScanPos003.laz
-    │   ├── ScanPos004.laz
-    │   └── ScanPos005.laz
-    └── original
-        ├── ScanPos001.laz
-        ├── ScanPos002.laz
-        ├── ScanPos003.laz
-        ├── ScanPos004.laz
-        └── ScanPos005.laz
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;While it’s not hard to do this sort of work in a GUI, things get harder when you want to do the same process over and over, tweaking the inputs, or you want to do the work on a large number of files.
-Automation such as this is also handy when integrating with other processing steps, such as map generation.&lt;/p&gt;</content><author><name></name></author><category term="pdal" /><category term="ogr" /><category term="python" /><summary type="html">This is the first in a series of posts describing how to use PDAL to develop automated, repeatable processes, the kind that can be tedious to do manually in RiSCAN Pro or other such software. These posts are aimed at a medium-to-high-level user, one who is comfortable with the command line, writing makefiles, and basic scripting. The PDAL tutorials and workshop might be a better start for a beginner user.</summary></entry></feed>
+Stay tuned.&lt;/p&gt;</content><author><name></name></author><category term="cpd" /><category term="pdal" /><summary type="html">I’m happy to announce the release of cpd v0.5.0, as well as the associated PDAL plugin update. cpd is a C++ library I have developed for running the Coherent Point Drift (CPD) point cloud change detection algorithm.</summary></entry></feed>
