@@ -6,6 +6,7 @@ permalink: /publications/
 
 ## First author
 
+- Gadomski, P. J. (2017). Three summer of high-resolution, high-accuracy velocity data of Helheim Glacier, as measured by an automated terrestrial LiDAR scanner: methods, challenges, and applications. In AGU Fall Meeting Abstracts.
 - Gadomski, P. J. (2016). Measuring Glacier Surface Velocities With LiDAR: A Comparison of Three-Dimensional Change Detection Methods. University of Houston.
 - Gadomski, P. J., Deems, J. S., Glennie, C. L., Hartzell, P. J., Butler, H., & Finnegan, D. C. (2015). Calculating LiDAR Point Cloud Uncertainty and Propagating Uncertainty to Snow-Water Equivalent Data Products. In 2015 AGU Fall Meeting.
 - Gadomski, P. J., Finnegan, D. C., Lawson, D. E., & Hanlon, G. (2009). Investigating Tidewater Glacier Advance/Retreat Cycles Using a Multi-year Dataset Hubbard Glacier, Southeast Alaska. In AGU Fall Meeting Abstracts (Vol. 1, p. 514).
