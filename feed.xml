@@ -1,5 +1,211 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2017-12-15T06:11:46-07:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>Research, code development, and field work for CRREL.
-</subtitle><entry><title type="html">AGU 2017</title><link href="http://www.gadom.ski/2017/12/15/AGU.html" rel="alternate" type="text/html" title="AGU 2017" /><published>2017-12-15T00:00:00-07:00</published><updated>2017-12-15T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/12/15/AGU</id><content type="html" xml:base="http://www.gadom.ski/2017/12/15/AGU.html">&lt;p&gt;I presented a poster at &lt;a href=&quot;https://fallmeeting.agu.org/2017/program-overview/&quot;&gt;the AGU 2017 fall meeting&lt;/a&gt;.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.5.2">Jekyll</generator><link href="http://www.gadom.ski/feed.xml" rel="self" type="application/atom+xml" /><link href="http://www.gadom.ski/" rel="alternate" type="text/html" /><updated>2018-02-28T15:44:29-07:00</updated><id>http://www.gadom.ski/</id><title type="html">LiDAR :: snow :: ice :: code</title><subtitle>Research, code development, and field work for CRREL.
+</subtitle><entry><title type="html">Snow depths with PDAL</title><link href="http://www.gadom.ski/2018/02/28/pdal-hs.html" rel="alternate" type="text/html" title="Snow depths with PDAL" /><published>2018-02-28T00:00:00-07:00</published><updated>2018-02-28T00:00:00-07:00</updated><id>http://www.gadom.ski/2018/02/28/pdal-hs</id><content type="html" xml:base="http://www.gadom.ski/2018/02/28/pdal-hs.html">&lt;p&gt;For the past several years we’ve been using terrestrial LiDAR to monitor snow-covered mountainsides for avalanche stability and mitigation &lt;a href=&quot;#Deems2015&quot;&gt;(Deems et al., 2015; Deems, LeWinter, Gadomski, &amp;amp; Finnegan, 2015)&lt;/a&gt;.
+We’ve even gotten some &lt;a href=&quot;http://www.dailycamera.com/science_environment/ci_30756446/boulder-scientist-targets-more-effective-safer-avalanche-mitigation&quot;&gt;local press&lt;/a&gt; for our efforts.
+We just completed processing for our data from the Seven Sisters at Loveland Pass, CO, where we’ve been working with the Colorado Department of Transportation (CDOT) to assess the effectivity of their installed &lt;a href=&quot;https://www.denverpost.com/2015/09/18/colorado-mountain-passes-get-remote-controlled-gas-avalanche-control-finally/&quot;&gt;GasEx&lt;/a&gt; systems.
+I used &lt;a href=&quot;https://www.pdal.io/&quot;&gt;PDAL&lt;/a&gt; to calculate and visualize the height of snow (HS) for these data, and the process was non-trivial enough to be worth a blog post.&lt;/p&gt;
+
+&lt;h2 id=&quot;source-data&quot;&gt;Source data&lt;/h2&gt;
+
+&lt;p&gt;The data were georeferenced using Riegl’s proprietary &lt;a href=&quot;http://www.riegl.com/products/software-packages/riscan-pro/&quot;&gt;RiSCAN Pro&lt;/a&gt; and exported to the &lt;a href=&quot;https://www.laszip.org/&quot;&gt;laz&lt;/a&gt; format.
+Our workflow uses UTM coordiantes inside RiSCAN Pro, which doesn’t play nicely with Riegl’s GeoSysManager, so the georeferenced laz files from RiSCAN Pro don’t have correct spatial reference information in the las header.
+Additionaly, as seen below, there’s a lot of in-air noise (usually due to blowing snow) and a lot of high-density points near that scanner that we aren’t really interested in.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/2017-04-28-SevenSisters-in-air-snow-annotated.png&quot; alt=&quot;Annotated scan from 2017-04-28 of the Seven Sisters.&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;We’re also interested in removing all the trees in the scan, as we only really want a bare earth surface and the snow surface for our HS measurements.&lt;/p&gt;
+
+&lt;h2 id=&quot;generating-reference-surfaces&quot;&gt;Generating reference surfaces&lt;/h2&gt;
+
+&lt;p&gt;The first step is to post-process the point clouds, as delivered from Riegl, using the following pipeline:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;pipeline&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;readers.las&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;spatialreference&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;EPSG:6342+5703&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.crop&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;polygon&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;POLYGON((424285.054199 4392521.066437,424264.463623 4392406.715332,424205.290527 4392190.98584,424201.560547 4392140.775757,423641.87146 4391921.607422,423426.168762 4391845.724854,423401.804596 4391842.146729,423041.956669 4392012.294861,422662.966858 4392335.28717,422759.23587 4392382.745789,422961.488438 4392474.017517,423273.389465 4392601.933075,423419.496582 4392539.133209,423538.245728 4392509.673706,423915.109497 4392511.763214,424070.769165 4392542.10498,424201.549438 4392565.36734,424248.287964 4392556.360779,424280.257935 4392531.412476,424285.054199 4392521.066437))&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.outlier&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.smrf&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ignore&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Classification[7:7]&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;writers.las&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Step-by-step, this pipeline:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Reads in the las data and tags it as UTM 13N / NAD83(2011)&lt;sup id=&quot;fnref:1&quot;&gt;&lt;a href=&quot;#fn:1&quot; class=&quot;footnote&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;, with the NAVD88 vertical datum.&lt;/li&gt;
+  &lt;li&gt;Crops the data to a pre-defined area of interest.&lt;/li&gt;
+  &lt;li&gt;Uses the outlier filter to add the classifation value “7” (Low point/Noise) to all noise points.&lt;/li&gt;
+  &lt;li&gt;Classifies all ground points using PDAL’s smrf filter, ignoring noise points.
+Note that for snow-on scans, we’re hoping that both bare ground and snow surfaces get classified as ground.&lt;/li&gt;
+  &lt;li&gt;Writes out the data to a las file.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;You’ll notice that neither the &lt;code class=&quot;highlighter-rouge&quot;&gt;readers.las&lt;/code&gt; stage or the &lt;code class=&quot;highlighter-rouge&quot;&gt;writers.las&lt;/code&gt; stage have filenames specified; this is because we use this pipeline via the following makefile rule.
+The same concept applies for all future pipelines, as well:&lt;/p&gt;
+
+&lt;div class=&quot;language-make highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nl&quot;&gt;build/full-resolution/%&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;laz/from-riscan/% pipelines/from-riscan.json&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;mkdir -p &lt;span class=&quot;err&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;dir &lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+	pdal pipeline pipelines/from-riscan.json &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+		--readers.las.filename&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$&amp;lt;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+		--writers.las.filename&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$@&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This lets us quickly create full-resolution processed laz files in parallel using a simple make command e.g. &lt;code class=&quot;highlighter-rouge&quot;&gt;make -j 6 all&lt;/code&gt;,
+Our full resolution, classified point cloud might look like this, colorized by classification (green: ground/snow, blue: noise, red: non-ground/snow):&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/2016-01-21-SevenSisters-classification.png&quot; alt=&quot;Classification of a 2016-01-21 point cloud.&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;With the full resolution, classified points, we then can create bare-earth (or bare-snow) surfaces for each scan.
+The bare-earth surface from our snow-off scan will be the reference surface for all snow depth (HS) calculations, and the bare-snow surfaces from snow-on scans will be used for change in snow depth (dHS) calculations, which are useful for analysing the distribution of snow depth after a storm or identifying the snow removed/deposited by an avalanche.
+To create the bare-earth/bare-snow surfaces, we use the following pipeline:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;pipeline&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;readers.las&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.range&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;limits&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Classification[2:2]&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;writers.gdal&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;resolution&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;output_type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;min&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;window_size&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;The “2” classifications were added by the &lt;code class=&quot;highlighter-rouge&quot;&gt;filters.smrf&lt;/code&gt;, and we choose a 0.5m resolution for our raster.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/2016-01-21-SevenSisters-dem.png&quot; alt=&quot;DEM of 2016-01-21 data.&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;calculating-snow-depths&quot;&gt;Calculating snow depths&lt;/h2&gt;
+
+&lt;p&gt;Once we have the reference surfaces, we can calculate the vertical distance (depth of snow in the vertical) between a snow-on point cloud and the bare-earth raster.
+PDAL doesn’t have a tool that’s perfectly suited for the job, but we can make it happen with a bit of elbow grease:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;pipeline&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;readers.las&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.range&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;limits&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Classification[2:2]&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.ferry&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;dimensions&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;GpsTime=Red&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.colorization&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;dimensions&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Red&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.range&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;limits&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Red[0:]&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.python&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;function&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;diff&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;script&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;scripts/hs.py&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.range&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;limits&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;GpsTime[0:]&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;filters.colorinterp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;minimum&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;maximum&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;ramp&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;pestel_shades&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;dimension&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;GpsTime&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;writers.las&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;There’s a lot going on, so let’s walk through this pipeline:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Reads in las data.&lt;/li&gt;
+  &lt;li&gt;Selects ground/snow points (as identified by &lt;code class=&quot;highlighter-rouge&quot;&gt;filters.smrf&lt;/code&gt;).&lt;/li&gt;
+  &lt;li&gt;Assigns the &lt;code class=&quot;highlighter-rouge&quot;&gt;GpsTime&lt;/code&gt; field into the &lt;code class=&quot;highlighter-rouge&quot;&gt;Red&lt;/code&gt; field on each point.
+The las format uses a two-byte unsigned integer to store color values, but we need &lt;code class=&quot;highlighter-rouge&quot;&gt;Red&lt;/code&gt; to be a double for the next step.&lt;/li&gt;
+  &lt;li&gt;Colorizes the &lt;code class=&quot;highlighter-rouge&quot;&gt;Red&lt;/code&gt; field of the point cloud.
+When this pipeline is invoked on the command line, we’ll provide the bare-earth raster, which means that the &lt;code class=&quot;highlighter-rouge&quot;&gt;Red&lt;/code&gt; field (which is a double, thanks to step 3), will be the elevation of the bare earth.&lt;/li&gt;
+  &lt;li&gt;Filters out all points where the bare-earth elevation is less than zero, which includes all points that don’t have a bare-earth elevation (the colorization filter assigns a low negative value for all points where it doesn’t have a raster cell).&lt;/li&gt;
+  &lt;li&gt;Runs the &lt;code class=&quot;highlighter-rouge&quot;&gt;hs.py&lt;/code&gt; script (included below), which calculates the difference between the &lt;code class=&quot;highlighter-rouge&quot;&gt;Red&lt;/code&gt; field and the point’s &lt;code class=&quot;highlighter-rouge&quot;&gt;Z&lt;/code&gt; value and assigns the result (HS) to &lt;code class=&quot;highlighter-rouge&quot;&gt;Gpstime&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;Removes all points with a negative HS.&lt;/li&gt;
+  &lt;li&gt;Assigns a rainbow color scheme to each point, based on the HS (stored in GpsTime).&lt;/li&gt;
+  &lt;li&gt;Writes the data out to a las file.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;We use the &lt;code class=&quot;highlighter-rouge&quot;&gt;GpsTime&lt;/code&gt; field because support for custom attributes in las files is patchy at best.
+PDAL can write extra dimensions, but not all visualization/processing software can handle them.
+For this dataset, the &lt;code class=&quot;highlighter-rouge&quot;&gt;GpsTime&lt;/code&gt; field isn’t super useful, and it’s a double in a las file, so it’s a convenient place to store arbitrary double data.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;hs.py&lt;/code&gt; script used in step 6 looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;diff&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;outs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;red&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Red&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ins&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Z&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;z&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;red&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;outs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;GpsTime&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hs&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;This simply calculates the difference between the &lt;code class=&quot;highlighter-rouge&quot;&gt;Red&lt;/code&gt; field (bare earth elevation) and “Z” (snow surface elevation) and stores it in &lt;code class=&quot;highlighter-rouge&quot;&gt;GpsTime&lt;/code&gt;.
+After it’s all done, we get a point cloud, colorized by HS, with the actual HS value stored in the GPS time field.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/2016-01-21-SevenSisters-hs.png&quot; alt=&quot;HS on 2016-01-21.&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You’ll see that our ground/snow classification wasn’t perfect, and that a lot of trees stumps were left behind, leading to those red (high) HS values.
+Still, we get a good sense of snow distribution, and, if we do this process for a bunch of scans, we can analyse the change in HS over time.&lt;/p&gt;
+
+&lt;h2 id=&quot;future-work&quot;&gt;Future work&lt;/h2&gt;
+
+&lt;p&gt;It’d be nice to store the HS in a custom attribute, as well, so that software that can handle las extra bytes (e.g. CloudCompare) could display the data with correct labeling.
+But the current solution, in my opinion, is good enough!&lt;/p&gt;
+
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
+
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;Deems2015&quot;&gt;Deems, J. S., Gadomski, P. J., Vellone, D., Evanczyk, R., LeWinter, A. L., Birkeland, K. W., &amp;amp; Finnegan, D. C. (2015). Mapping starting zone snow depth with a ground-based lidar to assist avalanche control and forecasting. &lt;i&gt;Cold Regions Science and Technology&lt;/i&gt;, &lt;i&gt;120&lt;/i&gt;, 101–108. https://doi.org/10.1016/j.coldregions.2015.09.002&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span id=&quot;deems2015ground&quot;&gt;Deems, J. S., LeWinter, A. L., Gadomski, P. J., &amp;amp; Finnegan, D. C. (2015). Ground-based LiDAR integration with avalanche control operations: target planning and assessment of control effectiveness. In &lt;i&gt;AGU Fall Meeting Abstracts&lt;/i&gt;.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;
+
+&lt;h2 id=&quot;footnotes&quot;&gt;Footnotes&lt;/h2&gt;
+
+&lt;div class=&quot;footnotes&quot;&gt;
+  &lt;ol&gt;
+    &lt;li id=&quot;fn:1&quot;&gt;
+      &lt;p&gt;These data were Epoch:2010. Note to self: find out if the new PROJ can handle epochs.&amp;nbsp;&lt;a href=&quot;#fnref:1&quot; class=&quot;reversefootnote&quot;&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+    &lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/div&gt;</content><author><name></name></author><category term="pdal" /><category term="snow" /><category term="seven-sisters" /><category term="cdot" /><summary type="html">For the past several years we’ve been using terrestrial LiDAR to monitor snow-covered mountainsides for avalanche stability and mitigation (Deems et al., 2015; Deems, LeWinter, Gadomski, &amp;amp; Finnegan, 2015). We’ve even gotten some local press for our efforts. We just completed processing for our data from the Seven Sisters at Loveland Pass, CO, where we’ve been working with the Colorado Department of Transportation (CDOT) to assess the effectivity of their installed GasEx systems. I used PDAL to calculate and visualize the height of snow (HS) for these data, and the process was non-trivial enough to be worth a blog post.</summary></entry><entry><title type="html">AGU 2017</title><link href="http://www.gadom.ski/2017/12/15/AGU.html" rel="alternate" type="text/html" title="AGU 2017" /><published>2017-12-15T00:00:00-07:00</published><updated>2017-12-15T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/12/15/AGU</id><content type="html" xml:base="http://www.gadom.ski/2017/12/15/AGU.html">&lt;p&gt;I presented a poster at &lt;a href=&quot;https://fallmeeting.agu.org/2017/program-overview/&quot;&gt;the AGU 2017 fall meeting&lt;/a&gt;.
 The long-winded title was “Three summer of high-resolution, high-accuracy velocity data of Helheim Glacier, as measured by an automated terrestrial LiDAR scanner: methods, challenges, and applications.”
 If you want to look at the PDF version of the poster, I have it &lt;a href=&quot;/pdf/2017-AGU-Gadomski-Poster.pdf&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
@@ -955,19 +1161,4 @@ I’ve souped up this example into &lt;a href=&quot;https://github.com/gadomski/
 
 &lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;McClung2006&quot;&gt;McClung, D., &amp;amp; Schaerer, P. (2006). &lt;i&gt;The Avalanche Handbook&lt;/i&gt; (3rd ed.). The Mountaineers Books.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name></name></author><category term="gmt" /><category term="slope-map" /><category term="ogr" /><category term="gdal" /><category term="skiing" /><category term="hidden-valley" /><summary type="html">About two-thirds of dry slab avalanches occur on slopes between 30° and 45° (McClung &amp;amp; Schaerer, 2006). A map of slope angles is therefore a useful tool for safe decision making when backcountry skiing.</summary></entry><entry><title type="html">cpd v0.5.0</title><link href="http://www.gadom.ski/2017/01/20/cpd-v0-5-0.html" rel="alternate" type="text/html" title="cpd v0.5.0" /><published>2017-01-20T00:00:00-07:00</published><updated>2017-01-20T00:00:00-07:00</updated><id>http://www.gadom.ski/2017/01/20/cpd-v0-5-0</id><content type="html" xml:base="http://www.gadom.ski/2017/01/20/cpd-v0-5-0.html">&lt;p&gt;I’m happy to announce the release of &lt;a href=&quot;https://github.com/gadomski/cpd/releases/tag/v0.5.0&quot;&gt;cpd v0.5.0&lt;/a&gt;, as well as the associated &lt;a href=&quot;https://github.com/PDAL/PDAL/pull/1474&quot;&gt;PDAL plugin update&lt;/a&gt;.
-&lt;strong&gt;cpd&lt;/strong&gt; is a C++ library I have developed for running the &lt;a href=&quot;https://sites.google.com/site/myronenko/research/cpd&quot;&gt;Coherent Point Drift&lt;/a&gt; (CPD) point cloud change detection algorithm.&lt;/p&gt;
-
-&lt;p&gt;One of my research areas is whether CPD is a viable tool for point cloud change detection and registration as compared to existing methods. 
-One place where I’ve used &lt;strong&gt;cpd&lt;/strong&gt; is with repeat LiDAR scans to measure glacier velocity, e.g. at the Helheim Glacier in southeast Greenland:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/helheim-velocity-field.png&quot; alt=&quot;Helheim velocity field&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;There’s a lot of space and work to be done with CPD, and at this point I’m just scratching that ol’ surface.
-But the &lt;strong&gt;cpd&lt;/strong&gt; codebase is reaching, if not maturity, then the equivalent of its early twenties, so I’m hopeful that I will be able to slow down on direct development and focus more on applications and downstream science.&lt;/p&gt;
-
-&lt;p&gt;The PDAL plugin in pretty limited, and it this point exists mostly as a proof-of-concept. 
-Rather than use it directly, I usually create a new project (e.g. &lt;a href=&quot;https://github.com/gadomski/hunky-dory&quot;&gt;hunky-dory&lt;/a&gt;) for a specific use-case.
-However, the plan is to eventually roll all of my external change detection projects back into PDAL once my tools mature enough that I won’t be over-churning the PDAL codebase.
-At that point, the PDAL &lt;strong&gt;cpd&lt;/strong&gt; plugin should become more powerful; it might even evolve into a higher-level &lt;strong&gt;changes&lt;/strong&gt; plugin that can run multiple change detection algorithms, e.g. &lt;a href=&quot;https://en.wikipedia.org/wiki/Iterative_closest_point&quot;&gt;ICP&lt;/a&gt;.
-Stay tuned.&lt;/p&gt;</content><author><name></name></author><category term="cpd" /><category term="pdal" /><summary type="html">I’m happy to announce the release of cpd v0.5.0, as well as the associated PDAL plugin update. cpd is a C++ library I have developed for running the Coherent Point Drift (CPD) point cloud change detection algorithm.</summary></entry></feed>
+&lt;ol class=&quot;bibliography&quot;&gt;&lt;li&gt;&lt;span id=&quot;McClung2006&quot;&gt;McClung, D., &amp;amp; Schaerer, P. (2006). &lt;i&gt;The Avalanche Handbook&lt;/i&gt; (3rd ed.). The Mountaineers Books.&lt;/span&gt;&lt;/li&gt;&lt;/ol&gt;</content><author><name></name></author><category term="gmt" /><category term="slope-map" /><category term="ogr" /><category term="gdal" /><category term="skiing" /><category term="hidden-valley" /><summary type="html">About two-thirds of dry slab avalanches occur on slopes between 30° and 45° (McClung &amp;amp; Schaerer, 2006). A map of slope angles is therefore a useful tool for safe decision making when backcountry skiing.</summary></entry></feed>
