@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>LiDAR :: snow :: ice :: code</title>
-  <meta name="description" content="Research, code development, and field work for CRREL.">
+  <title>FOSS4GNA 2018</title>
+  <meta name="description" content="">
 
   <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://www.gadom.ski/">
+  <link rel="canonical" href="http://www.gadom.ski/2018/05/18/FOSS4GNA.html">
   <link rel="alternate" type="application/rss+xml" title="LiDAR :: snow :: ice :: code" href="/feed.xml">
   
   
@@ -69,137 +69,46 @@
 
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <div class="home">
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-  <h1 class="page-heading">Posts</h1>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">FOSS4GNA 2018</h1>
+    <p class="post-meta">
+      <time datetime="2018-05-18T00:00:00-06:00" itemprop="datePublished">
+        
+        May 18, 2018
+      </time>
+      </p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><img src="/img/2018-05-16-foss4gna-title-slide.png" alt="The title slide of my FOSS4GNA talk." /></p>
+
+<p>On Monday, May 14th, I got to present at FOSS4GNA in St. Louis, MO.
+I talked abput our <a href="http://atlas.lidar.io/dashboard">ATLAS glacier monitoring system</a>, which uses an autonomous LiDAR scanner to regularly survey the Helheim Glacier.
+I’ve put the slides <a href="https://www.dropbox.com/s/ldba8mgksnnsleg/2018-05-14-Glacier-surface-velocities.pptx?dl=0">in my Dropbox</a>, since they’re <em>very</em> big (&gt;400MB) due to a bunch of high-resolution pictures and movies.
+The talk was half science, half software engineering; the science bits focused on lasers and glaciers, and the software bits walked people through my stack, especially non-trivial PDAL pipelines.
+Key parts of my stack are:</p>
+
+<ul>
+  <li><a href="https://www.pdal.io/">PDAL</a>: of course</li>
+  <li><a href="https://github.com/gadomski/cpd-rs">cpd-rs</a>: a Rust implementation of the Coherent Point Drift point set registration algorithm</li>
+  <li><a href="http://gmt.soest.hawaii.edu/">GMT</a>: batch maps</li>
+  <li>oh so much more…</li>
+</ul>
+
+<p>I couldn’t help but be impressed by <em>how nice</em> everyone was at FOSS4GNA!
+Compared to academic or DOD conferences, this conference was almost devoid of those who felt the need to prove just how smart they were as soon as you met them.
+Everyone was friendly, interested in what you were doing, and generally there just to have a good time and learn.
+How refreshing.</p>
+
+<p>The conference was disappointingly short of people of color and women; my eyeball estimate was at least 70% male, and vanishingly small percentage of PoC.
+We <del>can</del> must do better.</p>
+
+  </div>
+
   
-  
-
-
-  <ul class="post-list">
-    
-      <li>
-        
-        <span class="post-meta">May 18, 2018</span>
-
-        <h2>
-          <a class="post-link" href="/2018/05/18/FOSS4GNA.html">FOSS4GNA 2018</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Feb 28, 2018</span>
-
-        <h2>
-          <a class="post-link" href="/2018/02/28/pdal-hs.html">Snow depths with PDAL</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Dec 15, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/12/15/AGU.html">AGU 2017</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Oct 28, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/10/28/voting-guide.html">2017 voting guide for Longmont, CO</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Oct 19, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/10/19/bespoke-thermal.html">Bespoke thermal-LiDAR integration at the South Pole</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Sep 12, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/09/12/atlas-lidar-io.html">atlas.lidar.io</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">May 31, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/05/31/vdatum-with-pdal.html">Vertical datum conversions with PDAL</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Apr 21, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/04/21/pdal-on-windows.html">PDAL on Windows</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Feb 28, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/02/28/downloading-lots-of-unavco-pbo-data.html">Downloading lots of UNAVCO PBO data</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Jan 31, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html">Using PDAL to clean legacy LiDAR data</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Jan 23, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/01/23/slope-maps-with-gmt.html">Slope maps with GMT</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Jan 20, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/01/20/cpd-v0-5-0.html">cpd v0.5.0</a>
-        </h2>
-      </li>
-    
-      <li>
-        
-        <span class="post-meta">Jan 19, 2017</span>
-
-        <h2>
-          <a class="post-link" href="/2017/01/19/cropping-and-merging-with-pdal.html">Cropping and merging with PDAL</a>
-        </h2>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
-</div>
+</article>
 
       </div>
     </main>
