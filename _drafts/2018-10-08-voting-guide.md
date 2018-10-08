@@ -48,6 +48,12 @@ See above.
 
 ### Amendment 73: Funding for Public Schools
 
+This one feels a little weird to me.
+It increases revenue, but only guarantees that that increased revenue will be used for education as long as the legislature _doesn't_ pass a new education funding act.
+As soon as they pass a new education funding law, the money raised by this amendment could be sent somewhere else (i.e. not education).
+
+I'm all for soaking the rich to get more money for schools, but I smell a rat.
+
 ### Amendment 74: Compensation for Reduction in Fair Market Value by Government Law or Regulation
 
 ### Amendment 75: Campaign Contributions
