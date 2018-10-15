@@ -3,10 +3,42 @@ title: "2018 voting guide"
 tags: personal voting-guide longmont
 ---
 
+## Introduction
+{:.no_toc}
+
+Welcome to my 2018 voting guide!
+
+When I lived in Redding, CA, my buddy and I used to get together before every election and talk through the California ballot.
+If you've ever lived in California, you know how long that can take, and how freakin' obscure some of the direct democracy proposals can be.
+Apparently I _love_ direct democracy, becuase I now live in a similar system in Colorado, which means that there's TEN MILLION propositions and amendments every election cycle (especially in even years).
+
+My buddy and I no longer live in the same state, so I've taken to writing up my thoughts and posting them to the internets.
+Here's my past years':
+
+- [2017](https://www.gadom.ski/2017/10/28/voting-guide.html)
+- [2016 (facebook)](https://www.facebook.com/pete.gadomski/posts/1132537846842585)
+
+I post this stuff in the spirit of thoughtful contemplation of issues and a general enthusiasm for engagement.
+I don't think these are the only ways to vote, and my general rule is it's better to care, even if you come to a different conclusion than I do.
+
+Note that I live in Longmont, Colorado, so some of the local issues may not be applicable for you.
+
+## Table of contents
+{:.no_toc}
+
 * TOC
 {:toc}
 
-## U.S. House
+## U.S. House Colorado District 4 [Karen McCormick]
+
+I live in a [solidly Republican](https://projects.fivethirtyeight.com/2018-midterm-election-forecast/house/colorado/4/) house congressional district currently represented by Ken Buck, who comes off (at least to me) as a Central Casting rural-district Republican (lots of identity and culture war politics, with the usual dose of tax cuts and unwillingness to fund social programs).
+He's running to hold his seat, and no one really thinks the challenger, Karen McCormick, has a chance.
+
+I'm going to be honest, I didn't know much about Buck (or McCormick) before writing this post.
+As of this writing, neither Buck no McCormick has responded to the [Denver Post's Q&As](https://www.denverpost.com/2018/10/10/colorado-election-2018-candidate-questionnaires/#us-house).
+Cursory research on Buck turns up the fact that he thinks [planning for sea level rise helps ISIS](https://buck.house.gov/media-center/press-releases/ken-buck-amendment-refocuses-military-real-enemies), endorsed Ted Cruz and President Trump, and [thinks having a baby is like having cancer (?!?)](https://www.denverpost.com/2014/01/16/ken-buck-under-fire-even-from-gop-rival-for-abortion-remark/).
+McCormick seems to be a [traditional Democrat in these times](http://www.cpr.org/news/story/2018-election-cd4-ken-buck-and-karen-mccormick-on-the-issues), though I'm not stoked how hard it is to find interviews and such with her.
+But given Buck's self-professed positions on common-sense issues (have humans contributed to climate change and should we spend resources to help mitigate its impacts? is [being gay like being an alcoholic](https://www.denverpost.com/2010/10/17/bucks-remarks-on-homosexuality-loom-after-meet-the-press-debate/)?) there's no choice but McCormick.
 
 ## Governor
 
