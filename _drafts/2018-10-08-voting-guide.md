@@ -38,9 +38,39 @@ I'm going to be honest, I didn't know much about Buck (or McCormick) before writ
 As of this writing, neither Buck no McCormick has responded to the [Denver Post's Q&As](https://www.denverpost.com/2018/10/10/colorado-election-2018-candidate-questionnaires/#us-house).
 Cursory research on Buck turns up the fact that he thinks [planning for sea level rise helps ISIS](https://buck.house.gov/media-center/press-releases/ken-buck-amendment-refocuses-military-real-enemies), endorsed Ted Cruz and President Trump, and [thinks having a baby is like having cancer (?!?)](https://www.denverpost.com/2014/01/16/ken-buck-under-fire-even-from-gop-rival-for-abortion-remark/).
 McCormick seems to be a [traditional Democrat in these times](http://www.cpr.org/news/story/2018-election-cd4-ken-buck-and-karen-mccormick-on-the-issues), though I'm not stoked how hard it is to find interviews and such with her.
-But given Buck's self-professed positions on common-sense issues (have humans contributed to climate change and should we spend resources to help mitigate its impacts? is [being gay like being an alcoholic](https://www.denverpost.com/2010/10/17/bucks-remarks-on-homosexuality-loom-after-meet-the-press-debate/)?) there's no choice but McCormick.
+But given Buck's self-professed positions on common-sense issues (have humans contributed to climate change and should we spend resources to help mitigate its impacts? is [being gay like being an alcoholic](https://www.denverpost.com/2010/10/17/bucks-remarks-on-homosexuality-loom-after-meet-the-press-debate/)?) there's no choice but **McCormick**.
 
-## Governor
+## Governor [Jarid Polis]
+
+This is a four-horse race between Democrat Jarid Polis, Republican Walker Stapleton, Unity Party candidate Bill Hammons, and Libertarian Scott Helker.
+This race is one of the more competitive gubernatorial races in the country, which (for me) discourages the third-party vote -- when my vote matters I'm a pragmatist, when it doesn't I'm an idealist.
+This means, unless I'm super-compelled by Hammons or Helker, I'm going to be voting for Polis or Stapleton.
+
+Let's do our best to give Stapleton a fair hearing.
+He trusts [climate change science](https://www.denverpost.com/2018/06/19/denver-post-republican-governor-debate-wrapup/) (at least more than a lot of his Republican colleagues) and [doesn't want to repeal weed legalization](https://www.westword.com/news/walker-stapleton-for-colorado-governor-2018-interview-10183334).
+But he also thinks [teachers should have guns](https://www.stapletonforcolorado.com/issue/second-amendment/) and wants to [add to tax code complexity without raising more money](https://gazette.com/news/stapleton-rolls-out-education-policy/article_f845de7e-ad59-11e8-ac6a-f7a3b2f8fc1f.html) to help public education.
+He's got an endorsement from President Trump so that's a negative, and he [parrots "sanctuary city" rhetoric](https://www.stapletonforcolorado.com/issue/sanctuary-cities-2/), so he's not trying that hard to be More Than Just A Republican.
+All in all not the worst Republican, but not really the sort that turns my head.
+
+Next, Polis.
+I have a confession to make -- I have trouble caring about the subtle differences between the Legion of Generic Democrats that run for office.
+Polis strikes me as the sort that recognizes his "Boulder liberal" image and is consciously working to copy the Hickenlooper "I'm everybody's governor" model, which might be good for winning elections but doesn't move him away from "very vanilla" on my scorecard.
+He doesn't have any mega scandals and seems reasonably pragmatic on infrastructure and health care stuff, so no disqualifiers.
+
+Scott Helker wants every state to have TABOR. Noooope.
+
+But wait!!!
+I'm so here for Bill Hammons.
+Check out these gems from [his platform](https://www.billisrunning.com/):
+
+> - Lincoln, D.C. > Ditch the swamp by moving the nation's capital to east of DIA and naming it after one of our greatest Presidents
+> - Defend Colorado at all Costs > We should demand resurrection of the federal "Star Wars" SDI program with Colorado as its focus
+> - Colorado Spaceport Development > Since 2010, I've been publicly pushing for more Spaceport development in Colorado
+
+Omigosh yes.
+Just for the entertainment value.
+But it's a close race so I can't throw away my vote for moar Star War, more's the pity.
+**Polis**.
 
 ## State ballot measures
 
