@@ -56,6 +56,11 @@ Next, Polis.
 I have a confession to make -- I have trouble caring about the subtle differences between the Legion of Generic Democrats that run for office.
 Polis strikes me as the sort that recognizes his "Boulder liberal" image and is consciously working to copy the Hickenlooper "I'm everybody's governor" model, which might be good for winning elections but doesn't move him away from "very vanilla" on my scorecard.
 He doesn't have any mega scandals and seems reasonably pragmatic on infrastructure and health care stuff, so no disqualifiers.
+He does [speak very sensibly](http://www.cpr.org/news/story/democratic-candidate-jared-polis-on-what-he-d-do-as-governor) about Colorado's crazy relationship between funding and its constitution:
+
+> I’ve long been on the side of trying to simplify and get many of these fiscal provisions out of our state constitution so that our state can be more governable, regardless of whether Democrats or Republicans are in charge, it really ties the hands of our legislature and the governor.
+
+So I like the dude, I think.
 
 Scott Helker wants every state to have TABOR. Noooope.
 
@@ -83,6 +88,7 @@ If you don't think the person is experienced enough, don't vote for them.
 
 **Abstain**.
 It's ridiculous that ballot formatting is a state constitutional issue.
+I'm taking my toys and going home.
 
 ### Amendment X: Industrial Hemp Definition [yes]
 
@@ -108,13 +114,16 @@ See above.
 **Yes**.
 [I was for it in 2016](https://www.facebook.com/pete.gadomski/posts/1132537846842585) and I'm for it now.
 
-### Amendment 73: Funding for Public Schools
+### Amendment 73: Funding for Public Schools [no]
 
 This one feels a little weird to me.
 It increases revenue, but only guarantees that that increased revenue will be used for education as long as the legislature _doesn't_ pass a new education funding act.
 As soon as they pass a new education funding law, the money raised by this amendment could be sent somewhere else (i.e. not education).
+Just seems complicated.
 
 I'm all for soaking the rich to get more money for schools, but I smell a rat.
+[Polis is also against it](http://www.cpr.org/news/story/democratic-candidate-jared-polis-on-what-he-d-do-as-governor), for governability reasons, and if the Democratic gubernatorial candidate can oppose the amendment and still expect to win a close race, that means that this one isn't a slam dunk.
+I'll follow my pick for governor and vote **no** with the full recognition that I want more money for schools but this is the wrong way.
 
 ### Amendment 74: Compensation for Reduction in Fair Market Value by Government Law or Regulation
 
