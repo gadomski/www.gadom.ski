@@ -17,4 +17,7 @@ They don't add anything to the visualization and are useless for most analysis, 
 Manual culling works, but it's not always the best solution for big datasets, very noisy datasets, or in a case when you don't have a good point-cloud-and-viewing machine in front of you (aka right now when I'm on my Mac laptop).
 And so we look for an automatic solution.
 
-[PDAL](https://pdal.io/)
+[PDAL](https://pdal.io/) includes a few filters for doing automatic air-point removal.
+They include:
+
+- 
