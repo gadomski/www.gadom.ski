@@ -280,7 +280,7 @@ DEPENDENCIES
   jekyll-feed (~> 0.6)
   jekyll-gist
   jekyll-livereload
-  jekyll-scholar (= 5.16)
+  jekyll-scholar
   minima (~> 2.0)
 
 RUBY VERSION
