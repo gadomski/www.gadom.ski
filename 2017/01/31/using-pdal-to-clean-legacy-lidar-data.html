@@ -1,123 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
+<html lang="en"><head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Using PDAL to clean legacy LiDAR data | @gadomski</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="Using PDAL to clean legacy LiDAR data" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA (Bair et al., 2015):" />
+<meta property="og:description" content="The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA (Bair et al., 2015):" />
+<link rel="canonical" href="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html" />
+<meta property="og:url" content="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html" />
+<meta property="og:site_name" content="@gadomski" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2017-01-31T00:00:00-07:00" />
+<script type="application/ld+json">
+{"headline":"Using PDAL to clean legacy LiDAR data","url":"http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html","datePublished":"2017-01-31T00:00:00-07:00","dateModified":"2017-01-31T00:00:00-07:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html"},"description":"The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA (Bair et al., 2015):","@type":"BlogPosting","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://www.gadom.ski/feed.xml" title="@gadomski" /></head>
+<body><header class="site-header" role="banner">
 
-  <title>Using PDAL to clean legacy LiDAR data</title>
-  <meta name="description" content="The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA (Bair, Dozier, Davis, Colee, &amp;amp; Claffey, 2015):">
-
-  <link rel="stylesheet" href="/assets/main.css">
-  <link rel="canonical" href="http://www.gadom.ski/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html">
-  <link rel="alternate" type="application/rss+xml" title="@gadomski" href="/feed.xml">
-  
-  
-</head>
-
-
-  <body>
-
-    <header class="site-header" role="banner">
-
-  <div class="wrapper">
-    
-    
-    <a class="site-title" href="/">@gadomski</a>
-  
-    
-      <nav class="site-nav">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">@gadomski</a><nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
         <label for="nav-trigger">
           <span class="menu-icon">
             <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
-              <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
-              <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
             </svg>
           </span>
         </label>
 
-        <div class="trigger">
-          
-            
-            
-            <a class="page-link" href="/about/">About</a>
-            
-          
-            
-            
-          
-            
-            
-            <a class="page-link" href="/publications/">Publications</a>
-            
-          
-            
-            
-          
-            
-            
-          
-        </div>
-      </nav>
-    
-  </div>
+        <div class="trigger"><a class="page-link" href="/about/">About</a><a class="page-link" href="/publications/">Publications</a></div>
+      </nav></div>
 </header>
-
-
-    <main class="page-content" aria-label="Content">
+<main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Using PDAL to clean legacy LiDAR data</h1>
+    <h1 class="post-title p-name" itemprop="name headline">Using PDAL to clean legacy LiDAR data</h1>
     <p class="post-meta">
-      <time datetime="2017-01-31T00:00:00-07:00" itemprop="datePublished">
-        
-        Jan 31, 2017
-      </time>
-      </p>
+      <time class="dt-published" datetime="2017-01-31T00:00:00-07:00" itemprop="datePublished">Jan 31, 2017
+      </time></p>
   </header>
 
-  <div class="post-content" itemprop="articleBody">
-    <p>The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA <a href="#Bair2015">(Bair, Dozier, Davis, Colee, &amp; Claffey, 2015)</a>:</p>
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>The CRREL/UCSV Energy Site (CUES) is a snow research site on Mammoth Mountain, CA <a class="citation" href="#Bair2015">(Bair et al., 2015)</a>:</p>
 
 <p><img src="http://snow.ucsb.edu/sites/default/files/slides/20120908_122051.jpg" alt="East-looking panoramic photo of the CUES site" /></p>
 
 <p>In February 2011 a <a href="http://www.riegl.com/">Riegl</a> LMS-Z390 LiDAR scanner came online at the site, mounted in a glass enclosure on the central structure.
-This scanner regularly captures snow depths over a portion of the study area, and stores these snow depths on the <a href="http://snow.ucsb.edu/level-0-raw-data-files">CUES web server</a> as <code class="highlighter-rouge">.3dd</code> files:</p>
+This scanner regularly captures snow depths over a portion of the study area, and stores these snow depths on the <a href="http://snow.ucsb.edu/level-0-raw-data-files">CUES web server</a> as <code class="language-plaintext highlighter-rouge">.3dd</code> files:</p>
 
 <p><img src="/img/cues-scan.png" alt="An example of a scan of the CUES site" /></p>
 
 <p>While these data have been used with some research, in general they have been under-utilized, partially due to their file format.
-<code class="highlighter-rouge">.3dd</code> is an old Riegl file format, so old that the company no longer produces binaries to read from the format — the only binaries are available in <a href="http://www.riegl.com/index.php?id=234"><code class="highlighter-rouge">riscanlib</code> for Windows 32 systems</a>.
-And because Riegl doesn’t release the layout of their file formats to the public, we can’t<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> write our own multi-platform reader.</p>
+<code class="language-plaintext highlighter-rouge">.3dd</code> is an old Riegl file format, so old that the company no longer produces binaries to read from the format — the only binaries are available in <a href="http://www.riegl.com/index.php?id=234"><code class="language-plaintext highlighter-rouge">riscanlib</code> for Windows 32 systems</a>.
+And because Riegl doesn’t release the layout of their file formats to the public, we can’t<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote">1</a></sup> write our own multi-platform reader.</p>
 
-<p><code class="highlighter-rouge">riscanlib</code>, which requires a Riegl website account to download, comes with an example executable named <code class="highlighter-rouge">conv2asc.exe</code> that reads a <code class="highlighter-rouge">.3dd</code> file and prints the X, Y, Z, and Intensity coordinates to standard output.
-For now, this is what we’re using to extract information from <code class="highlighter-rouge">.3dd</code> files.
+<p><code class="language-plaintext highlighter-rouge">riscanlib</code>, which requires a Riegl website account to download, comes with an example executable named <code class="language-plaintext highlighter-rouge">conv2asc.exe</code> that reads a <code class="language-plaintext highlighter-rouge">.3dd</code> file and prints the X, Y, Z, and Intensity coordinates to standard output.
+For now, this is what we’re using to extract information from <code class="language-plaintext highlighter-rouge">.3dd</code> files.
 However, there’s a couple of hangups:</p>
 
 <ol>
-  <li>Our trusty ol’ Z390 scanner produces a lot of bogus data at <code class="highlighter-rouge">(0., 0., 0.)</code> that should be filtered out.</li>
-  <li><code class="highlighter-rouge">.3dd</code> intensities are floats in [0, 1], but other point cloud formats (e.g. <a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">las</a>) work best when intensity is scaled from [0, 65536].</li>
+  <li>Our trusty ol’ Z390 scanner produces a lot of bogus data at <code class="language-plaintext highlighter-rouge">(0., 0., 0.)</code> that should be filtered out.</li>
+  <li><code class="language-plaintext highlighter-rouge">.3dd</code> intensities are floats in [0, 1], but other point cloud formats (e.g. <a href="https://www.asprs.org/committee-general/laser-las-file-format-exchange-activities.html">las</a>) work best when intensity is scaled from [0, 65536].</li>
   <li>Our scanner shifts and moves through time, both intentionally when someone makes and adjustment and naturally due to shifts in the ground.
 We need to apply a rigid transform to our data to ensure all of our scans are in the same reference frame.</li>
 </ol>
 
 <p>We’ll tackle parts 1 and 2 in this post, and save part 3 for a later date.
 If you want to follow along at home with the same data, <a href="http://snow.ucsb.edu/data/2016/lidar/201612/20161229-1315-30.Z390.frame.3dd.gz">download it from the CUES website</a>.
-We’ll assume you’ve already used <code class="highlighter-rouge">conv2asc.exe</code> on the <code class="highlighter-rouge">3dd</code> file and redirected the output to <code class="highlighter-rouge">txt/original/20161229-1315-30.Z390.frame.txt</code>.</p>
+We’ll assume you’ve already used <code class="language-plaintext highlighter-rouge">conv2asc.exe</code> on the <code class="language-plaintext highlighter-rouge">3dd</code> file and redirected the output to <code class="language-plaintext highlighter-rouge">txt/original/20161229-1315-30.Z390.frame.txt</code>.</p>
 
-<p><a href="http://pdal.io/">PDAL</a> (with the Python plugin enabled) is the only required software for this exercise (assuming you have a unix-y system that includes <code class="highlighter-rouge">sed</code>).</p>
+<p><a href="http://pdal.io/">PDAL</a> (with the Python plugin enabled) is the only required software for this exercise (assuming you have a unix-y system that includes <code class="language-plaintext highlighter-rouge">sed</code>).</p>
 
 <h2 id="filtering-and-scaling">Filtering and scaling</h2>
 
 <p><a href="http://www.pdal.io/stages/readers.text.html">PDAL’s text reader</a> expects reasonably well-formed text files.
-Our <code class="highlighter-rouge">conv2asc.exe</code> output looks like this, which isn’t good enough:</p>
+Our <code class="language-plaintext highlighter-rouge">conv2asc.exe</code> output looks like this, which isn’t good enough:</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>$ head txt/original/20161229-1315-30.Z390.frame.txt
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ head txt/original/20161229-1315-30.Z390.frame.txt
 0.0000, 0.0000, 0.0000, 0.0000
 0.0000, 0.0000, 0.0000, 0.0000
 0.0000, 0.0000, 0.0000, 0.0000
@@ -128,21 +91,20 @@ Our <code class="highlighter-rouge">conv2asc.exe</code> output looks like this, 
 0.0000, 0.0000, 0.0000, 0.0000
 0.0000, 0.0000, 0.0000, 0.0000
 0.0000, 0.0000, 0.0000, 0.0000
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>We need to remove those spaces between the comma and the next number, and add a header.
 This is a simple two-step process:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir -p txt/cleaned
-<span class="nb">echo</span> <span class="s2">"X,Y,Z,Intensity"</span> &gt; txt/cleaned/20161229-1315-30.Z390.frame.txt
-sed <span class="s1">'s/, /,/g'</span> txt/original/20161229-1315-30.Z390.frame.txt &gt;&gt; txt/cleaned/20161229-1315-30.Z390.frame.txt</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">mkdir</span> <span class="nt">-p</span> txt/cleaned
+<span class="nb">echo</span> <span class="s2">"X,Y,Z,Intensity"</span> <span class="o">&gt;</span> txt/cleaned/20161229-1315-30.Z390.frame.txt
+<span class="nb">sed</span> <span class="s1">'s/, /,/g'</span> txt/original/20161229-1315-30.Z390.frame.txt <span class="o">&gt;&gt;</span> txt/cleaned/20161229-1315-30.Z390.frame.txt</code></pre></figure>
 
-<p>We’ll use PDAL to do the <code class="highlighter-rouge">(0., 0., 0.)</code> filtering and intensity scaling.
+<p>We’ll use PDAL to do the <code class="language-plaintext highlighter-rouge">(0., 0., 0.)</code> filtering and intensity scaling.
 The filtering can be done out of the box with <a href="http://www.pdal.io/stages/filters.range.html">range filter</a>, but we need to write some code to do the intensity scaling.
 We’ll use the <a href="http://www.pdal.io/stages/filters.programmable.html">programmable filter</a> to do the scaling work.</p>
 
-<p>Create a file called <code class="highlighter-rouge">scripts/scale_intensity.py</code> with the following code:</p>
+<p>Create a file called <code class="language-plaintext highlighter-rouge">scripts/scale_intensity.py</code> with the following code:</p>
 
 <figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">scale_intensity</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
     <span class="n">intensity</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="s">"Intensity"</span><span class="p">]</span>
@@ -150,20 +112,20 @@ We’ll use the <a href="http://www.pdal.io/stages/filters.programmable.html">pr
     <span class="n">output</span><span class="p">[</span><span class="s">"Intensity"</span><span class="p">]</span> <span class="o">=</span> <span class="n">intensity</span>
     <span class="k">return</span> <span class="bp">True</span></code></pre></figure>
 
-<p>This takes our <code class="highlighter-rouge">[0, 1]</code> intensity values and scales them to <code class="highlighter-rouge">[0, 65536]</code>, which happens to be the maximum range of intensity values supported by the las format.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup></p>
+<p>This takes our <code class="language-plaintext highlighter-rouge">[0, 1]</code> intensity values and scales them to <code class="language-plaintext highlighter-rouge">[0, 65536]</code>, which happens to be the maximum range of intensity values supported by the las format.<sup id="fnref:2" role="doc-noteref"><a href="#fn:2" class="footnote">2</a></sup></p>
 
-<p>We then can created a “cleaned” laz file with no origin points<sup id="fnref:3"><a href="#fn:3" class="footnote">3</a></sup> and scaled intensity values with this one-liner:</p>
+<p>We then can created a “cleaned” laz file with no origin points<sup id="fnref:3" role="doc-noteref"><a href="#fn:3" class="footnote">3</a></sup> and scaled intensity values with this one-liner:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir -p laz/cleaned
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">mkdir</span> <span class="nt">-p</span> laz/cleaned
 pdal translate txt/cleaned/20161229-1315-30.Z390.frame.txt laz/cleaned/20161229-1315-30.Z390.frame.laz <span class="se">\</span>
-    -f range --filters.range.limits<span class="o">=</span><span class="s1">'X![0:0],Y![0:0],Z![0:0]'</span> <span class="se">\</span>
-    -f programmable --filters.programmable.script<span class="o">=</span>scripts/scale_intensity.py <span class="se">\</span>
-        --filters.programmable.module<span class="o">=</span>scale_intensity <span class="se">\</span>
-        --filters.programmable.function<span class="o">=</span>scale_intensity</code></pre></figure>
+    <span class="nt">-f</span> range <span class="nt">--filters</span>.range.limits<span class="o">=</span><span class="s1">'X![0:0],Y![0:0],Z![0:0]'</span> <span class="se">\</span>
+    <span class="nt">-f</span> programmable <span class="nt">--filters</span>.programmable.script<span class="o">=</span>scripts/scale_intensity.py <span class="se">\</span>
+        <span class="nt">--filters</span>.programmable.module<span class="o">=</span>scale_intensity <span class="se">\</span>
+        <span class="nt">--filters</span>.programmable.function<span class="o">=</span>scale_intensity</code></pre></figure>
 
 <h2 id="conclusion">Conclusion</h2>
 
-<p>By combining simple external tools (e.g. <code class="highlighter-rouge">sed</code>) with PDAL’s powerful filters, we can transform uncomfortable data formats into more usable layouts.
+<p>By combining simple external tools (e.g. <code class="language-plaintext highlighter-rouge">sed</code>) with PDAL’s powerful filters, we can transform uncomfortable data formats into more usable layouts.
 I’ve gisted a Makefile and the scale intensity script that are useful for batch processing:</p>
 
 <script src="https://gist.github.com/gadomski/c921e5bffc888f0c5f44ca07d4932de4.js"> </script>
@@ -176,29 +138,26 @@ I’ve gisted a Makefile and the scale intensity script that are useful for batc
 <li><span id="Hartzell2013a">Hartzell, P. J., Glennie, C. L., &amp; Finnegan, D. C. (2013). Calibration of a Terrestrial Full Waveform Laser Scanner. <i>ASPRS 2013 Annual Conference Proceedings</i>, p. 7.</span></li></ol>
 
 <h2 id="footnotes">Footnotes</h2>
-<div class="footnotes">
+<div class="footnotes" role="doc-endnotes">
   <ol>
-    <li id="fn:1">
-      <p>Legally.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    <li id="fn:1" role="doc-endnote">
+      <p>Legally. <a href="#fnref:1" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
-    <li id="fn:2">
-      <p>Inquiring minds might wonder if we’re corrupting useful data by scaling these values all willy-nilly. By convention, when LiDAR systems report “intensity” values, they are sensor-specific values that have no absolute relationship to a real-world radiometric property of the reflective object. Riegl does attempt to provide an absolute measure of an object’s reflectivity in the laser’s wavelength with the “Reflectivity” attribute, but even this is fraught with issues <a href="#Hartzell2013a">(Hartzell, Glennie, &amp; Finnegan, 2013)</a>.&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    <li id="fn:2" role="doc-endnote">
+      <p>Inquiring minds might wonder if we’re corrupting useful data by scaling these values all willy-nilly. By convention, when LiDAR systems report “intensity” values, they are sensor-specific values that have no absolute relationship to a real-world radiometric property of the reflective object. Riegl does attempt to provide an absolute measure of an object’s reflectivity in the laser’s wavelength with the “Reflectivity” attribute, but even this is fraught with issues <a class="citation" href="#Hartzell2013a">(Hartzell et al., 2013)</a>. <a href="#fnref:2" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
-    <li id="fn:3">
-      <p>As of this writing, the negation operator (“!”) is an undocumented feature of the range filter.&nbsp;<a href="#fnref:3" class="reversefootnote">&#8617;</a></p>
+    <li id="fn:3" role="doc-endnote">
+      <p>As of this writing, the negation operator (“!”) is an undocumented feature of the range filter. <a href="#fnref:3" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
   </ol>
 </div>
 
-  </div>
-
-  
+  </div><a class="u-url" href="/2017/01/31/using-pdal-to-clean-legacy-lidar-data.html" hidden></a>
 </article>
 
       </div>
-    </main>
-
-    <footer class="site-footer">
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
 
   <div class="wrapper">
 
@@ -207,36 +166,11 @@ I’ve gisted a Makefile and the scale intensity script that are useful for batc
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
-          <li>
-            
-              @gadomski
-            
-            </li>
-            
-            <li><a href="mailto:pete@gadom.ski">pete@gadom.ski</a></li>
-            
-        </ul>
+          <li class="p-name">@gadomski</li><li><a class="u-email" href="mailto:pete@gadom.ski">pete@gadom.ski</a></li></ul>
       </div>
 
-      <div class="footer-col footer-col-2">
-        <ul class="social-media-list">
-          
-          <li>
-            <a href="https://github.com/gadomski"><span class="icon icon--github"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
-</span><span class="username">gadomski</span></a>
-
-          </li>
-          
-
-          
-          <li>
-            <a href="https://twitter.com/petegadomski"><span class="icon icon--twitter"><svg viewBox="0 0 16 16" width="16px" height="16px"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
-</span><span class="username">petegadomski</span></a>
-
-          </li>
-          
-        </ul>
-      </div>
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/gadomski"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">gadomski</span></a></li><li><a href="https://www.twitter.com/petegadomski"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">petegadomski</span></a></li></ul>
+</div>
 
       <div class="footer-col footer-col-3">
         <p>dogs and charts, mostly
@@ -247,8 +181,6 @@ I’ve gisted a Makefile and the scale intensity script that are useful for batc
   </div>
 
 </footer>
-
-
-  </body>
+</body>
 
 </html>
