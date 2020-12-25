@@ -23,5 +23,5 @@ group :jekyll_plugins do
    gem "jekyll-feed", "~> 0.6"
    gem "jekyll-gist"
    gem "jekyll-livereload"
-   gem "jekyll-scholar"
+   gem "jekyll-scholar", "5.16" # Required to get a non-vulnerable bibtex-ruby
 end
